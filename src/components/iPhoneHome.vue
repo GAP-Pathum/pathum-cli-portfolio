@@ -233,6 +233,58 @@
             </div>
         </div>
 
+        <!-- Notes App -->
+        <div v-if="notesOpen" class="notes-app">
+            <div class="notes-header-mobile">
+                <button class="notes-back" @click="showNotesList ? closeNotes() : backToNotesList()">
+                    ‹ {{ showNotesList ? 'Back' : 'Notes' }}
+                </button>
+                <span class="notes-title">{{ showNotesList ? 'Notes' : (getCurrentNote()?.title || 'Untitled') }}</span>
+                <button v-if="showNotesList" class="notes-new-btn" @click="createNewNote">+</button>
+                <span v-else class="notes-spacer"></span>
+            </div>
+            
+            <!-- Notes List -->
+            <div v-if="showNotesList" class="notes-list-mobile">
+                <div v-if="notes.length === 0" class="notes-empty">
+                    <span class="empty-icon">📝</span>
+                    <p>No notes yet</p>
+                    <button @click="createNewNote" class="create-note-btn">Create Note</button>
+                </div>
+                <div 
+                    v-for="note in notes" 
+                    :key="note.id" 
+                    class="note-item-mobile"
+                    @click="selectNote(note.id)"
+                >
+                    <div class="note-item-content">
+                        <div class="note-item-title">{{ note.title || 'Untitled' }}</div>
+                        <div class="note-item-preview">{{ getPreview(note.content) }}</div>
+                        <div class="note-item-date">{{ formatNoteDate(note.updatedAt) }}</div>
+                    </div>
+                    <button class="note-delete-btn" @click.stop="deleteNote(note.id)">×</button>
+                </div>
+            </div>
+            
+            <!-- Note Editor -->
+            <div v-else class="note-editor-mobile">
+                <input 
+                    v-if="getCurrentNote()"
+                    v-model="getCurrentNote().title"
+                    class="note-title-input-mobile"
+                    placeholder="Note Title"
+                    @input="updateCurrentNote"
+                />
+                <textarea 
+                    v-if="getCurrentNote()"
+                    v-model="getCurrentNote().content"
+                    class="note-textarea-mobile"
+                    placeholder="Start writing..."
+                    @input="updateCurrentNote"
+                ></textarea>
+            </div>
+        </div>
+
         <!-- Notification -->
         <div class="notification" :class="{ 'visible': showNotification }">
             <div class="notification-icon">💼</div>
@@ -255,7 +307,13 @@ const currentTime = ref('');
 const batteryLevel = ref(87);
 const terminalOpen = ref(false);
 const galleryOpen = ref(false);
+const notesOpen = ref(false);
 const lightboxOpen = ref(false);
+
+// Notes state
+const notes = ref([]);
+const currentNoteId = ref(null);
+const showNotesList = ref(true);
 const currentPhotoIndex = ref(0);
 const lightboxSwipeX = ref(0);
 const showControlCenter = ref(false);
@@ -316,6 +374,9 @@ function handleAppTap(appName) {
             }, 500);
         } else if (appName === 'photos') {
             galleryOpen.value = true;
+        } else if (appName === 'notes') {
+            notesOpen.value = true;
+            loadNotes();
         } else if (appName === 'linkedin') {
             window.open('https://www.linkedin.com/in/pasindu-pathum-98a299249', '_blank');
         } else if (appName === 'facebook') {
@@ -335,6 +396,96 @@ function closeGallery() {
     galleryOpen.value = false;
     lightboxOpen.value = false;
     currentPhotoIndex.value = 0;
+}
+
+// Notes functions
+function loadNotes() {
+    const saved = localStorage.getItem('portfolio-notes');
+    if (saved) {
+        notes.value = JSON.parse(saved);
+        if (notes.value.length > 0 && !currentNoteId.value) {
+            currentNoteId.value = notes.value[0].id;
+        }
+    } else {
+        createNewNote();
+        if (notes.value.length > 0) {
+            notes.value[0].title = 'Welcome to Notes';
+            notes.value[0].content = `Hello! 👋\n\nThis is your personal notepad.\n\nFeatures:\n• Create multiple notes\n• Auto-save to browser\n• Delete notes you don't need\n\nEnjoy! 🎉`;
+            saveNotes();
+        }
+    }
+}
+
+function saveNotes() {
+    localStorage.setItem('portfolio-notes', JSON.stringify(notes.value));
+}
+
+function createNewNote() {
+    const newNote = {
+        id: Date.now(),
+        title: '',
+        content: '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+    };
+    notes.value.unshift(newNote);
+    currentNoteId.value = newNote.id;
+    showNotesList.value = false;
+    saveNotes();
+}
+
+function selectNote(id) {
+    currentNoteId.value = id;
+    showNotesList.value = false;
+}
+
+function deleteNote(id) {
+    const index = notes.value.findIndex(n => n.id === id);
+    if (index > -1) {
+        notes.value.splice(index, 1);
+        if (currentNoteId.value === id) {
+            currentNoteId.value = notes.value.length > 0 ? notes.value[0].id : null;
+        }
+        saveNotes();
+    }
+}
+
+function getCurrentNote() {
+    return notes.value.find(n => n.id === currentNoteId.value) || null;
+}
+
+function updateCurrentNote() {
+    const note = getCurrentNote();
+    if (note) {
+        note.updatedAt = new Date().toISOString();
+        saveNotes();
+    }
+}
+
+function closeNotes() {
+    notesOpen.value = false;
+    showNotesList.value = true;
+}
+
+function backToNotesList() {
+    showNotesList.value = true;
+}
+
+function formatNoteDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now - date;
+    
+    if (diff < 60000) return 'Just now';
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+    
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function getPreview(content) {
+    if (!content) return 'No content';
+    return content.substring(0, 40) + (content.length > 40 ? '...' : '');
 }
 
 function openLightbox(index) {
@@ -852,6 +1003,208 @@ onUnmounted(() => {
 
 .lightbox-dots .dot.active {
     background: white;
+}
+
+/* Mobile Notes App */
+.notes-app {
+    position: fixed;
+    inset: 0;
+    background: #1c1c1e;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    animation: slideUpMobile 0.3s ease;
+}
+
+.notes-header-mobile {
+    height: 56px;
+    background: rgba(30, 30, 30, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.notes-back {
+    background: none;
+    border: none;
+    color: #FFCC02;
+    font-size: 17px;
+    padding: 8px 0;
+    cursor: pointer;
+    min-width: 70px;
+    text-align: left;
+}
+
+.notes-title {
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 8px;
+}
+
+.notes-new-btn {
+    background: #FFCC02;
+    border: none;
+    color: #1c1c1e;
+    font-size: 24px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.notes-spacer {
+    min-width: 32px;
+}
+
+/* Notes List Mobile */
+.notes-list-mobile {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.notes-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.notes-empty .empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.notes-empty p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.create-note-btn {
+    background: #FFCC02;
+    border: none;
+    color: #1c1c1e;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.note-item-mobile {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.note-item-mobile:active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.note-item-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.note-item-title {
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.note-item-preview {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.note-item-date {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 12px;
+}
+
+.note-delete-btn {
+    background: rgba(255, 59, 48, 0.8);
+    border: none;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+
+/* Note Editor Mobile */
+.note-editor-mobile {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    overflow: hidden;
+}
+
+.note-title-input-mobile {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 8px 0;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.note-title-input-mobile::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.note-textarea-mobile {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+    line-height: 1.6;
+    resize: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.note-textarea-mobile::placeholder {
+    color: rgba(255, 255, 255, 0.3);
 }
 
 @media (min-width: 768px) {
