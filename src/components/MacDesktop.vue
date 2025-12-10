@@ -30,32 +30,87 @@
                 :style="{ left: icon.x + 'px', top: icon.y + 'px' }"
             >
                 <div :class="['icon-image', icon.iconClass]">
-                    <div v-if="icon.id === 'terminal'" class="terminal-icon-content">
-                        <span class="terminal-symbol">&gt;_</span>
-                    </div>
-                    <div v-else-if="icon.id === 'linkedin'" class="social-icon-content">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="36" height="36">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    <!-- Photos -->
+                    <div v-if="icon.id === 'photos'" class="app-icon-content">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" fill="url(#photosGrad)"/>
+                            <path d="M12 7L14.5 11H9.5L12 7Z" fill="white"/>
+                            <circle cx="12" cy="14" r="3" fill="white"/>
+                            <defs><linearGradient id="photosGrad" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#FF6B6B"/><stop offset="0.5" stop-color="#FFE66D"/><stop offset="1" stop-color="#4ECDC4"/></linearGradient></defs>
                         </svg>
                     </div>
-                    <div v-else-if="icon.id === 'facebook'" class="social-icon-content">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="36" height="36">
-                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    <!-- Music -->
+                    <div v-else-if="icon.id === 'music'" class="app-icon-content">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="5" fill="url(#musicGrad)"/>
+                            <path d="M17 7V15C17 16.66 15.66 18 14 18C12.34 18 11 16.66 11 15C11 13.34 12.34 12 14 12C14.35 12 14.69 12.07 15 12.18V9L11 10V16C11 17.66 9.66 19 8 19C6.34 19 5 17.66 5 16C5 14.34 6.34 13 8 13C8.35 13 8.69 13.07 9 13.18V7L17 5V7Z" fill="white"/>
+                            <defs><linearGradient id="musicGrad" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#FA2D48"/><stop offset="1" stop-color="#A12B6B"/></linearGradient></defs>
                         </svg>
                     </div>
-                    <div v-else-if="icon.id === 'instagram'" class="social-icon-content">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="36" height="36">
-                            <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                    <!-- Notes -->
+                    <div v-else-if="icon.id === 'notes'" class="app-icon-content">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="5" fill="#FFCC02"/>
+                            <rect x="5" y="4" width="14" height="16" rx="2" fill="white"/>
+                            <line x1="7" y1="8" x2="17" y2="8" stroke="#E5E5E5" stroke-width="1"/>
+                            <line x1="7" y1="11" x2="17" y2="11" stroke="#E5E5E5" stroke-width="1"/>
+                            <line x1="7" y1="14" x2="14" y2="14" stroke="#E5E5E5" stroke-width="1"/>
                         </svg>
                     </div>
-                    <span v-else class="finder-symbol">{{ icon.emoji }}</span>
+                    <!-- Calendar -->
+                    <div v-else-if="icon.id === 'calendar'" class="app-icon-content">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="5" fill="white"/>
+                            <rect y="0" width="24" height="7" rx="3" fill="#FF3B30"/>
+                            <text x="12" y="18" text-anchor="middle" fill="#1C1C1E" font-size="11" font-weight="bold" font-family="-apple-system">11</text>
+                        </svg>
+                    </div>
+                    <!-- LinkedIn -->
+                    <div v-else-if="icon.id === 'linkedin'" class="app-icon-content">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="5" fill="#0A66C2"/>
+                            <path d="M8.5 10V17H6V10H8.5ZM7.25 8.75C6.56 8.75 6 8.19 6 7.5C6 6.81 6.56 6.25 7.25 6.25C7.94 6.25 8.5 6.81 8.5 7.5C8.5 8.19 7.94 8.75 7.25 8.75ZM18 17H15.5V13.5C15.5 12.5 15 12 14 12C13 12 12.5 12.67 12.5 13.5V17H10V10H12.5V11C12.5 11 13.17 10 14.75 10C16.33 10 18 11 18 13.5V17Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <!-- Facebook -->
+                    <div v-else-if="icon.id === 'facebook'" class="app-icon-content">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="5" fill="#1877F2"/>
+                            <path d="M16.5 12.5H14V18H11V12.5H9V10H11V8.5C11 6.5 12.17 5.5 14 5.5C14.83 5.5 15.5 5.58 15.5 5.58V7.5H14.67C13.67 7.5 13.5 8 13.5 8.67V10H15.5L15 12.5H13.5" fill="white"/>
+                        </svg>
+                    </div>
+                    <!-- Instagram -->
+                    <div v-else-if="icon.id === 'instagram'" class="app-icon-content">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="5" fill="url(#instaGrad)"/>
+                            <rect x="6" y="6" width="12" height="12" rx="3" stroke="white" stroke-width="1.5" fill="none"/>
+                            <circle cx="12" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/>
+                            <circle cx="15.5" cy="8.5" r="1" fill="white"/>
+                            <defs><radialGradient id="instaGrad" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#FFDC80"/><stop offset="10%" stop-color="#FCAF45"/><stop offset="35%" stop-color="#F77737"/><stop offset="55%" stop-color="#F56040"/><stop offset="70%" stop-color="#FD1D1D"/><stop offset="80%" stop-color="#E1306C"/><stop offset="100%" stop-color="#C13584"/></radialGradient></defs>
+                        </svg>
+                    </div>
+                    <!-- GitHub -->
+                    <div v-else-if="icon.id === 'github'" class="app-icon-content">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="5" fill="#24292F"/>
+                            <path d="M12 5C8.13 5 5 8.13 5 12C5 15.1 7.01 17.71 9.78 18.5C10.12 18.56 10.25 18.35 10.25 18.17V16.65C8.13 17.07 7.73 15.6 7.73 15.6C7.42 14.9 6.97 14.69 6.97 14.69C6.34 14.27 7.02 14.28 7.02 14.28C7.72 14.33 8.09 15 8.09 15C8.71 16.05 9.73 15.75 10.28 15.57C10.34 15.12 10.52 14.82 10.72 14.65C9.03 14.48 7.25 13.81 7.25 11.21C7.25 10.54 7.5 10 7.9 9.57C7.83 9.4 7.58 8.78 7.96 7.94C7.96 7.94 8.55 7.76 10.24 8.55C10.79 8.4 11.4 8.33 12 8.33C12.6 8.33 13.21 8.4 13.76 8.55C15.45 7.76 16.04 7.94 16.04 7.94C16.42 8.78 16.17 9.4 16.1 9.57C16.5 10 16.75 10.54 16.75 11.21C16.75 13.82 14.97 14.47 13.27 14.64C13.52 14.85 13.75 15.26 13.75 15.9V18.17C13.75 18.35 13.88 18.57 14.23 18.5C16.99 17.7 19 15.1 19 12C19 8.13 15.87 5 12 5Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <!-- Terminal -->
+                    <div v-else-if="icon.id === 'terminal'" class="app-icon-content">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="5" fill="#1e1e1e"/>
+                            <path d="M7 8L11 12L7 16" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="13" y1="16" x2="17" y2="16" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
                 </div>
                 <div class="icon-label">{{ icon.label }}</div>
             </div>
         </div>
 
         <!-- Dock -->
-        <div class="dock-container">
+        <div class="dock-container" :class="{ 'dock-hidden': isMaximized || isGalleryMaximized || isNotesMaximized }">
             <div class="dock">
                 <div class="dock-icon finder-dock" @click="selectDockIcon('finder')">
                     <span>🗂️</span>
@@ -70,10 +125,37 @@
                     <span>💬</span>
                 </div>
                 <div class="dock-divider"></div>
-                <div class="dock-icon terminal-dock" @click="selectDockIcon('terminal')">
+                <!-- Terminal Dock (shows when running) -->
+                <div v-if="terminalOpen || terminalMinimized" class="dock-icon terminal-dock" @click="selectDockIcon('terminal')" :class="{ 'has-window': terminalOpen || terminalMinimized }">
                     <div class="dock-terminal-icon">
                         <span>&gt;_</span>
                     </div>
+                    <div class="dock-indicator" :class="{ 'minimized-indicator': terminalMinimized, 'running-indicator': terminalOpen && !terminalMinimized }"></div>
+                </div>
+                <!-- Photos Dock (shows when running) -->
+                <div v-if="galleryOpen || galleryMinimized" class="dock-icon photos-dock" @click="selectDockIcon('photos')" :class="{ 'has-window': galleryOpen || galleryMinimized }">
+                    <div class="dock-photos-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" fill="url(#dockPhotosGrad)"/>
+                            <path d="M12 7L14.5 11H9.5L12 7Z" fill="white"/>
+                            <circle cx="12" cy="14" r="3" fill="white"/>
+                            <defs><linearGradient id="dockPhotosGrad" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#FF6B6B"/><stop offset="0.5" stop-color="#FFE66D"/><stop offset="1" stop-color="#4ECDC4"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <div class="dock-indicator" :class="{ 'minimized-indicator': galleryMinimized, 'running-indicator': galleryOpen && !galleryMinimized }"></div>
+                </div>
+                <!-- Notes Dock (shows when running) -->
+                <div v-if="notesOpen || notesMinimized" class="dock-icon notes-dock" @click="selectDockIcon('notes')" :class="{ 'has-window': notesOpen || notesMinimized }">
+                    <div class="dock-notes-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="5" fill="#FFCC02"/>
+                            <rect x="5" y="4" width="14" height="16" rx="2" fill="white"/>
+                            <line x1="7" y1="8" x2="17" y2="8" stroke="#E5E5E5" stroke-width="1"/>
+                            <line x1="7" y1="11" x2="17" y2="11" stroke="#E5E5E5" stroke-width="1"/>
+                            <line x1="7" y1="14" x2="14" y2="14" stroke="#E5E5E5" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <div class="dock-indicator" :class="{ 'minimized-indicator': notesMinimized, 'running-indicator': notesOpen && !notesMinimized }"></div>
                 </div>
                 <div class="dock-icon" @click="selectDockIcon('settings')">
                     <span>⚙️</span>
@@ -83,7 +165,7 @@
 
         <!-- Terminal Window (shown when opened) -->
         <div 
-            v-if="terminalOpen" 
+            v-if="terminalOpen && !terminalMinimized" 
             class="terminal-container"
             :style="terminalStyle"
         >
@@ -93,7 +175,7 @@
             >
                 <div class="window-controls">
                     <span class="window-dot close" @click.stop="closeTerminal"></span>
-                    <span class="window-dot minimize"></span>
+                    <span class="window-dot minimize" @click.stop="minimizeTerminal"></span>
                     <span class="window-dot maximize" @click.stop="toggleMaximize"></span>
                 </div>
                 <div class="window-title">Terminal — zsh</div>
@@ -143,17 +225,91 @@
             <div class="resize-handle resize-bottom" @mousedown="startResize($event, 'bottom')"></div>
             <div class="resize-handle resize-corner" @mousedown="startResize($event, 'corner')"></div>
         </div>
+
+        <!-- Gallery Window -->
+        <div 
+            v-if="galleryOpen && !galleryMinimized" 
+            class="gallery-container"
+            :style="galleryStyle"
+        >
+            <div 
+                class="gallery-header"
+                @mousedown="startDragGallery"
+            >
+                <div class="window-controls">
+                    <span class="window-dot close" @click.stop="closeGallery"></span>
+                    <span class="window-dot minimize" @click.stop="minimizeGallery"></span>
+                    <span class="window-dot maximize" @click.stop="toggleGalleryMaximize"></span>
+                </div>
+                <div class="window-title">Photos</div>
+            </div>
+            <div class="gallery-body">
+                <!-- Grid View -->
+                <div v-if="!lightboxOpen" class="photo-grid">
+                    <div 
+                        v-for="(photo, index) in photos" 
+                        :key="photo.id" 
+                        class="photo-item"
+                        @click="openLightbox(index)"
+                    >
+                        <img :src="photo.src" :alt="photo.title" loading="lazy" />
+                    </div>
+                </div>
+                
+                <!-- Lightbox View -->
+                <div v-else class="lightbox" @click.self="closeLightbox">
+                    <button class="lightbox-close" @click="closeLightbox">×</button>
+                    <button class="lightbox-nav lightbox-prev" @click.stop="prevPhoto">‹</button>
+                    <div class="lightbox-image-container">
+                        <img :src="photos[currentPhotoIndex].src" :alt="photos[currentPhotoIndex].title" />
+                        <div class="lightbox-counter">{{ currentPhotoIndex + 1 }} / {{ photos.length }}</div>
+                    </div>
+                    <button class="lightbox-nav lightbox-next" @click.stop="nextPhoto">›</button>
+                </div>
+            </div>
+            <!-- Gallery Resize Handles -->
+            <div class="resize-handle resize-right" @mousedown="startGalleryResize($event, 'right')"></div>
+            <div class="resize-handle resize-bottom" @mousedown="startGalleryResize($event, 'bottom')"></div>
+            <div class="resize-handle resize-corner" @mousedown="startGalleryResize($event, 'corner')"></div>
+        </div>
+
+        <!-- Notes Window -->
+        <div 
+            v-if="notesOpen && !notesMinimized" 
+            class="notes-container"
+            :style="notesStyle"
+        >
+            <Notes 
+                @close="closeNotes"
+                @minimize="minimizeNotes"
+                @toggleMaximize="toggleNotesMaximize"
+                @startDrag="startDragNotes"
+            />
+            <!-- Notes Resize Handles -->
+            <div class="resize-handle resize-right" @mousedown="startNotesResize($event, 'right')"></div>
+            <div class="resize-handle resize-bottom" @mousedown="startNotesResize($event, 'bottom')"></div>
+            <div class="resize-handle resize-corner" @mousedown="startNotesResize($event, 'corner')"></div>
+        </div>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { photos } from '../data/photos.js';
+import Notes from './Notes.vue';
 
 const emit = defineEmits(['logout']);
 
 const currentTime = ref('');
 const selectedIcon = ref(null);
 const terminalOpen = ref(false);
+const terminalMinimized = ref(false);
+const galleryOpen = ref(false);
+const galleryMinimized = ref(false);
+const notesOpen = ref(false);
+const notesMinimized = ref(false);
+const lightboxOpen = ref(false);
+const currentPhotoIndex = ref(0);
 let clickTimer = null;
 let clickCount = 0;
 
@@ -361,22 +517,19 @@ const commands = {
     }
 };
 
-// Desktop icons with positions arranged from left side
+// Desktop icons with positions arranged from left side (excluding dock items)
 const desktopIcons = ref([
-    // Column 1
-    { id: 'terminal', label: 'Terminal', emoji: '', iconClass: 'terminal-icon', x: 20, y: 40 },
-    { id: 'finder', label: 'Finder', emoji: '🗂️', iconClass: 'finder-icon', x: 20, y: 130 },
-    { id: 'safari', label: 'Safari', emoji: '🧭', iconClass: 'safari-icon', x: 20, y: 220 },
-    { id: 'mail', label: 'Mail', emoji: '✉️', iconClass: 'mail-icon', x: 20, y: 310 },
-    { id: 'photos', label: 'Photos', emoji: '🌅', iconClass: 'photos-icon', x: 20, y: 400 },
-    { id: 'music', label: 'Music', emoji: '🎵', iconClass: 'music-icon', x: 20, y: 490 },
-    // Column 2
-    { id: 'notes', label: 'Notes', emoji: '📝', iconClass: 'notes-icon', x: 110, y: 40 },
-    { id: 'calendar', label: 'Calendar', emoji: '📅', iconClass: 'calendar-icon', x: 110, y: 130 },
-    { id: 'settings', label: 'Settings', emoji: '⚙️', iconClass: 'settings-icon', x: 110, y: 220 },
-    { id: 'linkedin', label: 'LinkedIn', emoji: '', iconClass: 'linkedin-icon', x: 110, y: 310 },
-    { id: 'facebook', label: 'Facebook', emoji: '', iconClass: 'facebook-icon', x: 110, y: 400 },
-    { id: 'instagram', label: 'Instagram', emoji: '', iconClass: 'instagram-icon', x: 110, y: 490 }
+    // Column 1 - Apps
+    { id: 'terminal', label: 'Terminal', iconClass: 'terminal-icon', x: 20, y: 40 },
+    { id: 'photos', label: 'Photos', iconClass: 'photos-icon', x: 20, y: 130 },
+    { id: 'music', label: 'Music', iconClass: 'music-icon', x: 20, y: 220 },
+    { id: 'notes', label: 'Notes', iconClass: 'notes-icon', x: 20, y: 310 },
+    { id: 'calendar', label: 'Calendar', iconClass: 'calendar-icon', x: 20, y: 400 },
+    // Column 2 - Social Media
+    { id: 'linkedin', label: 'LinkedIn', iconClass: 'linkedin-icon', x: 110, y: 40 },
+    { id: 'facebook', label: 'Facebook', iconClass: 'facebook-icon', x: 110, y: 130 },
+    { id: 'instagram', label: 'Instagram', iconClass: 'instagram-icon', x: 110, y: 220 },
+    { id: 'github', label: 'GitHub', iconClass: 'github-icon', x: 110, y: 310 }
 ]);
 
 // Icon dragging
@@ -397,6 +550,58 @@ const terminalStyle = ref({
 
 const isMaximized = ref(false);
 let previousStyle = null;
+
+// Gallery window state
+const galleryStyle = ref({
+    left: '150px',
+    top: '80px',
+    width: '900px',
+    height: '600px'
+});
+
+const isGalleryMaximized = ref(false);
+let previousGalleryStyle = null;
+
+// Notes window state
+const notesStyle = ref({
+    left: '200px',
+    top: '100px',
+    width: '800px',
+    height: '550px'
+});
+
+const isNotesMaximized = ref(false);
+let previousNotesStyle = null;
+
+// Notes dragging
+let isDraggingNotes = false;
+let notesStartX = 0;
+let notesStartY = 0;
+let notesOffsetX = 0;
+let notesOffsetY = 0;
+
+// Notes resizing
+let isNotesResizing = false;
+let notesResizeDirection = null;
+let notesResizeStartX = 0;
+let notesResizeStartY = 0;
+let notesResizeStartWidth = 0;
+let notesResizeStartHeight = 0;
+
+// Gallery dragging
+let isDraggingGallery = false;
+let galleryStartX = 0;
+let galleryStartY = 0;
+let galleryOffsetX = 0;
+let galleryOffsetY = 0;
+
+// Gallery resizing
+let isGalleryResizing = false;
+let galleryResizeDirection = null;
+let galleryResizeStartX = 0;
+let galleryResizeStartY = 0;
+let galleryResizeStartWidth = 0;
+let galleryResizeStartHeight = 0;
 
 // Window dragging
 let isDraggingWindow = false;
@@ -589,22 +794,44 @@ function openApplication(appName) {
         nextTick(() => {
             terminalInput.value?.focus();
         });
+    } else if (appName === 'photos') {
+        galleryOpen.value = true;
+    } else if (appName === 'notes') {
+        notesOpen.value = true;
     } else if (appName === 'linkedin') {
         window.open('https://www.linkedin.com/in/pasindu-pathum-98a299249', '_blank');
     } else if (appName === 'facebook') {
         window.open('https://www.facebook.com/gap.pathum', '_blank');
     } else if (appName === 'instagram') {
         window.open('https://www.instagram.com/gap_pathum', '_blank');
+    } else if (appName === 'github') {
+        window.open('https://github.com/GAP-Pathum', '_blank');
     }
     // Other apps can be implemented later
 }
 
 function selectDockIcon(iconName) {
     if (iconName === 'terminal') {
-        terminalOpen.value = true;
-        nextTick(() => {
-            terminalInput.value?.focus();
-        });
+        if (terminalMinimized.value) {
+            restoreTerminal();
+        } else if (!terminalOpen.value) {
+            terminalOpen.value = true;
+            nextTick(() => {
+                terminalInput.value?.focus();
+            });
+        }
+    } else if (iconName === 'photos') {
+        if (galleryMinimized.value) {
+            restoreGallery();
+        } else if (!galleryOpen.value) {
+            galleryOpen.value = true;
+        }
+    } else if (iconName === 'notes') {
+        if (notesMinimized.value) {
+            restoreNotes();
+        } else if (!notesOpen.value) {
+            notesOpen.value = true;
+        }
     } else if (iconName === 'linkedin') {
         window.open('https://www.linkedin.com/in/pasindu-pathum-98a299249', '_blank');
     } else if (iconName === 'facebook') {
@@ -617,9 +844,256 @@ function selectDockIcon(iconName) {
 
 function closeTerminal() {
     terminalOpen.value = false;
+    terminalMinimized.value = false;
+    isMaximized.value = false;
     terminalOutput.value = [];
     currentCommand.value = '';
     cwd.value = '~';
+}
+
+function minimizeTerminal() {
+    terminalMinimized.value = true;
+    if (isMaximized.value) {
+        toggleMaximize(); // Restore from maximize before minimizing
+    }
+}
+
+function restoreTerminal() {
+    terminalMinimized.value = false;
+    nextTick(() => {
+        terminalInput.value?.focus();
+    });
+}
+
+// Gallery functions
+function closeGallery() {
+    galleryOpen.value = false;
+    galleryMinimized.value = false;
+    isGalleryMaximized.value = false;
+    lightboxOpen.value = false;
+    currentPhotoIndex.value = 0;
+}
+
+function minimizeGallery() {
+    galleryMinimized.value = true;
+    if (isGalleryMaximized.value) {
+        toggleGalleryMaximize(); // Restore from maximize before minimizing
+    }
+}
+
+function restoreGallery() {
+    galleryMinimized.value = false;
+}
+
+// Notes functions
+function closeNotes() {
+    notesOpen.value = false;
+    notesMinimized.value = false;
+    isNotesMaximized.value = false;
+}
+
+function minimizeNotes() {
+    notesMinimized.value = true;
+    if (isNotesMaximized.value) {
+        toggleNotesMaximize();
+    }
+}
+
+function restoreNotes() {
+    notesMinimized.value = false;
+}
+
+function toggleNotesMaximize() {
+    if (isNotesMaximized.value) {
+        notesStyle.value = { ...previousNotesStyle };
+        isNotesMaximized.value = false;
+    } else {
+        previousNotesStyle = { ...notesStyle.value };
+        notesStyle.value = {
+            left: '0px',
+            top: '24px',
+            width: '100vw',
+            height: 'calc(100vh - 24px)'
+        };
+        isNotesMaximized.value = true;
+    }
+}
+
+function startDragNotes(event) {
+    if (isNotesMaximized.value) return;
+    event.preventDefault();
+    
+    const container = document.querySelector('.notes-container');
+    const rect = container.getBoundingClientRect();
+    
+    isDraggingNotes = true;
+    notesStartX = event.clientX;
+    notesStartY = event.clientY;
+    notesOffsetX = event.clientX - rect.left;
+    notesOffsetY = event.clientY - rect.top;
+    
+    document.addEventListener('mousemove', dragNotes);
+    document.addEventListener('mouseup', stopDragNotes);
+}
+
+function dragNotes(event) {
+    if (!isDraggingNotes) return;
+    
+    const newX = event.clientX - notesOffsetX;
+    const newY = event.clientY - notesOffsetY;
+    
+    notesStyle.value.left = `${Math.max(0, newX)}px`;
+    notesStyle.value.top = `${Math.max(24, newY)}px`;
+}
+
+function stopDragNotes() {
+    isDraggingNotes = false;
+    document.removeEventListener('mousemove', dragNotes);
+    document.removeEventListener('mouseup', stopDragNotes);
+}
+
+function startNotesResize(event, direction) {
+    if (isNotesMaximized.value) return;
+    event.preventDefault();
+    
+    isNotesResizing = true;
+    notesResizeDirection = direction;
+    notesResizeStartX = event.clientX;
+    notesResizeStartY = event.clientY;
+    notesResizeStartWidth = parseInt(notesStyle.value.width);
+    notesResizeStartHeight = parseInt(notesStyle.value.height);
+    
+    document.addEventListener('mousemove', resizeNotes);
+    document.addEventListener('mouseup', stopNotesResize);
+}
+
+function resizeNotes(event) {
+    if (!isNotesResizing) return;
+    
+    const deltaX = event.clientX - notesResizeStartX;
+    const deltaY = event.clientY - notesResizeStartY;
+    
+    if (notesResizeDirection === 'right' || notesResizeDirection === 'corner') {
+        const newWidth = Math.max(400, notesResizeStartWidth + deltaX);
+        notesStyle.value.width = `${newWidth}px`;
+    }
+    
+    if (notesResizeDirection === 'bottom' || notesResizeDirection === 'corner') {
+        const newHeight = Math.max(300, notesResizeStartHeight + deltaY);
+        notesStyle.value.height = `${newHeight}px`;
+    }
+}
+
+function stopNotesResize() {
+    isNotesResizing = false;
+    notesResizeDirection = null;
+    document.removeEventListener('mousemove', resizeNotes);
+    document.removeEventListener('mouseup', stopNotesResize);
+}
+
+function openLightbox(index) {
+    currentPhotoIndex.value = index;
+    lightboxOpen.value = true;
+}
+
+function closeLightbox() {
+    lightboxOpen.value = false;
+}
+
+function nextPhoto() {
+    currentPhotoIndex.value = (currentPhotoIndex.value + 1) % photos.length;
+}
+
+function prevPhoto() {
+    currentPhotoIndex.value = (currentPhotoIndex.value - 1 + photos.length) % photos.length;
+}
+
+function toggleGalleryMaximize() {
+    if (isGalleryMaximized.value) {
+        galleryStyle.value = { ...previousGalleryStyle };
+        isGalleryMaximized.value = false;
+    } else {
+        previousGalleryStyle = { ...galleryStyle.value };
+        galleryStyle.value = {
+            left: '0px',
+            top: '24px',
+            width: '100vw',
+            height: 'calc(100vh - 24px)'
+        };
+        isGalleryMaximized.value = true;
+    }
+}
+
+function startDragGallery(event) {
+    if (isGalleryMaximized.value) return;
+    event.preventDefault();
+    isDraggingGallery = true;
+    galleryStartX = event.clientX;
+    galleryStartY = event.clientY;
+    galleryOffsetX = parseInt(galleryStyle.value.left) || 0;
+    galleryOffsetY = parseInt(galleryStyle.value.top) || 0;
+    document.addEventListener('mousemove', dragGallery);
+    document.addEventListener('mouseup', stopDragGallery);
+}
+
+function dragGallery(event) {
+    if (!isDraggingGallery) return;
+    const deltaX = event.clientX - galleryStartX;
+    const deltaY = event.clientY - galleryStartY;
+    galleryStyle.value.left = (galleryOffsetX + deltaX) + 'px';
+    galleryStyle.value.top = Math.max(24, galleryOffsetY + deltaY) + 'px';
+}
+
+function stopDragGallery() {
+    isDraggingGallery = false;
+    document.removeEventListener('mousemove', dragGallery);
+    document.removeEventListener('mouseup', stopDragGallery);
+}
+
+function startGalleryResize(event, direction) {
+    if (isGalleryMaximized.value) return;
+    event.preventDefault();
+    isGalleryResizing = true;
+    galleryResizeDirection = direction;
+    galleryResizeStartX = event.clientX;
+    galleryResizeStartY = event.clientY;
+    galleryResizeStartWidth = parseInt(galleryStyle.value.width) || 900;
+    galleryResizeStartHeight = parseInt(galleryStyle.value.height) || 600;
+    document.addEventListener('mousemove', resizeGallery);
+    document.addEventListener('mouseup', stopGalleryResize);
+}
+
+function resizeGallery(event) {
+    if (!isGalleryResizing) return;
+    const deltaX = event.clientX - galleryResizeStartX;
+    const deltaY = event.clientY - galleryResizeStartY;
+    
+    if (galleryResizeDirection === 'right' || galleryResizeDirection === 'corner') {
+        galleryStyle.value.width = Math.max(400, galleryResizeStartWidth + deltaX) + 'px';
+    }
+    if (galleryResizeDirection === 'bottom' || galleryResizeDirection === 'corner') {
+        galleryStyle.value.height = Math.max(300, galleryResizeStartHeight + deltaY) + 'px';
+    }
+}
+
+function stopGalleryResize() {
+    isGalleryResizing = false;
+    galleryResizeDirection = null;
+    document.removeEventListener('mousemove', resizeGallery);
+    document.removeEventListener('mouseup', stopGalleryResize);
+}
+
+// Keyboard navigation for lightbox
+function handleKeydown(event) {
+    if (lightboxOpen.value) {
+        if (event.key === 'ArrowRight') {
+            nextPhoto();
+        } else if (event.key === 'ArrowLeft') {
+            prevPhoto();
+        } else if (event.key === 'Escape') {
+            closeLightbox();
+        }
+    }
 }
 
 function executeTerminalCommand() {
@@ -699,10 +1173,12 @@ let timeInterval;
 onMounted(() => {
     updateTime();
     timeInterval = setInterval(updateTime, 1000);
+    document.addEventListener('keydown', handleKeydown);
 });
 
 onUnmounted(() => {
     if (timeInterval) clearInterval(timeInterval);
+    document.removeEventListener('keydown', handleKeydown);
 });
 </script>
 
@@ -805,33 +1281,13 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
     margin-bottom: 4px;
-    border-radius: 12px;
-}
-
-.terminal-icon {
-    background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.terminal-icon-content {
-    color: #00ff88;
-    font-size: 28px;
-    font-weight: bold;
-    font-family: 'Menlo', monospace;
-}
-
-.finder-icon,
-.safari-icon {
-    font-size: 48px;
-}
-
-.linkedin-icon {
-    background: linear-gradient(135deg, #0077B5 0%, #005582 100%);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-radius: 14px;
     overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-.linkedin-icon .social-icon-content {
+/* Unified app icon content */
+.app-icon-content {
     width: 100%;
     height: 100%;
     display: flex;
@@ -839,47 +1295,9 @@ onUnmounted(() => {
     justify-content: center;
 }
 
-.linkedin-icon .social-icon-content svg {
-    width: 36px;
-    height: 36px;
-}
-
-.facebook-icon {
-    background: linear-gradient(135deg, #1877F2 0%, #0d5bbd 100%);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-}
-
-.facebook-icon .social-icon-content {
+.app-icon-content svg {
     width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.facebook-icon .social-icon-content svg {
-    width: 36px;
-    height: 36px;
-}
-
-.instagram-icon {
-    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-}
-
-.instagram-icon .social-icon-content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.instagram-icon .social-icon-content svg {
-    width: 36px;
-    height: 36px;
 }
 
 .icon-label {
@@ -897,6 +1315,7 @@ onUnmounted(() => {
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
+    transition: all 0.3s ease;
 }
 
 .dock {
@@ -943,11 +1362,71 @@ onUnmounted(() => {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+.dock-photos-icon {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dock-photos-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.dock-notes-icon {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dock-notes-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
 .dock-divider {
     width: 1px;
     height: 48px;
     background: rgba(255, 255, 255, 0.2);
     margin: 0 4px;
+}
+
+/* Dock Hidden State - when window is maximized */
+.dock-hidden {
+    transform: translateX(-50%) translateY(100px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* Dock Window Indicators */
+.dock-indicator {
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.running-indicator {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+}
+
+.minimized-indicator {
+    background: rgba(255, 255, 255, 0.4);
 }
 
 /* Terminal Container */
@@ -1241,6 +1720,169 @@ onUnmounted(() => {
     width: 15px;
     height: 15px;
     cursor: nwse-resize;
+}
+
+/* Gallery Window */
+.gallery-container {
+    position: absolute;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    overflow: hidden;
+}
+
+/* Notes Container */
+.notes-container {
+    position: absolute;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    z-index: 300;
+    overflow: hidden;
+}
+
+.gallery-header {
+    height: 40px;
+    background: rgba(60, 60, 60, 0.9);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    cursor: move;
+    flex-shrink: 0;
+}
+
+.gallery-body {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Photo Grid */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+    padding: 16px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.photo-item {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.photo-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Lightbox */
+.lightbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.lightbox-image-container {
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lightbox-image-container img {
+    max-width: 100%;
+    max-height: calc(100vh - 200px);
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-counter {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-top: 16px;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 20;
+}
+
+.lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 20;
+}
+
+.lightbox-nav:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.lightbox-prev {
+    left: 16px;
+}
+
+.lightbox-next {
+    right: 16px;
 }
 
 /* Responsive */

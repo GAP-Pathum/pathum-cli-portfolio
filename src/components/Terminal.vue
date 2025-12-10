@@ -1,7 +1,16 @@
 <template>
     <div class="terminal-wrapper" :class="{ 'desktop-mode': isDesktopMode, 'mobile-mode': isMobileMode }">
+        <!-- Mobile Header -->
+        <div v-if="isMobileMode" class="mobile-terminal-header">
+            <button class="mobile-back-btn" @click="handleClose">
+                ‹ Back
+            </button>
+            <span class="mobile-terminal-title">Terminal</span>
+            <span class="mobile-spacer"></span>
+        </div>
+        
         <div class="terminal-window" @click="focusInput">
-            <div class="terminal-header">
+            <div class="terminal-header" v-if="!isMobileMode">
                 <div class="traffic-lights">
                     <span class="light close" @click.stop="handleClose"></span>
                     <span class="light minimize" @click.stop="minimizeWindow"></span>
@@ -335,11 +344,7 @@ function minimizeWindow() {
 }
 
 function handleClose() {
-    if (props.isDesktopMode) {
-        emit('close');
-    } else {
-        console.log('Close');
-    }
+    emit('close');
 }
 
 function toggleFullscreen() {
@@ -389,13 +394,48 @@ onMounted(() => {
     z-index: 500;
     padding: 0;
     animation: slideUpMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
 }
 
 .terminal-wrapper.mobile-mode .terminal-window {
     max-width: 100%;
-    height: 100vh;
-    max-height: 100vh;
+    height: 100%;
+    max-height: 100%;
     border-radius: 0;
+    flex: 1;
+}
+
+/* Mobile Terminal Header */
+.mobile-terminal-header {
+    height: 56px;
+    background: rgba(30, 30, 30, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    flex-shrink: 0;
+}
+
+.mobile-back-btn {
+    background: none;
+    border: none;
+    color: #007AFF;
+    font-size: 17px;
+    padding: 8px 0;
+    cursor: pointer;
+    min-width: 60px;
+    text-align: left;
+}
+
+.mobile-terminal-title {
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.mobile-spacer {
+    min-width: 60px;
 }
 
 .terminal-wrapper {

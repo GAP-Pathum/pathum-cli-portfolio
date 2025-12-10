@@ -187,6 +187,52 @@
             :isMobileMode="true"
         />
 
+        <!-- Gallery App -->
+        <div v-if="galleryOpen" class="gallery-app">
+            <div class="gallery-header-mobile">
+                <button class="gallery-back" @click="lightboxOpen ? closeLightbox() : closeGallery()">
+                    ‹ {{ lightboxOpen ? 'Gallery' : 'Back' }}
+                </button>
+                <span class="gallery-title">{{ lightboxOpen ? `${currentPhotoIndex + 1} of ${photos.length}` : 'Photos' }}</span>
+                <span class="gallery-spacer"></span>
+            </div>
+            
+            <!-- Photo Grid -->
+            <div v-if="!lightboxOpen" class="photo-grid-mobile">
+                <div 
+                    v-for="(photo, index) in photos" 
+                    :key="photo.id" 
+                    class="photo-item-mobile"
+                    @click="openLightbox(index)"
+                >
+                    <img :src="photo.src" :alt="photo.title" loading="lazy" />
+                </div>
+            </div>
+            
+            <!-- Lightbox -->
+            <div 
+                v-else 
+                class="lightbox-mobile"
+                @touchstart="handleLightboxTouchStart"
+                @touchmove="handleLightboxTouchMove"
+                @touchend="handleLightboxTouchEnd"
+            >
+                <img 
+                    :src="photos[currentPhotoIndex].src" 
+                    :alt="photos[currentPhotoIndex].title"
+                    :style="{ transform: `translateX(${lightboxSwipeX}px)` }"
+                />
+                <div class="lightbox-dots">
+                    <span 
+                        v-for="(_, index) in photos" 
+                        :key="index" 
+                        class="dot"
+                        :class="{ active: index === currentPhotoIndex }"
+                    ></span>
+                </div>
+            </div>
+        </div>
+
         <!-- Notification -->
         <div class="notification" :class="{ 'visible': showNotification }">
             <div class="notification-icon">💼</div>
@@ -201,12 +247,17 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import Terminal from './Terminal.vue';
+import { photos } from '../data/photos.js';
 
 const emit = defineEmits(['logout']);
 
 const currentTime = ref('');
 const batteryLevel = ref(87);
 const terminalOpen = ref(false);
+const galleryOpen = ref(false);
+const lightboxOpen = ref(false);
+const currentPhotoIndex = ref(0);
+const lightboxSwipeX = ref(0);
 const showControlCenter = ref(false);
 const showNotification = ref(false);
 const showWidgets = ref(false);
@@ -216,6 +267,7 @@ const isDark = ref(false);
 let startY = 0;
 let startX = 0;
 let isDragging = false;
+let lightboxTouchStartX = 0;
 
 function updateTime() {
     const now = new Date();
@@ -262,6 +314,8 @@ function handleAppTap(appName) {
                     showNotification.value = false;
                 }, 3000);
             }, 500);
+        } else if (appName === 'photos') {
+            galleryOpen.value = true;
         } else if (appName === 'linkedin') {
             window.open('https://www.linkedin.com/in/pasindu-pathum-98a299249', '_blank');
         } else if (appName === 'facebook') {
@@ -274,6 +328,50 @@ function handleAppTap(appName) {
 
 function closeTerminal() {
     terminalOpen.value = false;
+}
+
+// Gallery functions
+function closeGallery() {
+    galleryOpen.value = false;
+    lightboxOpen.value = false;
+    currentPhotoIndex.value = 0;
+}
+
+function openLightbox(index) {
+    currentPhotoIndex.value = index;
+    lightboxOpen.value = true;
+}
+
+function closeLightbox() {
+    lightboxOpen.value = false;
+    lightboxSwipeX.value = 0;
+}
+
+function nextPhoto() {
+    currentPhotoIndex.value = (currentPhotoIndex.value + 1) % photos.length;
+}
+
+function prevPhoto() {
+    currentPhotoIndex.value = (currentPhotoIndex.value - 1 + photos.length) % photos.length;
+}
+
+// Lightbox swipe handlers
+function handleLightboxTouchStart(e) {
+    lightboxTouchStartX = e.touches[0].clientX;
+}
+
+function handleLightboxTouchMove(e) {
+    const diff = e.touches[0].clientX - lightboxTouchStartX;
+    lightboxSwipeX.value = diff;
+}
+
+function handleLightboxTouchEnd() {
+    if (lightboxSwipeX.value < -50) {
+        nextPhoto();
+    } else if (lightboxSwipeX.value > 50) {
+        prevPhoto();
+    }
+    lightboxSwipeX.value = 0;
 }
 
 function toggleControlCenter() {
@@ -651,6 +749,109 @@ onUnmounted(() => {
 .notification-text {
     font-size: 13px;
     color: #666;
+}
+
+/* Gallery App */
+.gallery-app {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 250;
+    display: flex;
+    flex-direction: column;
+}
+
+.gallery-header-mobile {
+    height: 56px;
+    background: rgba(30, 30, 30, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    flex-shrink: 0;
+}
+
+.gallery-back {
+    background: none;
+    border: none;
+    color: #007AFF;
+    font-size: 17px;
+    padding: 8px 0;
+    cursor: pointer;
+    min-width: 80px;
+    text-align: left;
+}
+
+.gallery-title {
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.gallery-spacer {
+    min-width: 80px;
+}
+
+/* Mobile Photo Grid */
+.photo-grid-mobile {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    padding: 2px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.photo-item-mobile {
+    aspect-ratio: 1;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.photo-item-mobile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Mobile Lightbox */
+.lightbox-mobile {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    overflow: hidden;
+}
+
+.lightbox-mobile img {
+    max-width: 100%;
+    max-height: calc(100vh - 120px);
+    object-fit: contain;
+    transition: transform 0.1s ease-out;
+}
+
+.lightbox-dots {
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    gap: 6px;
+}
+
+.lightbox-dots .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transition: background 0.2s;
+}
+
+.lightbox-dots .dot.active {
+    background: white;
 }
 
 @media (min-width: 768px) {
