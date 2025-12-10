@@ -33,6 +33,11 @@
                     <div v-if="icon.id === 'terminal'" class="terminal-icon-content">
                         <span class="terminal-symbol">&gt;_</span>
                     </div>
+                    <div v-else-if="icon.id === 'linkedin'" class="linkedin-icon-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="36" height="36">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </div>
                     <span v-else class="finder-symbol">{{ icon.emoji }}</span>
                 </div>
                 <div class="icon-label">{{ icon.label }}</div>
@@ -169,21 +174,189 @@ const welcomeMessage = `
 </div>
 `;
 
+// File system
+const fileSystem = {
+  '~': {
+    'README.txt': '<b>Welcome to G.A.P. Pathum\'s CLI Portfolio!</b><br><i>Type "help" for commands. Navigate directories like "cd projects" or "cat bio.txt" for details.</i><br><br>Tip: Use "banner" for a stylish intro!',
+    'bio.txt': '<b>About Me:</b><br><i>Full-stack developer from Ragala, Sri Lanka.</i><br>Curiosity drives exploration beyond surface appearances, seeking patterns and structure through patient observation and systematic reasoning. Understanding emerges from disciplined focus rather than haste, where complexity transforms into clarity through sustained attention and deliberate practice. Simplicity guides every pursuit—precision replaces excess, depth supersedes breadth, and awareness overcomes impulse. Knowledge matures into insight through reflection, evolving into quiet confidence built on consistency and balance. Growth manifests through steady refinement, where meaningful progress arises from thoughtful engagement and unwavering commitment to clarity, purpose, and lasting transformation.',
+    'education': {},
+    'skills.txt': '<b>Technical Skills:</b><ul><li>HTML, CSS, JavaScript</li><li>Figma, Photoshop</li><li>React, Node.js, Express, MongoDB, MySQL</li><li>C, Python, Java, PHP</li><li>Git, Tailwind, ViteJS, WordPress</li><li>Microsoft Office</li></ul><br><b>Soft Skills:</b><ul><li>Patient observation & systematic reasoning</li><li>Disciplined focus & reflection</li><li>Consistency, balance, & steady refinement</li></ul>',
+    'contact.txt': '<b>Contact Info:</b><ul><li>Email: <a href="mailto:pathumpasindu41@gmail.com">pathumpasindu41@gmail.com</a></li><li>Phone: +94 752 955 301</li><li>Location: Ragala, Sri Lanka</li><li>Website: <a href="https://www.pasindupathum.me/">pasindupathum.me</a></li><li>Social: GitHub/LinkedIn (add links if available)</li></ul>',
+    'resume.txt': '<b>Resume:</b><br>View my full resume at <a href="https://www.pasindupathum.me/">https://www.pasindupathum.me/</a> or type "open resume".<br><i>Includes education, skills, projects, and more.</i>',
+    'projects': {},  
+    'certificates.txt': '<b>Certificates & Achievements:</b><br>No formal certifications listed yet, but key achievements include:<ul><li>Capstone Project: Build Mate Plus (2024)</li><li>Ongoing BSc in Computing and Information Systems</li><li>Multiple web and ML projects</li></ul>'
+  },
+  '~/education': {
+    'bsc.txt': '<b>BSc (Hons) Computing and Information Systems</b><br>Sabaragamuwa University of Sri Lanka<br>2022–Present',
+    'advanced-levels.txt': '<b>G.C.E. Advanced Levels (Physics Stream)</b><br>T.B.M. Herath National School – Ragala<br>2020',
+    'ordinary-levels.txt': '<b>G.C.E. Ordinary Levels</b><br>T.B.M. Herath National School – Ragala<br>2016'
+  },
+  '~/projects': {
+    'build-mate-plus.txt': '<b>Build Mate Plus</b> – Capstone Project 2024<br><i>Description:</i> Comprehensive construction management tool for tracking materials, budgets, and progress.<br><i>Technologies:</i> React, Node.js, MongoDB, Tailwind CSS',
+    'foody.txt': '<b>Foody</b> – Online Food Ordering App<br><i>Description:</i> User-friendly platform for browsing menus, placing orders, and real-time tracking.<br><i>Technologies:</i> React, Express, MongoDB, Stripe for payments',
+    'syncpress.txt': '<b>SyncPress</b> – Digital Services Application<br><i>Description:</i> App for managing digital printing services, orders, and customer interactions.<br><i>Technologies:</i> PHP, MySQL, JavaScript, Bootstrap',
+    'spam-detector.txt': '<b>Spam Detector</b><br><i>Description:</i> Web app detecting spam in English/Sinhala messages using SMSSpamCollection and SinhalaSpamCollection datasets.<br><i>Technologies:</i> Python (Scikit-learn for TF-IDF & Naive Bayes), Flask, HTML/CSS/JS',
+    'react-portfolio.txt': '<b>React Vite Portfolio</b><br><i>Description:</i> Personal portfolio with Home, About, Projects sections, animations.<br><i>Technologies:</i> React, Vite, Bootstrap, Framer Motion',
+    'drug-inventory-dashboard.txt': '<b>Drug Inventory Dashboard</b><br><i>Description:</i> Responsive, role-based dashboard for managing drug stock.<br><i>Technologies:</i> PHP, Laravel, Bootstrap, MySQL',
+    'hotel-booking.txt': '<b>Hotel Booking System</b><br><i>Description:</i> Booking system using Google Sheets as backend for room availability.<br><i>Technologies:</i> HTML, CSS, JavaScript, Google Apps Script',
+  }
+};
+
+const cwd = ref('~');
+
+const resolvePath = (path) => {
+    if (!path) return cwd.value;
+    if (path.startsWith('/')) return path.slice(1) || '~';
+    if (path === '~') return '~';
+    if (path === '..') {
+        const parts = cwd.value.split('/').filter(Boolean);
+        parts.pop();
+        return parts.length ? parts.join('/') : '~';
+    }
+    if (path === '.') return cwd.value;
+    
+    const current = cwd.value === '~' ? '' : cwd.value;
+    const newPath = current ? `${current}/${path}` : path;
+    return newPath;
+};
+
+const getDir = (path) => {
+    const normalized = path === '~' ? '~' : path.replace(/^~\//, '~/');
+    const parts = normalized.split('/').filter(Boolean);
+    
+    let dir = fileSystem;
+    for (const part of parts) {
+        if (dir && dir[part]) {
+            dir = dir[part];
+        } else {
+            return null;
+        }
+    }
+    return dir;
+};
+
 // Terminal commands
 const commands = {
-    help: () => '<b>Available Commands:</b><ul><li><b>clear</b> - Clear screen</li><li><b>banner</b> - Show banner</li><li><b>whoami</b> - About me</li><li><b>contact</b> - Get in touch</li><li><b>projects</b> - View projects</li></ul>',
-    clear: () => { terminalOutput.value = []; return null; },
+    help: () => '<b>Available Commands:</b><ul><li><b>cd [dir]</b> - Change directory</li><li><b>ls</b> - List files</li><li><b>cat [file]</b> - Read file</li><li><b>clear</b> - Clear screen</li><li><b>banner</b> - Show banner</li><li><b>whoami</b> - About me</li><li><b>pwd</b> - Current directory</li><li><b>open [resume/project]</b> - Open link</li><li><b>exit</b> - Close terminal</li><li><b>echo [text]</b> - Echo text</li><li><b>history</b> - Command history</li></ul>',
+    
+    clear: () => { 
+        terminalOutput.value = []; 
+        return null; 
+    },
+    
     banner: () => welcomeMessage,
-    whoami: () => '<b>GAP Pathum</b><br>Full-Stack Developer from Sri Lanka 🇱🇰<br>Passionate about building amazing web experiences!',
-    contact: () => '<b>Contact:</b><br>📧 Email: contact@pasindupathum.me<br>🌐 Portfolio: <a href="https://pasindupathum.me" target="_blank">pasindupathum.me</a>',
-    projects: () => '<b>Projects:</b><ul><li>🚀 CLI Portfolio</li><li>💼 E-Commerce Platform</li><li>📱 Mobile App</li></ul>',
+    
+    whoami: () => {
+        const bioFile = fileSystem['~']['bio.txt'];
+        return bioFile || '<b>GAP Pathum</b><br>Full-Stack Developer from Sri Lanka 🇱🇰';
+    },
+    
+    pwd: () => cwd.value,
+    
+    ls: () => {
+        const dir = getDir(cwd.value);
+        if (!dir) return '<span style="color: #f38ba8;">Directory not found</span>';
+        
+        const items = Object.keys(dir);
+        if (items.length === 0) return '<i>Empty directory</i>';
+        
+        return items.map(item => {
+            const isDir = typeof dir[item] === 'object' && !Array.isArray(dir[item]);
+            return isDir ? `<span style="color: #89dceb;">${item}/</span>` : `<span style="color: #a6e3a1;">${item}</span>`;
+        }).join('  ');
+    },
+    
+    cd: (args) => {
+        if (!args[0]) {
+            cwd.value = '~';
+            return null;
+        }
+        
+        const targetPath = resolvePath(args[0]);
+        const dir = getDir(targetPath);
+        
+        if (!dir) {
+            return `<span style="color: #f38ba8;">cd: ${args[0]}: No such directory</span>`;
+        }
+        
+        if (typeof dir !== 'object') {
+            return `<span style="color: #f38ba8;">cd: ${args[0]}: Not a directory</span>`;
+        }
+        
+        cwd.value = targetPath;
+        return null;
+    },
+    
+    cat: (args) => {
+        if (!args[0]) {
+            return '<span style="color: #f38ba8;">cat: missing file argument</span>';
+        }
+        
+        const dir = getDir(cwd.value);
+        if (!dir) return '<span style="color: #f38ba8;">Current directory not found</span>';
+        
+        const file = dir[args[0]];
+        if (!file) {
+            return `<span style="color: #f38ba8;">cat: ${args[0]}: No such file</span>`;
+        }
+        
+        if (typeof file === 'object') {
+            return `<span style="color: #f38ba8;">cat: ${args[0]}: Is a directory</span>`;
+        }
+        
+        return file;
+    },
+    
+    open: (args) => {
+        if (!args[0]) {
+            return '<span style="color: #f38ba8;">open: missing argument</span>';
+        }
+        
+        const target = args[0];
+        let url = '';
+        
+        if (target === 'resume') {
+            url = 'https://www.pasindupathum.me/';
+        } else if (target === 'email') {
+            url = 'mailto:pathumpasindu41@gmail.com';
+        } else {
+            const projectsDir = getDir('~/projects');
+            if (projectsDir && projectsDir[`${target}.txt`]) {
+                url = `https://github.com/GAP-Pathum/${target}`;
+            }
+        }
+        
+        if (url) {
+            window.open(url, '_blank');
+            return `<span style="color: #a6e3a1;">Opening ${target}...</span>`;
+        }
+        
+        return `<span style="color: #f38ba8;">open: unknown target '${target}'</span>`;
+    },
+    
+    exit: () => {
+        closeTerminal();
+        return null;
+    },
+    
+    echo: (args) => {
+        return args.join(' ') || '';
+    },
+    
+    history: () => {
+        if (commandHistory.value.length === 0) {
+            return '<i>No command history</i>';
+        }
+        return commandHistory.value.map((cmd, i) => `${i + 1}  ${cmd}`).join('<br>');
+    }
 };
 
 // Desktop icons with positions
 const desktopIcons = ref([
     { id: 'terminal', label: 'Terminal', emoji: '', iconClass: 'terminal-icon', x: window.innerWidth - 120, y: 40 },
     { id: 'finder', label: 'Finder', emoji: '🗂️', iconClass: 'finder-icon', x: window.innerWidth - 120, y: 140 },
-    { id: 'safari', label: 'Safari', emoji: '🧭', iconClass: 'safari-icon', x: window.innerWidth - 120, y: 240 }
+    { id: 'safari', label: 'Safari', emoji: '🧭', iconClass: 'safari-icon', x: window.innerWidth - 120, y: 240 },
+    { id: 'linkedin', label: 'LinkedIn', emoji: '', iconClass: 'linkedin-icon', x: window.innerWidth - 120, y: 340 }
 ]);
 
 // Icon dragging
@@ -396,6 +569,8 @@ function openApplication(appName) {
         nextTick(() => {
             terminalInput.value?.focus();
         });
+    } else if (appName === 'linkedin') {
+        window.open('https://www.linkedin.com/in/pasindu-pathum-98a299249', '_blank');
     }
     // Other apps can be implemented later
 }
@@ -406,6 +581,8 @@ function selectDockIcon(iconName) {
         nextTick(() => {
             terminalInput.value?.focus();
         });
+    } else if (iconName === 'linkedin') {
+        window.open('https://www.linkedin.com/in/pasindu-pathum-98a299249', '_blank');
     }
     // Other apps can be implemented later
 }
@@ -414,6 +591,75 @@ function closeTerminal() {
     terminalOpen.value = false;
     terminalOutput.value = [];
     currentCommand.value = '';
+    cwd.value = '~';
+}
+
+function executeTerminalCommand() {
+    const cmd = currentCommand.value.trim();
+    if (!cmd) {
+        currentCommand.value = '';
+        return;
+    }
+    
+    const parts = cmd.split(' ').filter(Boolean);
+    const commandName = parts[0];
+    const args = parts.slice(1);
+    
+    commandHistory.value.push(cmd);
+    historyIndex.value = commandHistory.value.length;
+    
+    let output = '';
+    
+    if (commands[commandName]) {
+        output = commands[commandName](args);
+    } else {
+        output = `<span style="color: #f38ba8;">Command not found: ${commandName}<br>Type 'help' for available commands.</span>`;
+    }
+    
+    if (output !== null) {
+        terminalOutput.value.push({
+            prompt: cwd.value,
+            command: cmd,
+            output: output,
+            type: 'stdout'
+        });
+    }
+    
+    currentCommand.value = '';
+    
+    nextTick(() => {
+        if (terminalOutputContainer.value) {
+            terminalOutputContainer.value.scrollTop = terminalOutputContainer.value.scrollHeight;
+        }
+        terminalInput.value?.focus();
+    });
+}
+
+function autocompleteCommand() {
+    const cmd = currentCommand.value.trim();
+    if (!cmd) return;
+    
+    const matches = Object.keys(commands).filter(c => c.startsWith(cmd));
+    if (matches.length === 1) {
+        currentCommand.value = matches[0];
+    }
+}
+
+function navigateHistory(direction) {
+    if (direction === 'up' && historyIndex.value > 0) {
+        historyIndex.value--;
+        currentCommand.value = commandHistory.value[historyIndex.value];
+    } else if (direction === 'down' && historyIndex.value < commandHistory.value.length - 1) {
+        historyIndex.value++;
+        currentCommand.value = commandHistory.value[historyIndex.value];
+    } else if (direction === 'down') {
+        historyIndex.value = commandHistory.value.length;
+        currentCommand.value = '';
+    }
+}
+
+function clearTerminal() {
+    terminalOutput.value = [];
 }
 
 function handleLogout() {
@@ -550,6 +796,25 @@ onUnmounted(() => {
 .finder-icon,
 .safari-icon {
     font-size: 48px;
+}
+
+.linkedin-icon {
+    background: linear-gradient(135deg, #0077B5 0%, #005582 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.linkedin-icon .linkedin-icon-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.linkedin-icon .linkedin-icon-content svg {
+    width: 36px;
+    height: 36px;
 }
 
 .icon-label {
