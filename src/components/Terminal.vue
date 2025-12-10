@@ -630,26 +630,17 @@ onMounted(() => {
     border-radius: 3px;
 }
 
-.dark .cmd {
+.cmd {
     color: #89dceb;
     background: rgba(137, 220, 235, 0.1);
-}
-
-.light .cmd {
-    color: #1e66f5;
-    background: rgba(30, 102, 245, 0.1);
 }
 
 .separator {
     margin: 0 6px;
 }
 
-.dark .separator {
+.separator {
     color: rgba(255, 255, 255, 0.3);
-}
-
-.light .separator {
-    color: #6c6f85;
 }
 
 .output-block {
@@ -667,48 +658,32 @@ onMounted(() => {
     font-weight: 600;
 }
 
-.dark .prompt-user {
+.prompt-user {
     color: #89dceb;
-}
-
-.light .prompt-user {
-    color: #1e66f5;
 }
 
 .prompt-separator {
     margin: 0 3px;
 }
 
-.dark .prompt-separator {
+.prompt-separator {
     color: rgba(255, 255, 255, 0.5);
-}
-
-.light .prompt-separator {
-    color: #5c5f77;
 }
 
 .prompt-host {
     font-weight: 600;
 }
 
-.dark .prompt-host {
+.prompt-host {
     color: #f5c2e7;
-}
-
-.light .prompt-host {
-    color: #8839ef;
 }
 
 .prompt-path {
     font-weight: 500;
 }
 
-.dark .prompt-path {
+.prompt-path {
     color: #a6e3a1;
-}
-
-.light .prompt-path {
-    color: #40a02b;
 }
 
 .prompt-symbol {
@@ -716,24 +691,16 @@ onMounted(() => {
     font-weight: bold;
 }
 
-.dark .prompt-symbol {
+.prompt-symbol {
     color: #f9e2af;
-}
-
-.light .prompt-symbol {
-    color: #df8e1d;
 }
 
 .command-text {
     margin-left: 4px;
 }
 
-.dark .command-text {
+.command-text {
     color: #cdd6f4;
-}
-
-.light .command-text {
-    color: #4c4f69;
 }
 
 .output-content {
@@ -749,16 +716,10 @@ onMounted(() => {
     margin: 8px 0;
 }
 
-.dark .output-content.stderr {
+.output-content.stderr {
     color: #f38ba8 !important;
     background: rgba(243, 139, 168, 0.1);
     border-left: 3px solid #f38ba8;
-}
-
-.light .output-content.stderr {
-    color: #d20f39 !important;
-    background: rgba(210, 15, 57, 0.1);
-    border-left: 3px solid #d20f39;
 }
 
 .input-line {
@@ -785,12 +746,8 @@ onMounted(() => {
     font-style: italic;
 }
 
-.dark .command-input::placeholder {
+.command-input::placeholder {
     color: rgba(255, 255, 255, 0.3);
-}
-
-.light .command-input::placeholder {
-    color: #9ca0b0;
 }
 
 /* Typography styles */
@@ -801,12 +758,8 @@ onMounted(() => {
     border-bottom: 1px solid transparent;
 }
 
-.dark .terminal-wrapper :deep(a) {
+.terminal-wrapper :deep(a) {
     color: #89b4fa;
-}
-
-.light .terminal-wrapper :deep(a) {
-    color: #1e66f5;
 }
 
 .terminal-wrapper :deep(a:hover) {
@@ -831,36 +784,24 @@ onMounted(() => {
     left: 0;
 }
 
-.dark .terminal-wrapper :deep(li::before) {
+.terminal-wrapper :deep(li::before) {
     color: #89dceb;
-}
-
-.light .terminal-wrapper :deep(li::before) {
-    color: #1e66f5;
 }
 
 .terminal-wrapper :deep(b) {
     font-weight: 600;
 }
 
-.dark .terminal-wrapper :deep(b) {
+.terminal-wrapper :deep(b) {
     color: #cdd6f4;
-}
-
-.light .terminal-wrapper :deep(b) {
-    color: #4c4f69;
 }
 
 .terminal-wrapper :deep(i) {
     font-style: italic;
 }
 
-.dark .terminal-wrapper :deep(i) {
+.terminal-wrapper :deep(i) {
     color: rgba(255, 255, 255, 0.7);
-}
-
-.light .terminal-wrapper :deep(i) {
-    color: #5c5f77;
 }
 
 /* Typing animation */
