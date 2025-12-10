@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .terminal-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .terminal-wrapper.dark {
+            background: #1e1e1e;
+        }
+
+        .terminal-wrapper.light {
+            background: #e8e8e8;
+        }
+
+        .terminal-window {
+            width: 100%;
+            max-width: 1200px;
+            height: 85vh;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dark .terminal-window {
+            background: #1e1e1e;
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.3);
+        }
+
+        .light .terminal-window {
+            background: #fafafa;
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .terminal-header {
+            padding: 11px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid;
+        }
+
+        .dark .terminal-header {
+            background: #2d2d2d;
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .light .terminal-header {
+            background: #f5f5f5;
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .traffic-lights {
+            display: flex;
+            gap: 8px;
+        }
+
+        .light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .light.close {
+            background: linear-gradient(135deg, #ff6159 0%, #ff5449 100%);
+        }
+
+        .light.minimize {
+            background: linear-gradient(135deg, #ffbd44 0%, #ffb529 100%);
+        }
+
+        .light.maximize {
+            background: linear-gradient(135deg, #27c93f 0%, #1fb934 100%);
+        }
+
+        .terminal-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .dark .terminal-title {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .light .terminal-title {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .dark .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .light .action-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .terminal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .dark .terminal-body {
+            color: #d4d4d4;
+        }
+
+        .light .terminal-body {
+            color: #1a1a1a;
+        }
+
+        .ascii-banner {
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .welcome-info {
+            line-height: 1.8;
+        }
+
+        .arrow {
+            margin-right: 8px;
+        }
+
+        .dark .arrow {
+            color: #ffaa00;
+        }
+
+        .light .arrow {
+            color: #df8e1d;
+        }
+
+        .label {
+            font-weight: 500;
+        }
+
+        .dark .label {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .light .label {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .value {
+            font-weight: 600;
+        }
+
+        .dark .value {
+            color: #a6e3a1;
+        }
+
+        .light .value {
+            color: #40a02b;
+        }
+
+        .cmd {
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .dark .cmd {
+            color: #89dceb;
+            background: rgba(137, 220, 235, 0.1);
+        }
+
+        .light .cmd {
+            color: #1e66f5;
+            background: rgba(30, 102, 245, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-wrapper dark" id="wrapper">
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="traffic-lights">
+                    <span class="light close"></span>
+                    <span class="light minimize"></span>
+                    <span class="light maximize"></span>
+                </div>
+                <div class="terminal-title">pathum@portfolio — zsh</div>
+                <div class="terminal-actions">
+                    <button class="action-btn" onclick="toggleTheme()" title="Toggle theme">
+                        <span id="themeIcon">☀️</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="terminal-body">
+                <div class="ascii-banner">
+                    <span id="banner" style="color:#00ff88;">
+ ██████╗  █████╗ ██████╗     ██████╗  █████╗ ████████╗██╗  ██╗██╗   ██╗███╗   ███╗
+██╔════╝ ██╔══██╗██╔══██╗    ██╔══██╗██╔══██╗╚══██╔══╝██║  ██║██║   ██║████╗ ████║
+██║  ███╗███████║██████╔╝    ██████╔╝███████║   ██║   ███████║██║   ██║██╔████╔██║
+██║   ██║██╔══██║██╔═══╝     ██╔═══╝ ██╔══██║   ██║   ██╔══██║██║   ██║██║╚██╔╝██║
+╚██████╔╝██║  ██║██║         ██║     ██║  ██║   ██║   ██║  ██║╚██████╔╝██║ ╚═╝ ██║
+ ╚═════╝ ╚═╝  ╚═╝╚═╝         ╚═╝     ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝
+                    </span>
+                </div>
+                <div class="welcome-info">
+                    <div class="info-line"><span class="arrow">➜</span> <span class="label">Developer:</span> <span class="value">Full-Stack Developer</span></div>
+                    <div class="info-line"><span class="arrow">➜</span> <span class="label">Location:</span> <span class="value">Ragala, Sri Lanka 🇱🇰</span></div>
+                    <div class="info-line"><span class="arrow">➜</span> <span class="label">Tip:</span> Type <span class="cmd">help</span> to see available commands</div>
+                    <div class="info-line"><span class="arrow">➜</span> <span class="label">Quick:</span> <span class="cmd">ls</span> <span class="separator">│</span> <span class="cmd">cd projects</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const wrapper = document.getElementById('wrapper');
+            const themeIcon = document.getElementById('themeIcon');
+            const banner = document.getElementById('banner');
+            
+            if (wrapper.classList.contains('dark')) {
+                wrapper.classList.remove('dark');
+                wrapper.classList.add('light');
+                themeIcon.textContent = '🌙';
+                banner.style.color = '#2d6a4f';
+            } else {
+                wrapper.classList.remove('light');
+                wrapper.classList.add('dark');
+                themeIcon.textContent = '☀️';
+                banner.style.color = '#00ff88';
+            }
+        }
+    </script>
+</body>
+</html>

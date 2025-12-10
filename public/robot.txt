@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.pasindupathum.me/sitemap.xml  # Update to your domain
