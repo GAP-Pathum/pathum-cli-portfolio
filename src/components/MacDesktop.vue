@@ -290,6 +290,18 @@
             <div class="resize-handle resize-bottom" @mousedown="startNotesResize($event, 'bottom')"></div>
             <div class="resize-handle resize-corner" @mousedown="startNotesResize($event, 'corner')"></div>
         </div>
+
+        <!-- macOS Notification Banner -->
+        <Transition name="notification">
+            <div v-if="showNotification" class="macos-notification">
+                <div class="notification-icon">👋</div>
+                <div class="notification-content">
+                    <div class="notification-title">Welcome</div>
+                    <div class="notification-text">Welcome to Pathum's Portfolio</div>
+                </div>
+                <button class="notification-close" @click="showNotification = false">×</button>
+            </div>
+        </Transition>
     </div>
 </template>
 
@@ -310,6 +322,7 @@ const notesOpen = ref(false);
 const notesMinimized = ref(false);
 const lightboxOpen = ref(false);
 const currentPhotoIndex = ref(0);
+const showNotification = ref(false);
 let clickTimer = null;
 let clickCount = 0;
 
@@ -1174,6 +1187,14 @@ onMounted(() => {
     updateTime();
     timeInterval = setInterval(updateTime, 1000);
     document.addEventListener('keydown', handleKeydown);
+    
+    // Show welcome notification after login
+    setTimeout(() => {
+        showNotification.value = true;
+        setTimeout(() => {
+            showNotification.value = false;
+        }, 5000);
+    }, 800);
 });
 
 onUnmounted(() => {
@@ -1883,6 +1904,98 @@ onUnmounted(() => {
 
 .lightbox-next {
     right: 16px;
+}
+
+/* macOS Notification Banner */
+.macos-notification {
+    position: fixed;
+    top: 40px;
+    right: 20px;
+    width: 340px;
+    background: rgba(40, 40, 45, 0.95);
+    backdrop-filter: blur(30px);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+    z-index: 9999;
+}
+
+.macos-notification .notification-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.macos-notification .notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.macos-notification .notification-title {
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.macos-notification .notification-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+}
+
+.macos-notification .notification-close {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.macos-notification .notification-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Notification Transition */
+.notification-enter-active {
+    animation: notificationSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-leave-active {
+    animation: notificationSlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes notificationSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes notificationSlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+    }
 }
 
 /* Responsive */

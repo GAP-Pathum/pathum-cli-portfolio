@@ -180,15 +180,28 @@
         </div>
 
         <!-- Terminal App -->
-        <Terminal 
+        <div 
             v-if="terminalOpen" 
-            @close="closeTerminal"
-            :isDesktopMode="false"
-            :isMobileMode="true"
-        />
+            class="app-overlay"
+            @touchstart.stop
+            @touchmove.stop
+            @touchend.stop
+        >
+            <Terminal 
+                @close="closeTerminal"
+                :isDesktopMode="false"
+                :isMobileMode="true"
+            />
+        </div>
 
         <!-- Gallery App -->
-        <div v-if="galleryOpen" class="gallery-app">
+        <div 
+            v-if="galleryOpen" 
+            class="gallery-app"
+            @touchstart.stop
+            @touchmove.stop="handleGalleryTouchMove"
+            @touchend.stop
+        >
             <div class="gallery-header-mobile">
                 <button class="gallery-back" @click="lightboxOpen ? closeLightbox() : closeGallery()">
                     ‹ {{ lightboxOpen ? 'Gallery' : 'Back' }}
@@ -234,7 +247,13 @@
         </div>
 
         <!-- Notes App -->
-        <div v-if="notesOpen" class="notes-app">
+        <div 
+            v-if="notesOpen" 
+            class="notes-app"
+            @touchstart.stop
+            @touchmove.stop
+            @touchend.stop
+        >
             <div class="notes-header-mobile">
                 <button class="notes-back" @click="showNotesList ? closeNotes() : backToNotesList()">
                     ‹ {{ showNotesList ? 'Back' : 'Notes' }}
@@ -287,10 +306,10 @@
 
         <!-- Notification -->
         <div class="notification" :class="{ 'visible': showNotification }">
-            <div class="notification-icon">💼</div>
+            <div class="notification-icon">👋</div>
             <div class="notification-content">
-                <div class="notification-title">Portfolio</div>
-                <div class="notification-text">Welcome to GAP Pathum's Terminal Portfolio</div>
+                <div class="notification-title">Welcome</div>
+                <div class="notification-text">Welcome to Pathum's Portfolio</div>
             </div>
         </div>
     </div>
@@ -365,13 +384,6 @@ function handleAppTap(appName) {
         bouncingApp.value = null;
         if (appName === 'terminal') {
             terminalOpen.value = true;
-            // Show welcome notification
-            setTimeout(() => {
-                showNotification.value = true;
-                setTimeout(() => {
-                    showNotification.value = false;
-                }, 3000);
-            }, 500);
         } else if (appName === 'photos') {
             galleryOpen.value = true;
         } else if (appName === 'notes') {
@@ -525,6 +537,11 @@ function handleLightboxTouchEnd() {
     lightboxSwipeX.value = 0;
 }
 
+// Gallery touch move handler (allows scrolling in gallery)
+function handleGalleryTouchMove(e) {
+    // Allow default touch behavior for scrolling in gallery
+}
+
 function toggleControlCenter() {
     showControlCenter.value = !showControlCenter.value;
 }
@@ -538,6 +555,14 @@ let timeInterval;
 onMounted(() => {
     updateTime();
     timeInterval = setInterval(updateTime, 1000);
+    
+    // Show welcome notification after login
+    setTimeout(() => {
+        showNotification.value = true;
+        setTimeout(() => {
+            showNotification.value = false;
+        }, 4000);
+    }, 500);
 });
 
 onUnmounted(() => {
@@ -902,6 +927,17 @@ onUnmounted(() => {
     color: #666;
 }
 
+/* App Overlay - wrapper for full screen apps */
+.app-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 500;
+    touch-action: auto;
+}
+
 /* Gallery App */
 .gallery-app {
     position: fixed;
@@ -910,9 +946,10 @@ onUnmounted(() => {
     width: 100%;
     height: 100%;
     background: #000;
-    z-index: 250;
+    z-index: 500;
     display: flex;
     flex-direction: column;
+    touch-action: auto;
 }
 
 .gallery-header-mobile {
@@ -1014,6 +1051,7 @@ onUnmounted(() => {
     display: flex;
     flex-direction: column;
     animation: slideUpMobile 0.3s ease;
+    touch-action: auto;
 }
 
 .notes-header-mobile {

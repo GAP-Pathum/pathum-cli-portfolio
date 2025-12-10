@@ -396,6 +396,7 @@ onMounted(() => {
     animation: slideUpMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
+    touch-action: auto;
 }
 
 .terminal-wrapper.mobile-mode .terminal-window {
