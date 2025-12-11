@@ -1,5 +1,6 @@
 <template>
     <div class="iphone-home" 
+         :style="homeBackground"
          @touchstart="handleTouchStart" 
          @touchmove="handleTouchMove" 
          @touchend="handleTouchEnd">
@@ -40,27 +41,25 @@
         <div class="app-grid" :class="{ 'with-widgets': showWidgets }">
             <!-- Row 1 -->
             <div class="app-icon" @click="handleAppTap('terminal')" :class="{ 'bouncing': bouncingApp === 'terminal' }">
-                <div class="icon terminal-icon">
-                    <span class="terminal-symbol">&gt;_</span>
-                </div>
+                <div class="icon" v-html="appIcons.terminalMobile"></div>
                 <div class="app-name">Terminal</div>
             </div>
             <div class="app-icon" @click="handleAppTap('messages')" :class="{ 'bouncing': bouncingApp === 'messages' }">
-                <div class="icon">💬</div>
+                <div class="icon" v-html="appIcons.messages"></div>
                 <div class="app-name">Messages</div>
             </div>
             <div class="app-icon" @click="handleAppTap('safari')" :class="{ 'bouncing': bouncingApp === 'safari' }">
-                <div class="icon">🧭</div>
+                <div class="icon" v-html="appIcons.safari"></div>
                 <div class="app-name">Safari</div>
             </div>
             <div class="app-icon" @click="handleAppTap('mail')" :class="{ 'bouncing': bouncingApp === 'mail' }">
-                <div class="icon">✉️</div>
+                <div class="icon" v-html="appIcons.mail"></div>
                 <div class="app-name">Mail</div>
             </div>
 
             <!-- Row 2 -->
             <div class="app-icon" @click="handleAppTap('photos')" :class="{ 'bouncing': bouncingApp === 'photos' }">
-                <div class="icon">📷</div>
+                <div class="icon" v-html="appIcons.photosMobile"></div>
                 <div class="app-name">Photos</div>
             </div>
             <div class="app-icon" @click="handleAppTap('music')" :class="{ 'bouncing': bouncingApp === 'music' }">
@@ -72,7 +71,7 @@
                 <div class="app-name">Files</div>
             </div>
             <div class="app-icon" @click="handleAppTap('notes')" :class="{ 'bouncing': bouncingApp === 'notes' }">
-                <div class="icon">📝</div>
+                <div class="icon" v-html="appIcons.notesMobile"></div>
                 <div class="app-name">Notes</div>
             </div>
 
@@ -119,6 +118,10 @@
                 </div>
                 <div class="app-name">Instagram</div>
             </div>
+            <div class="app-icon" @click="handleAppTap('resume')" :class="{ 'bouncing': bouncingApp === 'resume' }">
+                <div class="icon" v-html="appIcons.pdfMobile"></div>
+                <div class="app-name">Resume</div>
+            </div>
             <div class="app-icon" @click="handleAppTap('settings')" :class="{ 'bouncing': bouncingApp === 'settings' }">
                 <div class="icon">⚙️</div>
                 <div class="app-name">Settings</div>
@@ -137,15 +140,13 @@
                 <div class="icon">📞</div>
             </div>
             <div class="dock-icon" @click="handleAppTap('messages')">
-                <div class="icon">💬</div>
+                <div class="icon" v-html="appIcons.messages"></div>
             </div>
             <div class="dock-icon" @click="handleAppTap('safari')">
-                <div class="icon">🧭</div>
+                <div class="icon" v-html="appIcons.safari"></div>
             </div>
             <div class="dock-icon" @click="handleAppTap('terminal')">
-                <div class="icon terminal-icon-small">
-                    <span>&gt;_</span>
-                </div>
+                <div class="icon" v-html="appIcons.terminalMobile"></div>
             </div>
         </div>
 
@@ -192,6 +193,64 @@
                 :isDesktopMode="false"
                 :isMobileMode="true"
             />
+        </div>
+
+        <!-- Settings App -->
+        <div 
+            v-if="settingsOpen" 
+            class="settings-modal"
+            @touchstart.stop
+            @touchmove.stop
+            @touchend.stop
+        >
+            <div class="settings-header-mobile">
+                <button class="back-btn" @click="closeSettings">
+                    ‹ Back
+                </button>
+                <span class="settings-title-mobile">Settings</span>
+                <span class="spacer"></span>
+            </div>
+            <div class="settings-content-mobile">
+                <div class="settings-section-mobile">
+                    <h3 class="section-label">Appearance</h3>
+                    <div class="section-card">
+                        <h4 class="subsection-title">Wallpaper</h4>
+                        <div class="wallpaper-grid-mobile">
+                            <!-- Default Gradient -->
+                            <div 
+                                class="wallpaper-item-mobile"
+                                :class="{ 'selected': selectedWallpaper === 0 }"
+                                @click="selectWallpaper(0)"
+                            >
+                                <div class="wallpaper-thumb">
+                                    <div class="gradient-bg"></div>
+                                </div>
+                                <div class="wallpaper-label">Default</div>
+                                <div v-if="selectedWallpaper === 0" class="check-badge">✓</div>
+                            </div>
+                            
+                            <!-- Image Wallpapers -->
+                            <div 
+                                v-for="wallpaper in wallpapers"
+                                :key="wallpaper.id"
+                                class="wallpaper-item-mobile"
+                                :class="{ 'selected': selectedWallpaper === wallpaper.id }"
+                                @click="selectWallpaper(wallpaper.id)"
+                            >
+                                <div class="wallpaper-thumb">
+                                    <img 
+                                        :src="wallpaper.thumbnail" 
+                                        :alt="wallpaper.name"
+                                        loading="lazy"
+                                    >
+                                </div>
+                                <div class="wallpaper-label">{{ wallpaper.name }}</div>
+                                <div v-if="selectedWallpaper === wallpaper.id" class="check-badge">✓</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Gallery App -->
@@ -316,9 +375,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import Terminal from './Terminal.vue';
 import { photos } from '../data/photos.js';
+import { appIcons } from '../assets/appIcons.js';
+import { wallpapers } from '../data/wallpapers.js';
 
 const emit = defineEmits(['logout']);
 
@@ -340,6 +401,24 @@ const showNotification = ref(false);
 const showWidgets = ref(false);
 const bouncingApp = ref(null);
 const isDark = ref(false);
+const currentWallpaper = ref(null);
+const settingsOpen = ref(false);
+const selectedWallpaper = ref(0);
+
+// Computed property for background
+const homeBackground = computed(() => {
+  if (currentWallpaper.value) {
+    return {
+      backgroundImage: `url(${currentWallpaper.value})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    };
+  }
+  return {
+    background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
+  };
+});
 
 let startY = 0;
 let startX = 0;
@@ -395,12 +474,24 @@ function handleAppTap(appName) {
             window.open('https://www.facebook.com/gap.pathum', '_blank');
         } else if (appName === 'instagram') {
             window.open('https://www.instagram.com/gap_pathum', '_blank');
+        } else if (appName === 'resume') {
+            window.open('/documents/CV_Pasindu Pathum.pdf', '_blank');
+        } else if (appName === 'settings') {
+            settingsOpen.value = true;
         }
     }, 300);
 }
 
 function closeTerminal() {
     terminalOpen.value = false;
+}
+
+function closeSettings() {
+    settingsOpen.value = false;
+}
+
+function handleWallpaperChanged({ id, path }) {
+    currentWallpaper.value = path;
 }
 
 // Gallery functions
@@ -550,11 +641,36 @@ function handleLogout() {
     emit('logout');
 }
 
+function selectWallpaper(id) {
+    selectedWallpaper.value = id;
+    localStorage.setItem('wallpaper', id.toString());
+    
+    // Update wallpaper immediately
+    if (id === 0) {
+        currentWallpaper.value = null;
+    } else {
+        const wallpaper = wallpapers.find(w => w.id === id);
+        if (wallpaper) {
+            currentWallpaper.value = wallpaper.path;
+        }
+    }
+}
+
 let timeInterval;
 
 onMounted(() => {
     updateTime();
     timeInterval = setInterval(updateTime, 1000);
+    
+    // Load saved wallpaper
+    const savedWallpaper = localStorage.getItem('wallpaper');
+    if (savedWallpaper && savedWallpaper !== '0') {
+        const wallpaper = wallpapers.find(w => w.id === parseInt(savedWallpaper));
+        if (wallpaper) {
+            currentWallpaper.value = wallpaper.path;
+            selectedWallpaper.value = parseInt(savedWallpaper);
+        }
+    }
     
     // Show welcome notification after login
     setTimeout(() => {
@@ -573,8 +689,8 @@ onUnmounted(() => {
 <style scoped>
 .iphone-home {
     width: 100vw;
+    transition: background 0.3s ease;
     height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     position: relative;
     overflow: hidden;
     touch-action: none;
@@ -697,6 +813,12 @@ onUnmounted(() => {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.icon svg {
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+}
+
 .terminal-icon {
     background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
 }
@@ -771,6 +893,12 @@ onUnmounted(() => {
     height: 56px;
     font-size: 30px;
     margin-bottom: 0;
+}
+
+.dock-icon .icon svg {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
 }
 
 .terminal-icon-small {
@@ -936,6 +1064,150 @@ onUnmounted(() => {
     height: 100%;
     z-index: 500;
     touch-action: auto;
+}
+
+/* Settings Modal */
+.settings-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1c1c1e;
+    z-index: 600;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.settings-header-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: rgba(28, 28, 30, 0.98);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: calc(12px + env(safe-area-inset-top));
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: #0a84ff;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 8px 0;
+}
+
+.settings-title-mobile {
+    font-size: 17px;
+    font-weight: 600;
+    color: white;
+}
+
+.spacer {
+    width: 44px;
+}
+
+.settings-content-mobile {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+}
+
+.settings-section-mobile {
+    margin-bottom: 32px;
+}
+
+.section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    padding-left: 4px;
+}
+
+.section-card {
+    background: rgba(44, 44, 46, 0.6);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.subsection-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 16px;
+}
+
+.wallpaper-grid-mobile {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.wallpaper-item-mobile {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.wallpaper-item-mobile.selected .wallpaper-thumb {
+    border-color: #0a84ff;
+    box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.4);
+}
+
+.wallpaper-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    background: #000;
+}
+
+.wallpaper-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.wallpaper-thumb .gradient-bg {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+.wallpaper-label {
+    margin-top: 6px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+}
+
+.check-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background: #0a84ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.settings-content-mobile::-webkit-scrollbar {
+    display: none;
 }
 
 /* Gallery App */

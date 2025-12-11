@@ -1,5 +1,5 @@
 <template>
-    <div class="desktop">
+    <div class="desktop" :style="desktopBackground">
         <!-- Menu Bar -->
         <div class="menu-bar">
             <div class="menu-left">
@@ -104,6 +104,10 @@
                             <line x1="13" y1="16" x2="17" y2="16" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
+                    <!-- Resume PDF -->
+                    <div v-else-if="icon.id === 'resume'" class="app-icon-content">
+                        <div v-html="appIcons.pdf"></div>
+                    </div>
                 </div>
                 <div class="icon-label">{{ icon.label }}</div>
             </div>
@@ -112,53 +116,38 @@
         <!-- Dock -->
         <div class="dock-container" :class="{ 'dock-hidden': isMaximized || isGalleryMaximized || isNotesMaximized }">
             <div class="dock">
-                <div class="dock-icon finder-dock" @click="selectDockIcon('finder')">
-                    <span>🗂️</span>
-                </div>
-                <div class="dock-icon" @click="selectDockIcon('safari')">
-                    <span>🧭</span>
-                </div>
-                <div class="dock-icon" @click="selectDockIcon('mail')">
-                    <span>✉️</span>
-                </div>
-                <div class="dock-icon" @click="selectDockIcon('messages')">
-                    <span>💬</span>
-                </div>
+                <div class="dock-icon finder-dock" @click="selectDockIcon('finder')" v-html="appIcons.finder"></div>
+                <div class="dock-icon" @click="selectDockIcon('safari')" v-html="appIcons.safari"></div>
+                <div class="dock-icon" @click="selectDockIcon('mail')" v-html="appIcons.mail"></div>
+                <div class="dock-icon" @click="selectDockIcon('messages')" v-html="appIcons.messages"></div>
                 <div class="dock-divider"></div>
                 <!-- Terminal Dock (shows when running) -->
                 <div v-if="terminalOpen || terminalMinimized" class="dock-icon terminal-dock" @click="selectDockIcon('terminal')" :class="{ 'has-window': terminalOpen || terminalMinimized }">
-                    <div class="dock-terminal-icon">
-                        <span>&gt;_</span>
-                    </div>
+                    <div v-html="appIcons.terminal"></div>
                     <div class="dock-indicator" :class="{ 'minimized-indicator': terminalMinimized, 'running-indicator': terminalOpen && !terminalMinimized }"></div>
                 </div>
                 <!-- Photos Dock (shows when running) -->
                 <div v-if="galleryOpen || galleryMinimized" class="dock-icon photos-dock" @click="selectDockIcon('photos')" :class="{ 'has-window': galleryOpen || galleryMinimized }">
-                    <div class="dock-photos-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="10" fill="url(#dockPhotosGrad)"/>
-                            <path d="M12 7L14.5 11H9.5L12 7Z" fill="white"/>
-                            <circle cx="12" cy="14" r="3" fill="white"/>
-                            <defs><linearGradient id="dockPhotosGrad" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#FF6B6B"/><stop offset="0.5" stop-color="#FFE66D"/><stop offset="1" stop-color="#4ECDC4"/></linearGradient></defs>
-                        </svg>
-                    </div>
+                    <div v-html="appIcons.photos"></div>
                     <div class="dock-indicator" :class="{ 'minimized-indicator': galleryMinimized, 'running-indicator': galleryOpen && !galleryMinimized }"></div>
                 </div>
                 <!-- Notes Dock (shows when running) -->
                 <div v-if="notesOpen || notesMinimized" class="dock-icon notes-dock" @click="selectDockIcon('notes')" :class="{ 'has-window': notesOpen || notesMinimized }">
-                    <div class="dock-notes-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="24" height="24" rx="5" fill="#FFCC02"/>
-                            <rect x="5" y="4" width="14" height="16" rx="2" fill="white"/>
-                            <line x1="7" y1="8" x2="17" y2="8" stroke="#E5E5E5" stroke-width="1"/>
-                            <line x1="7" y1="11" x2="17" y2="11" stroke="#E5E5E5" stroke-width="1"/>
-                            <line x1="7" y1="14" x2="14" y2="14" stroke="#E5E5E5" stroke-width="1"/>
-                        </svg>
-                    </div>
+                    <div v-html="appIcons.notes"></div>
                     <div class="dock-indicator" :class="{ 'minimized-indicator': notesMinimized, 'running-indicator': notesOpen && !notesMinimized }"></div>
                 </div>
-                <div class="dock-icon" @click="selectDockIcon('settings')">
-                    <span>⚙️</span>
+                
+                <!-- Settings Dock (shows when running) -->
+                <div v-if="settingsOpen || settingsMinimized" class="dock-icon settings-dock" @click="selectDockIcon('settings')" :class="{ 'has-window': settingsOpen || settingsMinimized }">
+                    <div v-html="appIcons.settings"></div>
+                    <div class="dock-indicator" :class="{ 'minimized-indicator': settingsMinimized, 'running-indicator': settingsOpen && !settingsMinimized }"></div>
+                </div>
+                <div v-else class="dock-icon" @click="selectDockIcon('settings')" v-html="appIcons.settings"></div>
+                
+                <!-- Resume PDF Dock (shows when running) -->
+                <div v-if="pdfOpen || pdfMinimized" class="dock-icon resume-dock" @click="selectDockIcon('resume')" :class="{ 'has-window': pdfOpen || pdfMinimized }">
+                    <div v-html="appIcons.pdf"></div>
+                    <div class="dock-indicator" :class="{ 'minimized-indicator': pdfMinimized, 'running-indicator': pdfOpen && !pdfMinimized }"></div>
                 </div>
             </div>
         </div>
@@ -291,6 +280,35 @@
             <div class="resize-handle resize-corner" @mousedown="startNotesResize($event, 'corner')"></div>
         </div>
 
+        <!-- Settings Window -->
+        <div 
+            v-if="settingsOpen && !settingsMinimized" 
+            class="settings-container"
+            :style="settingsStyle"
+        >
+            <SettingsWindow 
+                @close="closeSettings"
+                @minimize="minimizeSettings"
+                @toggleMaximize="toggleSettingsMaximize"
+                @startDrag="startDragSettings"
+                @wallpaperChanged="handleWallpaperChanged"
+            />
+        </div>
+
+        <!-- PDF Viewer Window -->
+        <div 
+            v-if="pdfOpen && !pdfMinimized" 
+            class="pdf-container"
+            :style="pdfStyle"
+        >
+            <PdfViewer 
+                @close="closePdf"
+                @minimize="minimizePdf"
+                @toggleMaximize="togglePdfMaximize"
+                @startDrag="startDragPdf"
+            />
+        </div>
+
         <!-- macOS Notification Banner -->
         <Transition name="notification">
             <div v-if="showNotification" class="macos-notification">
@@ -306,9 +324,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import { photos } from '../data/photos.js';
+import { appIcons } from '../assets/appIcons.js';
+import { wallpapers } from '../data/wallpapers.js';
 import Notes from './Notes.vue';
+import SettingsWindow from './SettingsWindow.vue';
+import PdfViewer from './PdfViewer.vue';
 
 const emit = defineEmits(['logout']);
 
@@ -320,9 +342,14 @@ const galleryOpen = ref(false);
 const galleryMinimized = ref(false);
 const notesOpen = ref(false);
 const notesMinimized = ref(false);
+const settingsOpen = ref(false);
+const settingsMinimized = ref(false);
+const pdfOpen = ref(false);
+const pdfMinimized = ref(false);
 const lightboxOpen = ref(false);
 const currentPhotoIndex = ref(0);
 const showNotification = ref(false);
+const currentWallpaper = ref(null);
 let clickTimer = null;
 let clickCount = 0;
 
@@ -382,6 +409,21 @@ const fileSystem = {
 };
 
 const cwd = ref('~');
+
+// Computed property for background
+const desktopBackground = computed(() => {
+  if (currentWallpaper.value) {
+    return {
+      backgroundImage: `url(${currentWallpaper.value})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    };
+  }
+  return {
+    background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
+  };
+});
 
 const resolvePath = (path) => {
     if (!path) return cwd.value;
@@ -538,6 +580,7 @@ const desktopIcons = ref([
     { id: 'music', label: 'Music', iconClass: 'music-icon', x: 20, y: 220 },
     { id: 'notes', label: 'Notes', iconClass: 'notes-icon', x: 20, y: 310 },
     { id: 'calendar', label: 'Calendar', iconClass: 'calendar-icon', x: 20, y: 400 },
+    { id: 'resume', label: 'Resume', iconClass: 'resume-icon', x: 20, y: 490 },
     // Column 2 - Social Media
     { id: 'linkedin', label: 'LinkedIn', iconClass: 'linkedin-icon', x: 110, y: 40 },
     { id: 'facebook', label: 'Facebook', iconClass: 'facebook-icon', x: 110, y: 130 },
@@ -598,6 +641,42 @@ let isNotesResizing = false;
 let notesResizeDirection = null;
 let notesResizeStartX = 0;
 let notesResizeStartY = 0;
+
+// Settings window state
+const settingsStyle = ref({
+    left: '250px',
+    top: '80px',
+    width: '800px',
+    height: '600px'
+});
+
+const isSettingsMaximized = ref(false);
+let previousSettingsStyle = null;
+
+// PDF window state
+const pdfStyle = ref({
+    left: '200px',
+    top: '100px',
+    width: '900px',
+    height: '700px'
+});
+
+const isPdfMaximized = ref(false);
+let previousPdfStyle = null;
+
+// PDF dragging
+let isDraggingPdf = false;
+let pdfStartX = 0;
+let pdfStartY = 0;
+let pdfOffsetX = 0;
+let pdfOffsetY = 0;
+
+// Settings dragging
+let isDraggingSettings = false;
+let settingsStartX = 0;
+let settingsStartY = 0;
+let settingsOffsetX = 0;
+let settingsOffsetY = 0;
 let notesResizeStartWidth = 0;
 let notesResizeStartHeight = 0;
 
@@ -814,11 +893,13 @@ function openApplication(appName) {
     } else if (appName === 'linkedin') {
         window.open('https://www.linkedin.com/in/pasindu-pathum-98a299249', '_blank');
     } else if (appName === 'facebook') {
-        window.open('https://www.facebook.com/gap.pathum', '_blank');
+        window.open('https://www.facebook.com/pasindu.pathum.584868/about', '_blank');
     } else if (appName === 'instagram') {
-        window.open('https://www.instagram.com/gap_pathum', '_blank');
+        window.open('https://www.instagram.com/g_a_p_pathum/?fbclid=IwY2xjawOnaAJleHRuA2FlbQIxMABicmlkETFWdlJ5dzhYTWdsN0FzMTJZc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHtmbbieoC8U6m3DtsZ1QQan4CB7-vB5fL0gdzLWrwqD8JUtAjZa_DFlGnslE_aem_U6isFa-dV9-0SKORDrs3Sg#', '_blank');
     } else if (appName === 'github') {
         window.open('https://github.com/GAP-Pathum', '_blank');
+    } else if (appName === 'resume') {
+        pdfOpen.value = true;
     }
     // Other apps can be implemented later
 }
@@ -851,8 +932,162 @@ function selectDockIcon(iconName) {
         window.open('https://www.facebook.com/gap.pathum', '_blank');
     } else if (iconName === 'instagram') {
         window.open('https://www.instagram.com/gap_pathum', '_blank');
+    } else if (iconName === 'settings') {
+        if (settingsMinimized.value) {
+            restoreSettings();
+        } else if (!settingsOpen.value) {
+            settingsOpen.value = true;
+        }
+    } else if (iconName === 'resume') {
+        if (pdfMinimized.value) {
+            restorePdf();
+        } else if (!pdfOpen.value) {
+            pdfOpen.value = true;
+        }
     }
-    // Other apps can be implemented later
+}
+
+function closeSettings() {
+    settingsOpen.value = false;
+    settingsMinimized.value = false;
+    isSettingsMaximized.value = false;
+}
+
+function minimizeSettings() {
+    settingsMinimized.value = true;
+    if (isSettingsMaximized.value) {
+        toggleSettingsMaximize();
+    }
+}
+
+function restoreSettings() {
+    settingsMinimized.value = false;
+    nextTick(() => {
+        // Focus restored
+    });
+}
+
+function toggleSettingsMaximize() {
+    if (isSettingsMaximized.value) {
+        settingsStyle.value = { ...previousSettingsStyle };
+        isSettingsMaximized.value = false;
+    } else {
+        previousSettingsStyle = { ...settingsStyle.value };
+        settingsStyle.value = {
+            left: '0',
+            top: '24px',
+            width: '100vw',
+            height: 'calc(100vh - 94px)'
+        };
+        isSettingsMaximized.value = true;
+    }
+}
+
+function startDragSettings(event) {
+    if (isSettingsMaximized.value) return;
+    
+    isDraggingSettings = true;
+    settingsStartX = event.clientX;
+    settingsStartY = event.clientY;
+    
+    const currentLeft = parseInt(settingsStyle.value.left) || 0;
+    const currentTop = parseInt(settingsStyle.value.top) || 0;
+    
+    settingsOffsetX = settingsStartX - currentLeft;
+    settingsOffsetY = settingsStartY - currentTop;
+    
+    document.addEventListener('mousemove', onSettingsDrag);
+    document.addEventListener('mouseup', stopDragSettings);
+}
+
+function onSettingsDrag(event) {
+    if (!isDraggingSettings) return;
+    
+    const newX = event.clientX - settingsOffsetX;
+    const newY = event.clientY - settingsOffsetY;
+    
+    settingsStyle.value.left = `${Math.max(0, newX)}px`;
+    settingsStyle.value.top = `${Math.max(24, newY)}px`;
+}
+
+function stopDragSettings() {
+    isDraggingSettings = false;
+    document.removeEventListener('mousemove', onSettingsDrag);
+    document.removeEventListener('mouseup', stopDragSettings);
+}
+
+function handleWallpaperChanged({ id, path }) {
+    currentWallpaper.value = path;
+}
+
+// PDF viewer functions
+function closePdf() {
+    pdfOpen.value = false;
+    pdfMinimized.value = false;
+    isPdfMaximized.value = false;
+}
+
+function minimizePdf() {
+    pdfMinimized.value = true;
+    if (isPdfMaximized.value) {
+        togglePdfMaximize();
+    }
+}
+
+function restorePdf() {
+    pdfMinimized.value = false;
+    nextTick(() => {
+        // Focus restored
+    });
+}
+
+function togglePdfMaximize() {
+    if (isPdfMaximized.value) {
+        pdfStyle.value = { ...previousPdfStyle };
+        isPdfMaximized.value = false;
+    } else {
+        previousPdfStyle = { ...pdfStyle.value };
+        pdfStyle.value = {
+            left: '0',
+            top: '24px',
+            width: '100vw',
+            height: 'calc(100vh - 94px)'
+        };
+        isPdfMaximized.value = true;
+    }
+}
+
+function startDragPdf(event) {
+    if (isPdfMaximized.value) return;
+    
+    isDraggingPdf = true;
+    pdfStartX = event.clientX;
+    pdfStartY = event.clientY;
+    
+    const currentLeft = parseInt(pdfStyle.value.left) || 0;
+    const currentTop = parseInt(pdfStyle.value.top) || 0;
+    
+    pdfOffsetX = pdfStartX - currentLeft;
+    pdfOffsetY = pdfStartY - currentTop;
+    
+    document.addEventListener('mousemove', onPdfDrag);
+    document.addEventListener('mouseup', stopDragPdf);
+}
+
+function onPdfDrag(event) {
+    if (!isDraggingPdf) return;
+    
+    const newX = event.clientX - pdfOffsetX;
+    const newY = event.clientY - pdfOffsetY;
+    
+    pdfStyle.value.left = `${Math.max(0, newX)}px`;
+    pdfStyle.value.top = `${Math.max(24, newY)}px`;
+}
+
+function stopDragPdf() {
+    isDraggingPdf = false;
+    document.removeEventListener('mousemove', onPdfDrag);
+    document.removeEventListener('mouseup', stopDragPdf);
 }
 
 function closeTerminal() {
@@ -1188,6 +1423,15 @@ onMounted(() => {
     timeInterval = setInterval(updateTime, 1000);
     document.addEventListener('keydown', handleKeydown);
     
+    // Load saved wallpaper
+    const savedWallpaper = localStorage.getItem('wallpaper');
+    if (savedWallpaper && savedWallpaper !== '0') {
+        const wallpaper = wallpapers.find(w => w.id === parseInt(savedWallpaper));
+        if (wallpaper) {
+            currentWallpaper.value = wallpaper.path;
+        }
+    }
+    
     // Show welcome notification after login
     setTimeout(() => {
         showNotification.value = true;
@@ -1207,9 +1451,9 @@ onUnmounted(() => {
 .desktop {
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     position: relative;
     overflow: hidden;
+    transition: background 0.3s ease;
 }
 
 /* Menu Bar */
@@ -1364,53 +1608,15 @@ onUnmounted(() => {
     position: relative;
 }
 
+.dock-icon svg {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
 .dock-icon:hover {
     transform: translateY(-8px) scale(1.1);
-}
-
-.dock-terminal-icon {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #00ff88;
-    font-size: 24px;
-    font-weight: bold;
-    font-family: 'Menlo', monospace;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.dock-photos-icon {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.dock-photos-icon svg {
-    width: 100%;
-    height: 100%;
-}
-
-.dock-notes-icon {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.dock-notes-icon svg {
-    width: 100%;
-    height: 100%;
 }
 
 .dock-divider {
@@ -1766,6 +1972,32 @@ onUnmounted(() => {
     display: flex;
     flex-direction: column;
     z-index: 300;
+    overflow: hidden;
+}
+
+/* Settings Container */
+.settings-container {
+    position: absolute;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    z-index: 400;
+    overflow: hidden;
+}
+
+/* PDF Container */
+.pdf-container {
+    position: absolute;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    z-index: 450;
     overflow: hidden;
 }
 

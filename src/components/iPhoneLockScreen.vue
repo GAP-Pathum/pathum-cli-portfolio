@@ -1,5 +1,5 @@
 <template>
-    <div class="iphone-lockscreen" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+    <div class="iphone-lockscreen" :style="lockscreenBackground" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <!-- Status Bar -->
         <div class="status-bar">
             <div class="status-left">
@@ -86,7 +86,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { wallpapers } from '../data/wallpapers.js';
 
 const emit = defineEmits(['unlock']);
 
@@ -95,8 +96,24 @@ const currentTimeSmall = ref('');
 const currentDate = ref('');
 const unlockOffset = ref(0);
 const faceIDActive = ref(false);
+const currentWallpaper = ref(null);
 let startY = 0;
 let isDragging = false;
+
+// Computed property for background
+const lockscreenBackground = computed(() => {
+  if (currentWallpaper.value) {
+    return {
+      backgroundImage: `url(${currentWallpaper.value})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    };
+  }
+  return {
+    background: 'linear-gradient(180deg, #1c1c1e 0%, #2c2c2e 50%, #1c1c1e 100%)'
+  };
+});
 
 function updateDateTime() {
     const now = new Date();
@@ -150,6 +167,15 @@ let timeInterval;
 onMounted(() => {
     updateDateTime();
     timeInterval = setInterval(updateDateTime, 1000);
+    
+    // Load saved wallpaper
+    const savedWallpaper = localStorage.getItem('wallpaper');
+    if (savedWallpaper && savedWallpaper !== '0') {
+        const wallpaper = wallpapers.find(w => w.id === parseInt(savedWallpaper));
+        if (wallpaper) {
+            currentWallpaper.value = wallpaper.path;
+        }
+    }
 });
 
 onUnmounted(() => {
@@ -161,7 +187,7 @@ onUnmounted(() => {
 .iphone-lockscreen {
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(180deg, #1c1c1e 0%, #2c2c2e 50%, #1c1c1e 100%);
+    transition: background 0.3s ease;
     position: relative;
     overflow: hidden;
     touch-action: none;
