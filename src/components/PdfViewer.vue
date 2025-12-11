@@ -6,7 +6,7 @@
                 <span class="window-dot minimize" @click.stop="$emit('minimize')"></span>
                 <span class="window-dot maximize" @click.stop="$emit('toggleMaximize')"></span>
             </div>
-            <div class="window-title">Resume - CV_Pasindu Pathum.pdf</div>
+            <div class="window-title">Resume — Pasindu Pathum</div>
             <div class="pdf-controls">
                 <button @click="previousPage" :disabled="currentPage <= 1" class="pdf-btn">←</button>
                 <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
@@ -26,6 +26,9 @@
 import { ref, onMounted, watch } from 'vue';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+// Use the single canonical PDF in public/documents
+// Path served as `/documents/resume.pdf`
+const pdfFile = '/documents/resume.pdf';
 
 const emit = defineEmits(['close', 'minimize', 'toggleMaximize', 'startDrag']);
 
@@ -41,12 +44,26 @@ const scale = ref(1.0);
 
 async function loadPDF() {
     try {
-        const loadingTask = pdfjsLib.getDocument('/documents/CV_Pasindu Pathum.pdf');
-        pdfDoc.value = await loadingTask.promise;
+        // Try loading by URL but disable range requests (some dev servers mishandle Range)
+        try {
+            const loadingTask = pdfjsLib.getDocument({ url: pdfFile, disableRange: true, verbosity: 0 });
+            pdfDoc.value = await loadingTask.promise;
+        } catch (urlErr) {
+            console.warn('pdfjs getDocument(url) failed, falling back to fetch:', urlErr);
+
+            // Fallback: fetch entire file as ArrayBuffer and pass it to pdf.js
+            const resp = await fetch(pdfFile);
+            if (!resp.ok) throw new Error(`Network error fetching PDF: ${resp.status}`);
+            const arrayBuffer = await resp.arrayBuffer();
+            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+            pdfDoc.value = await loadingTask.promise;
+        }
+
         totalPages.value = pdfDoc.value.numPages;
         renderPage(currentPage.value);
     } catch (error) {
         console.error('Error loading PDF:', error);
+        alert('Failed to load PDF: ' + (error && error.message ? error.message : error));
     }
 }
 

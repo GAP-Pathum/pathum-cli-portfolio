@@ -475,7 +475,8 @@ function handleAppTap(appName) {
         } else if (appName === 'instagram') {
             window.open('https://www.instagram.com/gap_pathum', '_blank');
         } else if (appName === 'resume') {
-            window.open('/documents/CV_Pasindu Pathum.pdf', '_blank');
+            // Open canonical resume PDF in a new tab on mobile
+            window.open('/documents/resume.pdf', '_blank');
         } else if (appName === 'settings') {
             settingsOpen.value = true;
         }

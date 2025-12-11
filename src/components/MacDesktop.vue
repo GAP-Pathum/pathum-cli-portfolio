@@ -31,14 +31,7 @@
             >
                 <div :class="['icon-image', icon.iconClass]">
                     <!-- Photos -->
-                    <div v-if="icon.id === 'photos'" class="app-icon-content">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="10" fill="url(#photosGrad)"/>
-                            <path d="M12 7L14.5 11H9.5L12 7Z" fill="white"/>
-                            <circle cx="12" cy="14" r="3" fill="white"/>
-                            <defs><linearGradient id="photosGrad" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#FF6B6B"/><stop offset="0.5" stop-color="#FFE66D"/><stop offset="1" stop-color="#4ECDC4"/></linearGradient></defs>
-                        </svg>
-                    </div>
+                    <div v-if="icon.id === 'photos'" class="app-icon-content" v-html="appIcons.photos"></div>
                     <!-- Music -->
                     <div v-else-if="icon.id === 'music'" class="app-icon-content">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -48,15 +41,7 @@
                         </svg>
                     </div>
                     <!-- Notes -->
-                    <div v-else-if="icon.id === 'notes'" class="app-icon-content">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="24" height="24" rx="5" fill="#FFCC02"/>
-                            <rect x="5" y="4" width="14" height="16" rx="2" fill="white"/>
-                            <line x1="7" y1="8" x2="17" y2="8" stroke="#E5E5E5" stroke-width="1"/>
-                            <line x1="7" y1="11" x2="17" y2="11" stroke="#E5E5E5" stroke-width="1"/>
-                            <line x1="7" y1="14" x2="14" y2="14" stroke="#E5E5E5" stroke-width="1"/>
-                        </svg>
-                    </div>
+                    <div v-else-if="icon.id === 'notes'" class="app-icon-content" v-html="appIcons.notes"></div>
                     <!-- Calendar -->
                     <div v-else-if="icon.id === 'calendar'" class="app-icon-content">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -97,17 +82,9 @@
                         </svg>
                     </div>
                     <!-- Terminal -->
-                    <div v-else-if="icon.id === 'terminal'" class="app-icon-content">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="24" height="24" rx="5" fill="#1e1e1e"/>
-                            <path d="M7 8L11 12L7 16" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <line x1="13" y1="16" x2="17" y2="16" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
+                    <div v-else-if="icon.id === 'terminal'" class="app-icon-content" v-html="appIcons.terminal"></div>
                     <!-- Resume PDF -->
-                    <div v-else-if="icon.id === 'resume'" class="app-icon-content">
-                        <div v-html="appIcons.pdf"></div>
-                    </div>
+                    <div v-else-if="icon.id === 'resume'" class="app-icon-content" v-html="appIcons.pdf"></div>
                 </div>
                 <div class="icon-label">{{ icon.label }}</div>
             </div>
@@ -115,38 +92,48 @@
 
         <!-- Dock -->
         <div class="dock-container" :class="{ 'dock-hidden': isMaximized || isGalleryMaximized || isNotesMaximized }">
-            <div class="dock">
-                <div class="dock-icon finder-dock" @click="selectDockIcon('finder')" v-html="appIcons.finder"></div>
-                <div class="dock-icon" @click="selectDockIcon('safari')" v-html="appIcons.safari"></div>
-                <div class="dock-icon" @click="selectDockIcon('mail')" v-html="appIcons.mail"></div>
-                <div class="dock-icon" @click="selectDockIcon('messages')" v-html="appIcons.messages"></div>
+            <div class="dock mac-dock">
+                <div class="dock-icon finder-dock" @click="selectDockIcon('finder')">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.finder"></div>
+                </div>
+                <div class="dock-icon" @click="selectDockIcon('safari')">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.safari"></div>
+                </div>
+                <div class="dock-icon" @click="selectDockIcon('mail')">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.mail"></div>
+                </div>
+                <div class="dock-icon" @click="selectDockIcon('messages')">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.messages"></div>
+                </div>
                 <div class="dock-divider"></div>
                 <!-- Terminal Dock (shows when running) -->
                 <div v-if="terminalOpen || terminalMinimized" class="dock-icon terminal-dock" @click="selectDockIcon('terminal')" :class="{ 'has-window': terminalOpen || terminalMinimized }">
-                    <div v-html="appIcons.terminal"></div>
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.terminal"></div>
                     <div class="dock-indicator" :class="{ 'minimized-indicator': terminalMinimized, 'running-indicator': terminalOpen && !terminalMinimized }"></div>
                 </div>
                 <!-- Photos Dock (shows when running) -->
                 <div v-if="galleryOpen || galleryMinimized" class="dock-icon photos-dock" @click="selectDockIcon('photos')" :class="{ 'has-window': galleryOpen || galleryMinimized }">
-                    <div v-html="appIcons.photos"></div>
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.photos"></div>
                     <div class="dock-indicator" :class="{ 'minimized-indicator': galleryMinimized, 'running-indicator': galleryOpen && !galleryMinimized }"></div>
                 </div>
                 <!-- Notes Dock (shows when running) -->
                 <div v-if="notesOpen || notesMinimized" class="dock-icon notes-dock" @click="selectDockIcon('notes')" :class="{ 'has-window': notesOpen || notesMinimized }">
-                    <div v-html="appIcons.notes"></div>
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.notes"></div>
                     <div class="dock-indicator" :class="{ 'minimized-indicator': notesMinimized, 'running-indicator': notesOpen && !notesMinimized }"></div>
                 </div>
                 
                 <!-- Settings Dock (shows when running) -->
                 <div v-if="settingsOpen || settingsMinimized" class="dock-icon settings-dock" @click="selectDockIcon('settings')" :class="{ 'has-window': settingsOpen || settingsMinimized }">
-                    <div v-html="appIcons.settings"></div>
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.settings"></div>
                     <div class="dock-indicator" :class="{ 'minimized-indicator': settingsMinimized, 'running-indicator': settingsOpen && !settingsMinimized }"></div>
                 </div>
-                <div v-else class="dock-icon" @click="selectDockIcon('settings')" v-html="appIcons.settings"></div>
+                <div v-else class="dock-icon" @click="selectDockIcon('settings')">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.settings"></div>
+                </div>
                 
                 <!-- Resume PDF Dock (shows when running) -->
                 <div v-if="pdfOpen || pdfMinimized" class="dock-icon resume-dock" @click="selectDockIcon('resume')" :class="{ 'has-window': pdfOpen || pdfMinimized }">
-                    <div v-html="appIcons.pdf"></div>
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.pdf"></div>
                     <div class="dock-indicator" :class="{ 'minimized-indicator': pdfMinimized, 'running-indicator': pdfOpen && !pdfMinimized }"></div>
                 </div>
             </div>
@@ -1532,11 +1519,12 @@ onUnmounted(() => {
 }
 
 .desktop-icon:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .desktop-icon.selected {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(66, 133, 244, 0.3);
+    border-radius: 8px;
 }
 
 .icon-image {
@@ -1547,8 +1535,7 @@ onUnmounted(() => {
     justify-content: center;
     margin-bottom: 4px;
     border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    overflow: visible;
 }
 
 /* Unified app icon content */
@@ -1576,54 +1563,98 @@ onUnmounted(() => {
 /* Dock */
 .dock-container {
     position: fixed;
-    bottom: 8px;
+    bottom: 4px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dock {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(30px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
-    padding: 8px 12px;
+    background: rgba(30, 30, 30, 0.4);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    padding: 4px 6px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    gap: 4px;
+    box-shadow: 
+        0 0 0 0.5px rgba(0, 0, 0, 0.3),
+        0 10px 40px rgba(0, 0, 0, 0.4),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
 }
 
 .dock-icon {
-    width: 56px;
-    height: 56px;
+    width: 52px;
+    height: 52px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     border-radius: 12px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    font-size: 36px;
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+}
+
+/* Ensure inner v-html wrapper fills the dock icon so injected SVGs scale properly */
+.dock-icon > div {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .dock-icon svg {
     width: 100%;
     height: 100%;
-    border-radius: 12px;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    border-radius: 11px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    transition: filter 0.15s ease;
+}
+
+/* Desktop-specific dock overrides: ensure desktop dock shows desktop-style icons */
+.mac-dock .dock-icon > div {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mac-dock .dock-icon svg {
+    border-radius: 11px;
+}
+
+/* Stronger rules for desktop dock inner icon wrapper */
+.mac-dock .desktop-dock-icon-inner {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mac-dock .desktop-dock-icon-inner svg {
+    width: 100%;
+    height: 100%;
+    border-radius: 11px !important;
 }
 
 .dock-icon:hover {
-    transform: translateY(-8px) scale(1.1);
+    transform: translateY(-10px) scale(1.15);
+}
+
+.dock-icon:hover svg {
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
 }
 
 .dock-divider {
     width: 1px;
-    height: 48px;
-    background: rgba(255, 255, 255, 0.2);
-    margin: 0 4px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 2px;
+    border-radius: 1px;
 }
 
 /* Dock Hidden State - when window is maximized */
@@ -1631,29 +1662,29 @@ onUnmounted(() => {
     transform: translateX(-50%) translateY(100px);
     opacity: 0;
     pointer-events: none;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dock Window Indicators */
+/* Dock Window Indicators - dot under running apps */
 .dock-indicator {
     position: absolute;
-    bottom: -6px;
+    bottom: -8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 4px;
-    height: 4px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background: transparent;
     transition: all 0.2s ease;
 }
 
 .running-indicator {
-    background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.176);
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.301);
 }
 
 .minimized-indicator {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.5);
 }
 
 /* Terminal Container */
