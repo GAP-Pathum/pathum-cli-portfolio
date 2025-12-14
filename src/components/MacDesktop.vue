@@ -180,6 +180,27 @@
                         :class="{ 'minimized-indicator': pdfMinimized, 'running-indicator': pdfOpen && !pdfMinimized }">
                     </div>
                 </div>
+                <!-- Music Dock (shows when running) -->
+                <div v-if="musicOpen || musicMinimized" class="dock-icon music-dock" @click="selectDockIcon('music')"
+                    :class="{ 'has-window': musicOpen || musicMinimized }">
+                    <div class="desktop-dock-icon-inner">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="5" fill="url(#musicGrad)" />
+                            <path
+                                d="M17 7V15C17 16.66 15.66 18 14 18C12.34 18 11 16.66 11 15C11 13.34 12.34 12 14 12C14.35 12 14.69 12.07 15 12.18V9L11 10V16C11 17.66 9.66 19 8 19C6.34 19 5 17.66 5 16C5 14.34 6.34 13 8 13C8.35 13 8.69 13.07 9 13.18V7L17 5V7Z"
+                                fill="white" />
+                            <defs>
+                                <linearGradient id="musicGrad" x1="0" y1="0" x2="24" y2="24">
+                                    <stop stop-color="#FA2D48" />
+                                    <stop offset="1" stop-color="#A12B6B" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': musicMinimized, 'running-indicator': musicOpen && !musicMinimized }">
+                    </div>
+                </div>
                 <!-- ChatBot Window (shown when opened, always in desktop area) -->
             </div> <!-- close .dock.mac-dock -->
         </div> <!-- close .dock-container -->
@@ -310,6 +331,14 @@
             @startDrag="startDragPdf" />
     </div>
 
+    <!-- Music Player Window -->
+    <MusicPlayer
+        :is-open="musicOpen"
+        :is-minimized="musicMinimized"
+        @close="closeMusic"
+        @minimize="minimizeMusic"
+    />
+
     <!-- macOS Notification Banner -->
     <Transition name="notification">
         <div v-if="showNotification" class="macos-notification">
@@ -332,6 +361,7 @@ import Notes from './Notes.vue';
 import SettingsWindow from './SettingsWindow.vue';
 import PdfViewer from './PdfViewer.vue';
 import ChatBot from './ChatBot.vue';
+import MusicPlayer from './MusicPlayer.vue';
 
 const emit = defineEmits(['logout']);
 
@@ -347,6 +377,8 @@ const settingsOpen = ref(false);
 const settingsMinimized = ref(false);
 const pdfOpen = ref(false);
 const pdfMinimized = ref(false);
+const musicOpen = ref(false);
+const musicMinimized = ref(false);
 const lightboxOpen = ref(false);
 const currentPhotoIndex = ref(0);
 const showNotification = ref(false);
@@ -917,6 +949,8 @@ function openApplication(appName) {
         window.open('https://github.com/GAP-Pathum', '_blank');
     } else if (appName === 'resume') {
         pdfOpen.value = true;
+    } else if (appName === 'music') {
+        musicOpen.value = true;
     }
 }
 
@@ -978,6 +1012,12 @@ function selectDockIcon(iconName) {
             restorePdf();
         } else if (!pdfOpen.value) {
             pdfOpen.value = true;
+        }
+    } else if (iconName === 'music') {
+        if (musicMinimized.value) {
+            restoreMusic();
+        } else if (!musicOpen.value) {
+            musicOpen.value = true;
         }
     }
 }
@@ -1123,6 +1163,20 @@ function stopDragPdf() {
     isDraggingPdf = false;
     document.removeEventListener('mousemove', onPdfDrag);
     document.removeEventListener('mouseup', stopDragPdf);
+}
+
+// Music functions
+function closeMusic() {
+    musicOpen.value = false;
+    musicMinimized.value = false;
+}
+
+function minimizeMusic() {
+    musicMinimized.value = true;
+}
+
+function restoreMusic() {
+    musicMinimized.value = false;
 }
 
 function closeTerminal() {

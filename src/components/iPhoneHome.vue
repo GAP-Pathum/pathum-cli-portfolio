@@ -1,5 +1,3 @@
-import ChatBot from './ChatBot.vue';
-
 <template>
     <div class="iphone-home" :style="homeBackground" @touchstart="handleTouchStart" @touchmove="handleTouchMove"
         @touchend="handleTouchEnd">
@@ -192,6 +190,11 @@ import ChatBot from './ChatBot.vue';
             <Terminal @close="closeTerminal" :isDesktopMode="false" :isMobileMode="true" />
         </div>
 
+        <!-- Music App -->
+        <div v-if="musicOpen" class="app-overlay" @touchstart.stop @touchmove.stop @touchend.stop>
+            <MusicPlayer :is-open="musicOpen" :is-minimized="false" :mobile-mode="true" @close="closeMusic" />
+        </div>
+
         <!-- Settings App -->
         <div v-if="settingsOpen" class="settings-modal" @touchstart.stop @touchmove.stop @touchend.stop>
             <div class="settings-header-mobile">
@@ -233,38 +236,6 @@ import ChatBot from './ChatBot.vue';
             </div>
         </div>
 
-        <!-- Gallery App -->
-        <div v-if="galleryOpen" class="gallery-app" @touchstart.stop @touchmove.stop="handleGalleryTouchMove"
-            @touchend.stop>
-            <div class="gallery-header-mobile">
-                <button class="gallery-back" @click="lightboxOpen ? closeLightbox() : closeGallery()">
-                    ‹ {{ lightboxOpen ? 'Gallery' : 'Back' }}
-                </button>
-                <span class="gallery-title">{{ lightboxOpen ? `${currentPhotoIndex + 1} of ${photos.length}` : 'Photos'
-                }}</span>
-                <span class="gallery-spacer"></span>
-            </div>
-
-            <!-- Photo Grid -->
-            <div v-if="!lightboxOpen" class="photo-grid-mobile">
-                <div v-for="(photo, index) in photos" :key="photo.id" class="photo-item-mobile"
-                    @click="openLightbox(index)">
-                    <img :src="photo.src" :alt="photo.title" loading="lazy" />
-                </div>
-            </div>
-
-            <!-- Lightbox -->
-            <div v-else class="lightbox-mobile" @touchstart="handleLightboxTouchStart"
-                @touchmove="handleLightboxTouchMove" @touchend="handleLightboxTouchEnd">
-                <img :src="photos[currentPhotoIndex].src" :alt="photos[currentPhotoIndex].title"
-                    :style="{ transform: `translateX(${lightboxSwipeX}px)` }" />
-                <div class="lightbox-dots">
-                    <span v-for="(_, index) in photos" :key="index" class="dot"
-                        :class="{ active: index === currentPhotoIndex }"></span>
-                </div>
-            </div>
-        </div>
-
         <!-- Notes App -->
         <div v-if="notesOpen" class="notes-app" @touchstart.stop @touchmove.stop @touchend.stop>
             <div class="notes-header-mobile">
@@ -278,6 +249,7 @@ import ChatBot from './ChatBot.vue';
 
             <!-- Notes List -->
             <div v-if="showNotesList" class="notes-list-mobile">
+                <button v-if="notes.length > 0" @click="createNewNote" class="create-note-btn" style="margin: 8px; width: calc(100% - 16px);">+ New Note</button>
                 <div v-if="notes.length === 0" class="notes-empty">
                     <span class="empty-icon">📝</span>
                     <p>No notes yet</p>
@@ -321,17 +293,21 @@ import ChatBot from './ChatBot.vue';
             </div>
             <ChatBot />
         </div>
+
+        <!-- Gallery App -->
+        <Gallery :is-open="galleryOpen" @close="closeGallery" />
     </div>
 </template>
 
 
 <script setup>
 import ChatBot from './ChatBot.vue';
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import MusicPlayer from './MusicPlayer.vue';
+import Gallery from './Gallery.vue';
 import Terminal from './Terminal.vue';
-import { photos } from '../data/photos.js';
 import { appIcons } from '../assets/appIcons.js';
 import { wallpapers } from '../data/wallpapers.js';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 const emit = defineEmits(['logout']);
 
@@ -340,14 +316,7 @@ const batteryLevel = ref(87);
 const terminalOpen = ref(false);
 const galleryOpen = ref(false);
 const notesOpen = ref(false);
-const lightboxOpen = ref(false);
-
-// Notes state
-const notes = ref([]);
-const currentNoteId = ref(null);
-const showNotesList = ref(true);
-const currentPhotoIndex = ref(0);
-const lightboxSwipeX = ref(0);
+const musicOpen = ref(false);
 const showControlCenter = ref(false);
 const showNotification = ref(false);
 const showWidgets = ref(false);
@@ -356,6 +325,11 @@ const isDark = ref(false);
 const currentWallpaper = ref(null);
 const settingsOpen = ref(false);
 const selectedWallpaper = ref(0);
+
+// Notes related refs
+const notes = ref([]);
+const currentNoteId = ref(null);
+const showNotesList = ref(true);
 
 // Computed property for background
 const homeBackground = computed(() => {
@@ -375,7 +349,6 @@ const homeBackground = computed(() => {
 let startY = 0;
 let startX = 0;
 let isDragging = false;
-let lightboxTouchStartX = 0;
 
 function updateTime() {
     const now = new Date();
@@ -421,6 +394,8 @@ function handleAppTap(appName) {
             terminalOpen.value = true;
         } else if (appName === 'photos') {
             galleryOpen.value = true;
+        } else if (appName === 'music') {
+            musicOpen.value = true;
         } else if (appName === 'notes') {
             notesOpen.value = true;
             loadNotes();
@@ -449,15 +424,16 @@ function closeSettings() {
     settingsOpen.value = false;
 }
 
-function handleWallpaperChanged({ id, path }) {
-    currentWallpaper.value = path;
+function closeMusic() {
+    musicOpen.value = false;
 }
 
-// Gallery functions
 function closeGallery() {
     galleryOpen.value = false;
-    lightboxOpen.value = false;
-    currentPhotoIndex.value = 0;
+}
+
+function handleWallpaperChanged({ id, path }) {
+    currentWallpaper.value = path;
 }
 
 // Notes functions
@@ -536,48 +512,6 @@ function formatNoteDate(dateString) {
 function getPreview(content) {
     if (!content) return 'No content';
     return content.substring(0, 40) + (content.length > 40 ? '...' : '');
-}
-
-function openLightbox(index) {
-    currentPhotoIndex.value = index;
-    lightboxOpen.value = true;
-}
-
-function closeLightbox() {
-    lightboxOpen.value = false;
-    lightboxSwipeX.value = 0;
-}
-
-function nextPhoto() {
-    currentPhotoIndex.value = (currentPhotoIndex.value + 1) % photos.length;
-}
-
-function prevPhoto() {
-    currentPhotoIndex.value = (currentPhotoIndex.value - 1 + photos.length) % photos.length;
-}
-
-// Lightbox swipe handlers
-function handleLightboxTouchStart(e) {
-    lightboxTouchStartX = e.touches[0].clientX;
-}
-
-function handleLightboxTouchMove(e) {
-    const diff = e.touches[0].clientX - lightboxTouchStartX;
-    lightboxSwipeX.value = diff;
-}
-
-function handleLightboxTouchEnd() {
-    if (lightboxSwipeX.value < -50) {
-        nextPhoto();
-    } else if (lightboxSwipeX.value > 50) {
-        prevPhoto();
-    }
-    lightboxSwipeX.value = 0;
-}
-
-// Gallery touch move handler (allows scrolling in gallery)
-function handleGalleryTouchMove(e) {
-    // Allow default touch behavior for scrolling in gallery
 }
 
 function toggleControlCenter() {
@@ -1164,110 +1098,6 @@ onUnmounted(() => {
     display: none;
 }
 
-/* Gallery App */
-.gallery-app {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    z-index: 500;
-    display: flex;
-    flex-direction: column;
-    touch-action: auto;
-}
-
-.gallery-header-mobile {
-    height: 56px;
-    background: rgba(30, 30, 30, 0.95);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 16px;
-    flex-shrink: 0;
-}
-
-.gallery-back {
-    background: none;
-    border: none;
-    color: #007AFF;
-    font-size: 17px;
-    padding: 8px 0;
-    cursor: pointer;
-    min-width: 80px;
-    text-align: left;
-}
-
-.gallery-title {
-    color: white;
-    font-size: 17px;
-    font-weight: 600;
-}
-
-.gallery-spacer {
-    min-width: 80px;
-}
-
-/* Mobile Photo Grid */
-.photo-grid-mobile {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    padding: 2px;
-    overflow-y: auto;
-    flex: 1;
-}
-
-.photo-item-mobile {
-    aspect-ratio: 1;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.photo-item-mobile img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Mobile Lightbox */
-.lightbox-mobile {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #000;
-    overflow: hidden;
-}
-
-.lightbox-mobile img {
-    max-width: 100%;
-    max-height: calc(100vh - 120px);
-    object-fit: contain;
-    transition: transform 0.1s ease-out;
-}
-
-.lightbox-dots {
-    position: absolute;
-    bottom: 40px;
-    display: flex;
-    gap: 6px;
-}
-
-.lightbox-dots .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
-    transition: background 0.2s;
-}
-
-.lightbox-dots .dot.active {
-    background: white;
-}
-
 /* Mobile Notes App */
 .notes-app {
     position: fixed;
@@ -1294,7 +1124,7 @@ onUnmounted(() => {
 .notes-back {
     background: none;
     border: none;
-    color: #FFCC02;
+    color: #007AFF;
     font-size: 17px;
     padding: 8px 0;
     cursor: pointer;
@@ -1314,23 +1144,8 @@ onUnmounted(() => {
     padding: 0 8px;
 }
 
-.notes-new-btn {
-    background: #FFCC02;
-    border: none;
-    color: #1c1c1e;
-    font-size: 24px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-}
-
 .notes-spacer {
-    min-width: 32px;
+    min-width: 70px;
 }
 
 /* Notes List Mobile */

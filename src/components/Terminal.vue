@@ -1,5 +1,5 @@
 <template>
-    <div class="terminal-wrapper" :class="{ 'desktop-mode': isDesktopMode, 'mobile-mode': isMobileMode }">
+    <div class="terminal-wrapper" :class="{ 'desktop-mode': isDesktopMode, 'mobile-mode': isMobileMode }" @touchstart.stop @touchmove.stop @touchend.stop>
         <!-- Mobile Header -->
         <div v-if="isMobileMode" class="mobile-terminal-header">
             <button class="mobile-back-btn" @click="handleClose">
@@ -425,7 +425,7 @@ onMounted(() => {
     font-size: 17px;
     padding: 8px 0;
     cursor: pointer;
-    min-width: 60px;
+    min-width: 80px;
     text-align: left;
 }
 

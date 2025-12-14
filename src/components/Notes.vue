@@ -1,5 +1,5 @@
 <template>
-    <div class="notes-window">
+    <div class="notes-window" @touchstart.stop @touchmove.stop @touchend.stop>
         <div class="notes-header" @mousedown="$emit('startDrag', $event)">
             <div class="window-controls">
                 <span class="window-dot close" @click.stop="$emit('close')"></span>
