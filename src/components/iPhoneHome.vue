@@ -431,6 +431,10 @@ function handleAppTap(appName) {
             window.open('/documents/resume.pdf', '_blank');
         } else if (appName === 'settings') {
             settingsOpen.value = true;
+        } else if (appName === 'phone') {
+            window.location.href = 'tel:+94752955301';
+        } else if (appName === 'messages') {
+            window.open('https://wa.me/94752955301?text=Hello%20Pathum', '_blank');
         }
     }, 300);
 }
