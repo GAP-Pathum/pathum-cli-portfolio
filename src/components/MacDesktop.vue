@@ -20,24 +20,25 @@
 
         <!-- Desktop Icons -->
         <div class="desktop-icons">
-            <div 
-                class="desktop-icon"
-                v-for="icon in desktopIcons"
-                :key="icon.id"
-                @mousedown="startDragIcon($event, icon)"
-                @click="handleIconClick(icon.id)"
-                :class="{ selected: selectedIcon === icon.id }"
-                :style="{ left: icon.x + 'px', top: icon.y + 'px' }"
-            >
+            <div class="desktop-icon" v-for="icon in desktopIcons" :key="icon.id"
+                @mousedown="startDragIcon($event, icon)" @click="handleIconClick(icon.id)"
+                :class="{ selected: selectedIcon === icon.id }" :style="{ left: icon.x + 'px', top: icon.y + 'px' }">
                 <div :class="['icon-image', icon.iconClass]">
                     <!-- Photos -->
                     <div v-if="icon.id === 'photos'" class="app-icon-content" v-html="appIcons.photos"></div>
                     <!-- Music -->
                     <div v-else-if="icon.id === 'music'" class="app-icon-content">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="24" height="24" rx="5" fill="url(#musicGrad)"/>
-                            <path d="M17 7V15C17 16.66 15.66 18 14 18C12.34 18 11 16.66 11 15C11 13.34 12.34 12 14 12C14.35 12 14.69 12.07 15 12.18V9L11 10V16C11 17.66 9.66 19 8 19C6.34 19 5 17.66 5 16C5 14.34 6.34 13 8 13C8.35 13 8.69 13.07 9 13.18V7L17 5V7Z" fill="white"/>
-                            <defs><linearGradient id="musicGrad" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#FA2D48"/><stop offset="1" stop-color="#A12B6B"/></linearGradient></defs>
+                            <rect width="24" height="24" rx="5" fill="url(#musicGrad)" />
+                            <path
+                                d="M17 7V15C17 16.66 15.66 18 14 18C12.34 18 11 16.66 11 15C11 13.34 12.34 12 14 12C14.35 12 14.69 12.07 15 12.18V9L11 10V16C11 17.66 9.66 19 8 19C6.34 19 5 17.66 5 16C5 14.34 6.34 13 8 13C8.35 13 8.69 13.07 9 13.18V7L17 5V7Z"
+                                fill="white" />
+                            <defs>
+                                <linearGradient id="musicGrad" x1="0" y1="0" x2="24" y2="24">
+                                    <stop stop-color="#FA2D48" />
+                                    <stop offset="1" stop-color="#A12B6B" />
+                                </linearGradient>
+                            </defs>
                         </svg>
                     </div>
                     <!-- Notes -->
@@ -45,46 +46,66 @@
                     <!-- Calendar -->
                     <div v-else-if="icon.id === 'calendar'" class="app-icon-content">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="24" height="24" rx="5" fill="white"/>
-                            <rect y="0" width="24" height="7" rx="3" fill="#FF3B30"/>
-                            <text x="12" y="18" text-anchor="middle" fill="#1C1C1E" font-size="11" font-weight="bold" font-family="-apple-system">11</text>
+                            <rect width="24" height="24" rx="5" fill="white" />
+                            <rect y="0" width="24" height="7" rx="3" fill="#FF3B30" />
+                            <text x="12" y="18" text-anchor="middle" fill="#1C1C1E" font-size="11" font-weight="bold"
+                                font-family="-apple-system">11</text>
                         </svg>
                     </div>
                     <!-- LinkedIn -->
                     <div v-else-if="icon.id === 'linkedin'" class="app-icon-content">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="24" height="24" rx="5" fill="#0A66C2"/>
-                            <path d="M8.5 10V17H6V10H8.5ZM7.25 8.75C6.56 8.75 6 8.19 6 7.5C6 6.81 6.56 6.25 7.25 6.25C7.94 6.25 8.5 6.81 8.5 7.5C8.5 8.19 7.94 8.75 7.25 8.75ZM18 17H15.5V13.5C15.5 12.5 15 12 14 12C13 12 12.5 12.67 12.5 13.5V17H10V10H12.5V11C12.5 11 13.17 10 14.75 10C16.33 10 18 11 18 13.5V17Z" fill="white"/>
+                            <rect width="24" height="24" rx="5" fill="#0A66C2" />
+                            <path
+                                d="M8.5 10V17H6V10H8.5ZM7.25 8.75C6.56 8.75 6 8.19 6 7.5C6 6.81 6.56 6.25 7.25 6.25C7.94 6.25 8.5 6.81 8.5 7.5C8.5 8.19 7.94 8.75 7.25 8.75ZM18 17H15.5V13.5C15.5 12.5 15 12 14 12C13 12 12.5 12.67 12.5 13.5V17H10V10H12.5V11C12.5 11 13.17 10 14.75 10C16.33 10 18 11 18 13.5V17Z"
+                                fill="white" />
                         </svg>
                     </div>
                     <!-- Facebook -->
                     <div v-else-if="icon.id === 'facebook'" class="app-icon-content">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="24" height="24" rx="5" fill="#1877F2"/>
-                            <path d="M16.5 12.5H14V18H11V12.5H9V10H11V8.5C11 6.5 12.17 5.5 14 5.5C14.83 5.5 15.5 5.58 15.5 5.58V7.5H14.67C13.67 7.5 13.5 8 13.5 8.67V10H15.5L15 12.5H13.5" fill="white"/>
+                            <rect width="24" height="24" rx="5" fill="#1877F2" />
+                            <path
+                                d="M16.5 12.5H14V18H11V12.5H9V10H11V8.5C11 6.5 12.17 5.5 14 5.5C14.83 5.5 15.5 5.58 15.5 5.58V7.5H14.67C13.67 7.5 13.5 8 13.5 8.67V10H15.5L15 12.5H13.5"
+                                fill="white" />
                         </svg>
                     </div>
                     <!-- Instagram -->
                     <div v-else-if="icon.id === 'instagram'" class="app-icon-content">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="24" height="24" rx="5" fill="url(#instaGrad)"/>
-                            <rect x="6" y="6" width="12" height="12" rx="3" stroke="white" stroke-width="1.5" fill="none"/>
-                            <circle cx="12" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/>
-                            <circle cx="15.5" cy="8.5" r="1" fill="white"/>
-                            <defs><radialGradient id="instaGrad" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#FFDC80"/><stop offset="10%" stop-color="#FCAF45"/><stop offset="35%" stop-color="#F77737"/><stop offset="55%" stop-color="#F56040"/><stop offset="70%" stop-color="#FD1D1D"/><stop offset="80%" stop-color="#E1306C"/><stop offset="100%" stop-color="#C13584"/></radialGradient></defs>
+                            <rect width="24" height="24" rx="5" fill="url(#instaGrad)" />
+                            <rect x="6" y="6" width="12" height="12" rx="3" stroke="white" stroke-width="1.5"
+                                fill="none" />
+                            <circle cx="12" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+                            <circle cx="15.5" cy="8.5" r="1" fill="white" />
+                            <defs>
+                                <radialGradient id="instaGrad" cx="30%" cy="107%" r="150%">
+                                    <stop offset="0%" stop-color="#FFDC80" />
+                                    <stop offset="10%" stop-color="#FCAF45" />
+                                    <stop offset="35%" stop-color="#F77737" />
+                                    <stop offset="55%" stop-color="#F56040" />
+                                    <stop offset="70%" stop-color="#FD1D1D" />
+                                    <stop offset="80%" stop-color="#E1306C" />
+                                    <stop offset="100%" stop-color="#C13584" />
+                                </radialGradient>
+                            </defs>
                         </svg>
                     </div>
                     <!-- GitHub -->
                     <div v-else-if="icon.id === 'github'" class="app-icon-content">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="24" height="24" rx="5" fill="#24292F"/>
-                            <path d="M12 5C8.13 5 5 8.13 5 12C5 15.1 7.01 17.71 9.78 18.5C10.12 18.56 10.25 18.35 10.25 18.17V16.65C8.13 17.07 7.73 15.6 7.73 15.6C7.42 14.9 6.97 14.69 6.97 14.69C6.34 14.27 7.02 14.28 7.02 14.28C7.72 14.33 8.09 15 8.09 15C8.71 16.05 9.73 15.75 10.28 15.57C10.34 15.12 10.52 14.82 10.72 14.65C9.03 14.48 7.25 13.81 7.25 11.21C7.25 10.54 7.5 10 7.9 9.57C7.83 9.4 7.58 8.78 7.96 7.94C7.96 7.94 8.55 7.76 10.24 8.55C10.79 8.4 11.4 8.33 12 8.33C12.6 8.33 13.21 8.4 13.76 8.55C15.45 7.76 16.04 7.94 16.04 7.94C16.42 8.78 16.17 9.4 16.1 9.57C16.5 10 16.75 10.54 16.75 11.21C16.75 13.82 14.97 14.47 13.27 14.64C13.52 14.85 13.75 15.26 13.75 15.9V18.17C13.75 18.35 13.88 18.57 14.23 18.5C16.99 17.7 19 15.1 19 12C19 8.13 15.87 5 12 5Z" fill="white"/>
+                            <rect width="24" height="24" rx="5" fill="#24292F" />
+                            <path
+                                d="M12 5C8.13 5 5 8.13 5 12C5 15.1 7.01 17.71 9.78 18.5C10.12 18.56 10.25 18.35 10.25 18.17V16.65C8.13 17.07 7.73 15.6 7.73 15.6C7.42 14.9 6.97 14.69 6.97 14.69C6.34 14.27 7.02 14.28 7.02 14.28C7.72 14.33 8.09 15 8.09 15C8.71 16.05 9.73 15.75 10.28 15.57C10.34 15.12 10.52 14.82 10.72 14.65C9.03 14.48 7.25 13.81 7.25 11.21C7.25 10.54 7.5 10 7.9 9.57C7.83 9.4 7.58 8.78 7.96 7.94C7.96 7.94 8.55 7.76 10.24 8.55C10.79 8.4 11.4 8.33 12 8.33C12.6 8.33 13.21 8.4 13.76 8.55C15.45 7.76 16.04 7.94 16.04 7.94C16.42 8.78 16.17 9.4 16.1 9.57C16.5 10 16.75 10.54 16.75 11.21C16.75 13.82 14.97 14.47 13.27 14.64C13.52 14.85 13.75 15.26 13.75 15.9V18.17C13.75 18.35 13.88 18.57 14.23 18.5C16.99 17.7 19 15.1 19 12C19 8.13 15.87 5 12 5Z"
+                                fill="white" />
                         </svg>
                     </div>
                     <!-- Terminal -->
                     <div v-else-if="icon.id === 'terminal'" class="app-icon-content" v-html="appIcons.terminal"></div>
                     <!-- Resume PDF -->
                     <div v-else-if="icon.id === 'resume'" class="app-icon-content" v-html="appIcons.pdf"></div>
+                    <!-- ChatBot -->
+                    <div v-else-if="icon.id === 'chatbot'" class="app-icon-content" v-html="appIcons.chatbot"></div>
                 </div>
                 <div class="icon-label">{{ icon.label }}</div>
             </div>
@@ -106,208 +127,200 @@
                     <div class="desktop-dock-icon-inner" v-html="appIcons.messages"></div>
                 </div>
                 <div class="dock-divider"></div>
+                <!-- ChatBot Dock (shows when running) -->
+                <div v-if="chatbotOpen || chatbotMinimized" class="dock-icon chatbot-dock"
+                    @click="selectDockIcon('chatbot')" :class="{ 'has-window': chatbotOpen || chatbotMinimized }">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.chatbot"></div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': chatbotMinimized, 'running-indicator': chatbotOpen && !chatbotMinimized }">
+                    </div>
+                </div>
                 <!-- Terminal Dock (shows when running) -->
-                <div v-if="terminalOpen || terminalMinimized" class="dock-icon terminal-dock" @click="selectDockIcon('terminal')" :class="{ 'has-window': terminalOpen || terminalMinimized }">
+                <div v-if="terminalOpen || terminalMinimized" class="dock-icon terminal-dock"
+                    @click="selectDockIcon('terminal')" :class="{ 'has-window': terminalOpen || terminalMinimized }">
                     <div class="desktop-dock-icon-inner" v-html="appIcons.terminal"></div>
-                    <div class="dock-indicator" :class="{ 'minimized-indicator': terminalMinimized, 'running-indicator': terminalOpen && !terminalMinimized }"></div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': terminalMinimized, 'running-indicator': terminalOpen && !terminalMinimized }">
+                    </div>
                 </div>
                 <!-- Photos Dock (shows when running) -->
-                <div v-if="galleryOpen || galleryMinimized" class="dock-icon photos-dock" @click="selectDockIcon('photos')" :class="{ 'has-window': galleryOpen || galleryMinimized }">
+                <div v-if="galleryOpen || galleryMinimized" class="dock-icon photos-dock"
+                    @click="selectDockIcon('photos')" :class="{ 'has-window': galleryOpen || galleryMinimized }">
                     <div class="desktop-dock-icon-inner" v-html="appIcons.photos"></div>
-                    <div class="dock-indicator" :class="{ 'minimized-indicator': galleryMinimized, 'running-indicator': galleryOpen && !galleryMinimized }"></div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': galleryMinimized, 'running-indicator': galleryOpen && !galleryMinimized }">
+                    </div>
                 </div>
                 <!-- Notes Dock (shows when running) -->
-                <div v-if="notesOpen || notesMinimized" class="dock-icon notes-dock" @click="selectDockIcon('notes')" :class="{ 'has-window': notesOpen || notesMinimized }">
+                <div v-if="notesOpen || notesMinimized" class="dock-icon notes-dock" @click="selectDockIcon('notes')"
+                    :class="{ 'has-window': notesOpen || notesMinimized }">
                     <div class="desktop-dock-icon-inner" v-html="appIcons.notes"></div>
-                    <div class="dock-indicator" :class="{ 'minimized-indicator': notesMinimized, 'running-indicator': notesOpen && !notesMinimized }"></div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': notesMinimized, 'running-indicator': notesOpen && !notesMinimized }">
+                    </div>
                 </div>
-                
+
                 <!-- Settings Dock (shows when running) -->
-                <div v-if="settingsOpen || settingsMinimized" class="dock-icon settings-dock" @click="selectDockIcon('settings')" :class="{ 'has-window': settingsOpen || settingsMinimized }">
+                <div v-if="settingsOpen || settingsMinimized" class="dock-icon settings-dock"
+                    @click="selectDockIcon('settings')" :class="{ 'has-window': settingsOpen || settingsMinimized }">
                     <div class="desktop-dock-icon-inner" v-html="appIcons.settings"></div>
-                    <div class="dock-indicator" :class="{ 'minimized-indicator': settingsMinimized, 'running-indicator': settingsOpen && !settingsMinimized }"></div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': settingsMinimized, 'running-indicator': settingsOpen && !settingsMinimized }">
+                    </div>
                 </div>
                 <div v-else class="dock-icon" @click="selectDockIcon('settings')">
                     <div class="desktop-dock-icon-inner" v-html="appIcons.settings"></div>
                 </div>
-                
-                <!-- Resume PDF Dock (shows when running) -->
-                <div v-if="pdfOpen || pdfMinimized" class="dock-icon resume-dock" @click="selectDockIcon('resume')" :class="{ 'has-window': pdfOpen || pdfMinimized }">
-                    <div class="desktop-dock-icon-inner" v-html="appIcons.pdf"></div>
-                    <div class="dock-indicator" :class="{ 'minimized-indicator': pdfMinimized, 'running-indicator': pdfOpen && !pdfMinimized }"></div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Terminal Window (shown when opened) -->
-        <div 
-            v-if="terminalOpen && !terminalMinimized" 
-            class="terminal-container"
-            :style="terminalStyle"
-        >
-            <div 
-                class="terminal-resize-header"
-                @mousedown="startDragWindow"
-            >
-                <div class="window-controls">
-                    <span class="window-dot close" @click.stop="closeTerminal"></span>
-                    <span class="window-dot minimize" @click.stop="minimizeTerminal"></span>
-                    <span class="window-dot maximize" @click.stop="toggleMaximize"></span>
-                </div>
-                <div class="window-title">Terminal — zsh</div>
-            </div>
-            <div class="terminal-body-wrapper">
-                <div class="terminal-body" ref="terminalOutputContainer">
-                    <div v-html="welcomeMessage" class="welcome-output"></div>
-                    
-                    <div v-for="(item, index) in terminalOutput" :key="index" class="output-block">
-                        <div v-if="item.command" class="command-line">
-                            <span class="prompt-user">pathum</span>
-                            <span class="prompt-separator">@</span>
-                            <span class="prompt-host">portfolio</span>
-                            <span class="prompt-separator">:</span>
-                            <span class="prompt-path">{{ item.prompt }}</span>
-                            <span class="prompt-symbol">$</span>
-                            <span class="command-text">{{ item.command }}</span>
-                        </div>
-                        <div v-if="item.output" class="output-content" :class="item.type" v-html="item.output"></div>
+                <!-- Resume PDF Dock (shows when running) -->
+                <div v-if="pdfOpen || pdfMinimized" class="dock-icon resume-dock" @click="selectDockIcon('resume')"
+                    :class="{ 'has-window': pdfOpen || pdfMinimized }">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.pdf"></div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': pdfMinimized, 'running-indicator': pdfOpen && !pdfMinimized }">
                     </div>
-                    
-                    <div class="input-line">
+                </div>
+                <!-- ChatBot Window (shown when opened, always in desktop area) -->
+            </div> <!-- close .dock.mac-dock -->
+        </div> <!-- close .dock-container -->
+
+        <!-- ChatBot Window (shown when opened, always in desktop area) -->
+        <div v-if="chatbotOpen && !chatbotMinimized" class="chatbot-container chatbot-desktop-window"
+            :style="chatbotStyle">
+            <div class="terminal-resize-header" @mousedown="startDragChatbot">
+                <div class="window-controls">
+                    <span class="window-dot close" @click.stop="closeChatbot"></span>
+                    <span class="window-dot minimize" @click.stop="minimizeChatbot"></span>
+                    <span class="window-dot maximize" @click.stop="toggleChatbotMaximize"></span>
+                </div>
+                <div class="window-title">Gemini ChatBot</div>
+            </div>
+            <div style="flex:1;overflow:hidden;background:rgba(255,255,255,0.12);border-radius:0 0 10px 10px;">
+                <ChatBot />
+            </div>
+            <!-- Resize Handles -->
+            <div class="resize-handle resize-right" @mousedown="startChatbotResize($event, 'right')"></div>
+            <div class="resize-handle resize-bottom" @mousedown="startChatbotResize($event, 'bottom')"></div>
+            <div class="resize-handle resize-corner" @mousedown="startChatbotResize($event, 'corner')"></div>
+        </div>
+    </div>
+
+    <!-- Terminal Window (shown when opened) -->
+    <div v-if="terminalOpen && !terminalMinimized" class="terminal-container" :style="terminalStyle">
+        <div class="terminal-resize-header" @mousedown="startDragWindow">
+            <div class="window-controls">
+                <span class="window-dot close" @click.stop="closeTerminal"></span>
+                <span class="window-dot minimize" @click.stop="minimizeTerminal"></span>
+                <span class="window-dot maximize" @click.stop="toggleMaximize"></span>
+            </div>
+            <div class="window-title">Terminal — zsh</div>
+        </div>
+        <div class="terminal-body-wrapper">
+            <div class="terminal-body" ref="terminalOutputContainer">
+                <div v-html="welcomeMessage" class="welcome-output"></div>
+
+                <div v-for="(item, index) in terminalOutput" :key="index" class="output-block">
+                    <div v-if="item.command" class="command-line">
                         <span class="prompt-user">pathum</span>
                         <span class="prompt-separator">@</span>
                         <span class="prompt-host">portfolio</span>
                         <span class="prompt-separator">:</span>
-                        <span class="prompt-path">~</span>
+                        <span class="prompt-path">{{ item.prompt }}</span>
                         <span class="prompt-symbol">$</span>
-                        <input 
-                            ref="terminalInput"
-                            v-model="currentCommand"
-                            @keydown.enter="executeTerminalCommand"
-                            @keydown.tab.prevent="autocompleteCommand"
-                            @keydown.up.prevent="navigateHistory('up')"
-                            @keydown.down.prevent="navigateHistory('down')"
-                            @keydown.ctrl.l.prevent="clearTerminal"
-                            class="command-input"
-                            spellcheck="false"
-                            autocomplete="off"
-                            placeholder="type 'help' to get started..."
-                        />
+                        <span class="command-text">{{ item.command }}</span>
                     </div>
+                    <div v-if="item.output" class="output-content" :class="item.type" v-html="item.output"></div>
+                </div>
+
+                <div class="input-line">
+                    <span class="prompt-user">pathum</span>
+                    <span class="prompt-separator">@</span>
+                    <span class="prompt-host">portfolio</span>
+                    <span class="prompt-separator">:</span>
+                    <span class="prompt-path">~</span>
+                    <span class="prompt-symbol">$</span>
+                    <input ref="terminalInput" v-model="currentCommand" @keydown.enter="executeTerminalCommand"
+                        @keydown.tab.prevent="autocompleteCommand" @keydown.up.prevent="navigateHistory('up')"
+                        @keydown.down.prevent="navigateHistory('down')" @keydown.ctrl.l.prevent="clearTerminal"
+                        class="command-input" spellcheck="false" autocomplete="off"
+                        placeholder="type 'help' to get started..." />
                 </div>
             </div>
-            <!-- Resize Handles -->
-            <div class="resize-handle resize-right" @mousedown="startResize($event, 'right')"></div>
-            <div class="resize-handle resize-bottom" @mousedown="startResize($event, 'bottom')"></div>
-            <div class="resize-handle resize-corner" @mousedown="startResize($event, 'corner')"></div>
         </div>
-
-        <!-- Gallery Window -->
-        <div 
-            v-if="galleryOpen && !galleryMinimized" 
-            class="gallery-container"
-            :style="galleryStyle"
-        >
-            <div 
-                class="gallery-header"
-                @mousedown="startDragGallery"
-            >
-                <div class="window-controls">
-                    <span class="window-dot close" @click.stop="closeGallery"></span>
-                    <span class="window-dot minimize" @click.stop="minimizeGallery"></span>
-                    <span class="window-dot maximize" @click.stop="toggleGalleryMaximize"></span>
-                </div>
-                <div class="window-title">Photos</div>
-            </div>
-            <div class="gallery-body">
-                <!-- Grid View -->
-                <div v-if="!lightboxOpen" class="photo-grid">
-                    <div 
-                        v-for="(photo, index) in photos" 
-                        :key="photo.id" 
-                        class="photo-item"
-                        @click="openLightbox(index)"
-                    >
-                        <img :src="photo.src" :alt="photo.title" loading="lazy" />
-                    </div>
-                </div>
-                
-                <!-- Lightbox View -->
-                <div v-else class="lightbox" @click.self="closeLightbox">
-                    <button class="lightbox-close" @click="closeLightbox">×</button>
-                    <button class="lightbox-nav lightbox-prev" @click.stop="prevPhoto">‹</button>
-                    <div class="lightbox-image-container">
-                        <img :src="photos[currentPhotoIndex].src" :alt="photos[currentPhotoIndex].title" />
-                        <div class="lightbox-counter">{{ currentPhotoIndex + 1 }} / {{ photos.length }}</div>
-                    </div>
-                    <button class="lightbox-nav lightbox-next" @click.stop="nextPhoto">›</button>
-                </div>
-            </div>
-            <!-- Gallery Resize Handles -->
-            <div class="resize-handle resize-right" @mousedown="startGalleryResize($event, 'right')"></div>
-            <div class="resize-handle resize-bottom" @mousedown="startGalleryResize($event, 'bottom')"></div>
-            <div class="resize-handle resize-corner" @mousedown="startGalleryResize($event, 'corner')"></div>
-        </div>
-
-        <!-- Notes Window -->
-        <div 
-            v-if="notesOpen && !notesMinimized" 
-            class="notes-container"
-            :style="notesStyle"
-        >
-            <Notes 
-                @close="closeNotes"
-                @minimize="minimizeNotes"
-                @toggleMaximize="toggleNotesMaximize"
-                @startDrag="startDragNotes"
-            />
-            <!-- Notes Resize Handles -->
-            <div class="resize-handle resize-right" @mousedown="startNotesResize($event, 'right')"></div>
-            <div class="resize-handle resize-bottom" @mousedown="startNotesResize($event, 'bottom')"></div>
-            <div class="resize-handle resize-corner" @mousedown="startNotesResize($event, 'corner')"></div>
-        </div>
-
-        <!-- Settings Window -->
-        <div 
-            v-if="settingsOpen && !settingsMinimized" 
-            class="settings-container"
-            :style="settingsStyle"
-        >
-            <SettingsWindow 
-                @close="closeSettings"
-                @minimize="minimizeSettings"
-                @toggleMaximize="toggleSettingsMaximize"
-                @startDrag="startDragSettings"
-                @wallpaperChanged="handleWallpaperChanged"
-            />
-        </div>
-
-        <!-- PDF Viewer Window -->
-        <div 
-            v-if="pdfOpen && !pdfMinimized" 
-            class="pdf-container"
-            :style="pdfStyle"
-        >
-            <PdfViewer 
-                @close="closePdf"
-                @minimize="minimizePdf"
-                @toggleMaximize="togglePdfMaximize"
-                @startDrag="startDragPdf"
-            />
-        </div>
-
-        <!-- macOS Notification Banner -->
-        <Transition name="notification">
-            <div v-if="showNotification" class="macos-notification">
-                <div class="notification-icon">👋</div>
-                <div class="notification-content">
-                    <div class="notification-title">Welcome</div>
-                    <div class="notification-text">Welcome to Pathum's Portfolio</div>
-                </div>
-                <button class="notification-close" @click="showNotification = false">×</button>
-            </div>
-        </Transition>
+        <!-- Resize Handles -->
+        <div class="resize-handle resize-right" @mousedown="startResize($event, 'right')"></div>
+        <div class="resize-handle resize-bottom" @mousedown="startResize($event, 'bottom')"></div>
+        <div class="resize-handle resize-corner" @mousedown="startResize($event, 'corner')"></div>
     </div>
+
+    <!-- Gallery Window -->
+    <div v-if="galleryOpen && !galleryMinimized" class="gallery-container" :style="galleryStyle">
+        <div class="gallery-header" @mousedown="startDragGallery">
+            <div class="window-controls">
+                <span class="window-dot close" @click.stop="closeGallery"></span>
+                <span class="window-dot minimize" @click.stop="minimizeGallery"></span>
+                <span class="window-dot maximize" @click.stop="toggleGalleryMaximize"></span>
+            </div>
+            <div class="window-title">Photos</div>
+        </div>
+        <div class="gallery-body">
+            <!-- Grid View -->
+            <div v-if="!lightboxOpen" class="photo-grid">
+                <div v-for="(photo, index) in photos" :key="photo.id" class="photo-item" @click="openLightbox(index)">
+                    <img :src="photo.src" :alt="photo.title" loading="lazy" />
+                </div>
+            </div>
+
+            <!-- Lightbox View -->
+            <div v-else class="lightbox" @click.self="closeLightbox">
+                <button class="lightbox-close" @click="closeLightbox">×</button>
+                <button class="lightbox-nav lightbox-prev" @click.stop="prevPhoto">‹</button>
+                <div class="lightbox-image-container">
+                    <img :src="photos[currentPhotoIndex].src" :alt="photos[currentPhotoIndex].title" />
+                    <div class="lightbox-counter">{{ currentPhotoIndex + 1 }} / {{ photos.length }}</div>
+                </div>
+                <button class="lightbox-nav lightbox-next" @click.stop="nextPhoto">›</button>
+            </div>
+        </div>
+        <!-- Gallery Resize Handles -->
+        <div class="resize-handle resize-right" @mousedown="startGalleryResize($event, 'right')"></div>
+        <div class="resize-handle resize-bottom" @mousedown="startGalleryResize($event, 'bottom')"></div>
+        <div class="resize-handle resize-corner" @mousedown="startGalleryResize($event, 'corner')"></div>
+    </div>
+
+    <!-- Notes Window -->
+    <div v-if="notesOpen && !notesMinimized" class="notes-container" :style="notesStyle">
+        <Notes @close="closeNotes" @minimize="minimizeNotes" @toggleMaximize="toggleNotesMaximize"
+            @startDrag="startDragNotes" />
+        <!-- Notes Resize Handles -->
+        <div class="resize-handle resize-right" @mousedown="startNotesResize($event, 'right')"></div>
+        <div class="resize-handle resize-bottom" @mousedown="startNotesResize($event, 'bottom')"></div>
+        <div class="resize-handle resize-corner" @mousedown="startNotesResize($event, 'corner')"></div>
+    </div>
+
+    <!-- Settings Window -->
+    <div v-if="settingsOpen && !settingsMinimized" class="settings-container" :style="settingsStyle">
+        <SettingsWindow @close="closeSettings" @minimize="minimizeSettings" @toggleMaximize="toggleSettingsMaximize"
+            @startDrag="startDragSettings" @wallpaperChanged="handleWallpaperChanged" />
+    </div>
+
+    <!-- PDF Viewer Window -->
+    <div v-if="pdfOpen && !pdfMinimized" class="pdf-container" :style="pdfStyle">
+        <PdfViewer @close="closePdf" @minimize="minimizePdf" @toggleMaximize="togglePdfMaximize"
+            @startDrag="startDragPdf" />
+    </div>
+
+    <!-- macOS Notification Banner -->
+    <Transition name="notification">
+        <div v-if="showNotification" class="macos-notification">
+            <div class="notification-icon">👋</div>
+            <div class="notification-content">
+                <div class="notification-title">Welcome</div>
+                <div class="notification-text">Welcome to Pathum's Portfolio</div>
+            </div>
+            <button class="notification-close" @click="showNotification = false">×</button>
+        </div>
+    </Transition>
 </template>
 
 <script setup>
@@ -318,6 +331,7 @@ import { wallpapers } from '../data/wallpapers.js';
 import Notes from './Notes.vue';
 import SettingsWindow from './SettingsWindow.vue';
 import PdfViewer from './PdfViewer.vue';
+import ChatBot from './ChatBot.vue';
 
 const emit = defineEmits(['logout']);
 
@@ -369,47 +383,47 @@ const welcomeMessage = `
 
 // File system
 const fileSystem = {
-  '~': {
-    'README.txt': '<b>Welcome to G.A.P. Pathum\'s CLI Portfolio!</b><br><i>Type "help" for commands. Navigate directories like "cd projects" or "cat bio.txt" for details.</i><br><br>Tip: Use "banner" for a stylish intro!',
-    'bio.txt': '<b>About Me:</b><br><i>Full-stack developer from Ragala, Sri Lanka.</i><br>Curiosity drives exploration beyond surface appearances, seeking patterns and structure through patient observation and systematic reasoning. Understanding emerges from disciplined focus rather than haste, where complexity transforms into clarity through sustained attention and deliberate practice. Simplicity guides every pursuit—precision replaces excess, depth supersedes breadth, and awareness overcomes impulse. Knowledge matures into insight through reflection, evolving into quiet confidence built on consistency and balance. Growth manifests through steady refinement, where meaningful progress arises from thoughtful engagement and unwavering commitment to clarity, purpose, and lasting transformation.',
-    'education': {},
-    'skills.txt': '<b>Technical Skills:</b><ul><li>HTML, CSS, JavaScript</li><li>Figma, Photoshop</li><li>React, Node.js, Express, MongoDB, MySQL</li><li>C, Python, Java, PHP</li><li>Git, Tailwind, ViteJS, WordPress</li><li>Microsoft Office</li></ul><br><b>Soft Skills:</b><ul><li>Patient observation & systematic reasoning</li><li>Disciplined focus & reflection</li><li>Consistency, balance, & steady refinement</li></ul>',
-    'contact.txt': '<b>Contact Info:</b><ul><li>Email: <a href="mailto:pathumpasindu41@gmail.com">pathumpasindu41@gmail.com</a></li><li>Phone: +94 752 955 301</li><li>Location: Ragala, Sri Lanka</li><li>Website: <a href="https://www.pasindupathum.me/">pasindupathum.me</a></li><li>Social: GitHub/LinkedIn (add links if available)</li></ul>',
-    'resume.txt': '<b>Resume:</b><br>View my full resume at <a href="https://www.pasindupathum.me/">https://www.pasindupathum.me/</a> or type "open resume".<br><i>Includes education, skills, projects, and more.</i>',
-    'projects': {},  
-    'certificates.txt': '<b>Certificates & Achievements:</b><br>No formal certifications listed yet, but key achievements include:<ul><li>Capstone Project: Build Mate Plus (2024)</li><li>Ongoing BSc in Computing and Information Systems</li><li>Multiple web and ML projects</li></ul>'
-  },
-  '~/education': {
-    'bsc.txt': '<b>BSc (Hons) Computing and Information Systems</b><br>Sabaragamuwa University of Sri Lanka<br>2022–Present',
-    'advanced-levels.txt': '<b>G.C.E. Advanced Levels (Physics Stream)</b><br>T.B.M. Herath National School – Ragala<br>2020',
-    'ordinary-levels.txt': '<b>G.C.E. Ordinary Levels</b><br>T.B.M. Herath National School – Ragala<br>2016'
-  },
-  '~/projects': {
-    'build-mate-plus.txt': '<b>Build Mate Plus</b> – Capstone Project 2024<br><i>Description:</i> Comprehensive construction management tool for tracking materials, budgets, and progress.<br><i>Technologies:</i> React, Node.js, MongoDB, Tailwind CSS',
-    'foody.txt': '<b>Foody</b> – Online Food Ordering App<br><i>Description:</i> User-friendly platform for browsing menus, placing orders, and real-time tracking.<br><i>Technologies:</i> React, Express, MongoDB, Stripe for payments',
-    'syncpress.txt': '<b>SyncPress</b> – Digital Services Application<br><i>Description:</i> App for managing digital printing services, orders, and customer interactions.<br><i>Technologies:</i> PHP, MySQL, JavaScript, Bootstrap',
-    'spam-detector.txt': '<b>Spam Detector</b><br><i>Description:</i> Web app detecting spam in English/Sinhala messages using SMSSpamCollection and SinhalaSpamCollection datasets.<br><i>Technologies:</i> Python (Scikit-learn for TF-IDF & Naive Bayes), Flask, HTML/CSS/JS',
-    'react-portfolio.txt': '<b>React Vite Portfolio</b><br><i>Description:</i> Personal portfolio with Home, About, Projects sections, animations.<br><i>Technologies:</i> React, Vite, Bootstrap, Framer Motion',
-    'drug-inventory-dashboard.txt': '<b>Drug Inventory Dashboard</b><br><i>Description:</i> Responsive, role-based dashboard for managing drug stock.<br><i>Technologies:</i> PHP, Laravel, Bootstrap, MySQL',
-    'hotel-booking.txt': '<b>Hotel Booking System</b><br><i>Description:</i> Booking system using Google Sheets as backend for room availability.<br><i>Technologies:</i> HTML, CSS, JavaScript, Google Apps Script',
-  }
+    '~': {
+        'README.txt': '<b>Welcome to G.A.P. Pathum\'s CLI Portfolio!</b><br><i>Type "help" for commands. Navigate directories like "cd projects" or "cat bio.txt" for details.</i><br><br>Tip: Use "banner" for a stylish intro!',
+        'bio.txt': '<b>About Me:</b><br><i>Full-stack developer from Ragala, Sri Lanka.</i><br>Curiosity drives exploration beyond surface appearances, seeking patterns and structure through patient observation and systematic reasoning. Understanding emerges from disciplined focus rather than haste, where complexity transforms into clarity through sustained attention and deliberate practice. Simplicity guides every pursuit—precision replaces excess, depth supersedes breadth, and awareness overcomes impulse. Knowledge matures into insight through reflection, evolving into quiet confidence built on consistency and balance. Growth manifests through steady refinement, where meaningful progress arises from thoughtful engagement and unwavering commitment to clarity, purpose, and lasting transformation.',
+        'education': {},
+        'skills.txt': '<b>Technical Skills:</b><ul><li>HTML, CSS, JavaScript</li><li>Figma, Photoshop</li><li>React, Node.js, Express, MongoDB, MySQL</li><li>C, Python, Java, PHP</li><li>Git, Tailwind, ViteJS, WordPress</li><li>Microsoft Office</li></ul><br><b>Soft Skills:</b><ul><li>Patient observation & systematic reasoning</li><li>Disciplined focus & reflection</li><li>Consistency, balance, & steady refinement</li></ul>',
+        'contact.txt': '<b>Contact Info:</b><ul><li>Email: <a href="mailto:pathumpasindu41@gmail.com">pathumpasindu41@gmail.com</a></li><li>Phone: +94 752 955 301</li><li>Location: Ragala, Sri Lanka</li><li>Website: <a href="https://www.pasindupathum.me/">pasindupathum.me</a></li><li>Social: GitHub/LinkedIn (add links if available)</li></ul>',
+        'resume.txt': '<b>Resume:</b><br>View my full resume at <a href="https://www.pasindupathum.me/">https://www.pasindupathum.me/</a> or type "open resume".<br><i>Includes education, skills, projects, and more.</i>',
+        'projects': {},
+        'certificates.txt': '<b>Certificates & Achievements:</b><br>No formal certifications listed yet, but key achievements include:<ul><li>Capstone Project: Build Mate Plus (2024)</li><li>Ongoing BSc in Computing and Information Systems</li><li>Multiple web and ML projects</li></ul>'
+    },
+    '~/education': {
+        'bsc.txt': '<b>BSc (Hons) Computing and Information Systems</b><br>Sabaragamuwa University of Sri Lanka<br>2022–Present',
+        'advanced-levels.txt': '<b>G.C.E. Advanced Levels (Physics Stream)</b><br>T.B.M. Herath National School – Ragala<br>2020',
+        'ordinary-levels.txt': '<b>G.C.E. Ordinary Levels</b><br>T.B.M. Herath National School – Ragala<br>2016'
+    },
+    '~/projects': {
+        'build-mate-plus.txt': '<b>Build Mate Plus</b> – Capstone Project 2024<br><i>Description:</i> Comprehensive construction management tool for tracking materials, budgets, and progress.<br><i>Technologies:</i> React, Node.js, MongoDB, Tailwind CSS',
+        'foody.txt': '<b>Foody</b> – Online Food Ordering App<br><i>Description:</i> User-friendly platform for browsing menus, placing orders, and real-time tracking.<br><i>Technologies:</i> React, Express, MongoDB, Stripe for payments',
+        'syncpress.txt': '<b>SyncPress</b> – Digital Services Application<br><i>Description:</i> App for managing digital printing services, orders, and customer interactions.<br><i>Technologies:</i> PHP, MySQL, JavaScript, Bootstrap',
+        'spam-detector.txt': '<b>Spam Detector</b><br><i>Description:</i> Web app detecting spam in English/Sinhala messages using SMSSpamCollection and SinhalaSpamCollection datasets.<br><i>Technologies:</i> Python (Scikit-learn for TF-IDF & Naive Bayes), Flask, HTML/CSS/JS',
+        'react-portfolio.txt': '<b>React Vite Portfolio</b><br><i>Description:</i> Personal portfolio with Home, About, Projects sections, animations.<br><i>Technologies:</i> React, Vite, Bootstrap, Framer Motion',
+        'drug-inventory-dashboard.txt': '<b>Drug Inventory Dashboard</b><br><i>Description:</i> Responsive, role-based dashboard for managing drug stock.<br><i>Technologies:</i> PHP, Laravel, Bootstrap, MySQL',
+        'hotel-booking.txt': '<b>Hotel Booking System</b><br><i>Description:</i> Booking system using Google Sheets as backend for room availability.<br><i>Technologies:</i> HTML, CSS, JavaScript, Google Apps Script',
+    }
 };
 
 const cwd = ref('~');
 
 // Computed property for background
 const desktopBackground = computed(() => {
-  if (currentWallpaper.value) {
+    if (currentWallpaper.value) {
+        return {
+            backgroundImage: `url(${currentWallpaper.value})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+        };
+    }
     return {
-      backgroundImage: `url(${currentWallpaper.value})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
     };
-  }
-  return {
-    background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
-  };
 });
 
 const resolvePath = (path) => {
@@ -422,7 +436,7 @@ const resolvePath = (path) => {
         return parts.length ? parts.join('/') : '~';
     }
     if (path === '.') return cwd.value;
-    
+
     const current = cwd.value === '~' ? '' : cwd.value;
     const newPath = current ? `${current}/${path}` : path;
     return newPath;
@@ -431,7 +445,7 @@ const resolvePath = (path) => {
 const getDir = (path) => {
     const normalized = path === '~' ? '~' : path.replace(/^~\//, '~/');
     const parts = normalized.split('/').filter(Boolean);
-    
+
     let dir = fileSystem;
     for (const part of parts) {
         if (dir && dir[part]) {
@@ -446,83 +460,83 @@ const getDir = (path) => {
 // Terminal commands
 const commands = {
     help: () => '<b>Available Commands:</b><ul><li><b>cd [dir]</b> - Change directory</li><li><b>ls</b> - List files</li><li><b>cat [file]</b> - Read file</li><li><b>clear</b> - Clear screen</li><li><b>banner</b> - Show banner</li><li><b>whoami</b> - About me</li><li><b>pwd</b> - Current directory</li><li><b>open [resume/project]</b> - Open link</li><li><b>exit</b> - Close terminal</li><li><b>echo [text]</b> - Echo text</li><li><b>history</b> - Command history</li></ul>',
-    
-    clear: () => { 
-        terminalOutput.value = []; 
-        return null; 
+
+    clear: () => {
+        terminalOutput.value = [];
+        return null;
     },
-    
+
     banner: () => welcomeMessage,
-    
+
     whoami: () => {
         const bioFile = fileSystem['~']['bio.txt'];
         return bioFile || '<b>GAP Pathum</b><br>Full-Stack Developer from Sri Lanka 🇱🇰';
     },
-    
+
     pwd: () => cwd.value,
-    
+
     ls: () => {
         const dir = getDir(cwd.value);
         if (!dir) return '<span style="color: #f38ba8;">Directory not found</span>';
-        
+
         const items = Object.keys(dir);
         if (items.length === 0) return '<i>Empty directory</i>';
-        
+
         return items.map(item => {
             const isDir = typeof dir[item] === 'object' && !Array.isArray(dir[item]);
             return isDir ? `<span style="color: #89dceb;">${item}/</span>` : `<span style="color: #a6e3a1;">${item}</span>`;
         }).join('  ');
     },
-    
+
     cd: (args) => {
         if (!args[0]) {
             cwd.value = '~';
             return null;
         }
-        
+
         const targetPath = resolvePath(args[0]);
         const dir = getDir(targetPath);
-        
+
         if (!dir) {
             return `<span style="color: #f38ba8;">cd: ${args[0]}: No such directory</span>`;
         }
-        
+
         if (typeof dir !== 'object') {
             return `<span style="color: #f38ba8;">cd: ${args[0]}: Not a directory</span>`;
         }
-        
+
         cwd.value = targetPath;
         return null;
     },
-    
+
     cat: (args) => {
         if (!args[0]) {
             return '<span style="color: #f38ba8;">cat: missing file argument</span>';
         }
-        
+
         const dir = getDir(cwd.value);
         if (!dir) return '<span style="color: #f38ba8;">Current directory not found</span>';
-        
+
         const file = dir[args[0]];
         if (!file) {
             return `<span style="color: #f38ba8;">cat: ${args[0]}: No such file</span>`;
         }
-        
+
         if (typeof file === 'object') {
             return `<span style="color: #f38ba8;">cat: ${args[0]}: Is a directory</span>`;
         }
-        
+
         return file;
     },
-    
+
     open: (args) => {
         if (!args[0]) {
             return '<span style="color: #f38ba8;">open: missing argument</span>';
         }
-        
+
         const target = args[0];
         let url = '';
-        
+
         if (target === 'resume') {
             url = 'https://www.pasindupathum.me/';
         } else if (target === 'email') {
@@ -533,24 +547,24 @@ const commands = {
                 url = `https://github.com/GAP-Pathum/${target}`;
             }
         }
-        
+
         if (url) {
             window.open(url, '_blank');
             return `<span style="color: #a6e3a1;">Opening ${target}...</span>`;
         }
-        
+
         return `<span style="color: #f38ba8;">open: unknown target '${target}'</span>`;
     },
-    
+
     exit: () => {
         closeTerminal();
         return null;
     },
-    
+
     echo: (args) => {
         return args.join(' ') || '';
     },
-    
+
     history: () => {
         if (commandHistory.value.length === 0) {
             return '<i>No command history</i>';
@@ -567,12 +581,13 @@ const desktopIcons = ref([
     { id: 'music', label: 'Music', iconClass: 'music-icon', x: 20, y: 220 },
     { id: 'notes', label: 'Notes', iconClass: 'notes-icon', x: 20, y: 310 },
     { id: 'calendar', label: 'Calendar', iconClass: 'calendar-icon', x: 20, y: 400 },
-    { id: 'resume', label: 'Resume', iconClass: 'resume-icon', x: 20, y: 490 },
     // Column 2 - Social Media
     { id: 'linkedin', label: 'LinkedIn', iconClass: 'linkedin-icon', x: 110, y: 40 },
     { id: 'facebook', label: 'Facebook', iconClass: 'facebook-icon', x: 110, y: 130 },
     { id: 'instagram', label: 'Instagram', iconClass: 'instagram-icon', x: 110, y: 220 },
-    { id: 'github', label: 'GitHub', iconClass: 'github-icon', x: 110, y: 310 }
+    { id: 'github', label: 'GitHub', iconClass: 'github-icon', x: 110, y: 310 },
+    { id: 'resume', label: 'Resume', iconClass: 'resume-icon', x: 20, y: 490 },
+    { id: 'chatbot', label: 'ChatBot', iconClass: 'chatbot-icon', x: 20, y: 580 },
 ]);
 
 // Icon dragging
@@ -701,20 +716,20 @@ function updateTime() {
     const now = new Date();
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
+
     const dayName = days[now.getDay()];
     const monthName = months[now.getMonth()];
     const date = now.getDate();
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
-    
+
     currentTime.value = `${dayName} ${monthName} ${date}  ${hours}:${minutes}`;
 }
 
 function handleIconClick(iconName) {
     selectedIcon.value = iconName;
     clickCount++;
-    
+
     if (clickCount === 1) {
         clickTimer = setTimeout(() => {
             clickCount = 0;
@@ -731,34 +746,34 @@ function handleIconClick(iconName) {
 function startDragIcon(event, icon) {
     event.preventDefault();
     selectedIcon.value = icon.id;
-    
+
     const iconElement = event.currentTarget;
     const rect = iconElement.getBoundingClientRect();
-    
+
     isDraggingIcon = false;
     draggedIcon = icon;
     iconStartX = event.clientX;
     iconStartY = event.clientY;
     iconOffsetX = event.clientX - rect.left;
     iconOffsetY = event.clientY - rect.top;
-    
+
     document.addEventListener('mousemove', dragIcon);
     document.addEventListener('mouseup', stopDragIcon);
 }
 
 function dragIcon(event) {
     if (!draggedIcon) return;
-    
+
     const moveThreshold = 5;
-    if (Math.abs(event.clientX - iconStartX) > moveThreshold || 
+    if (Math.abs(event.clientX - iconStartX) > moveThreshold ||
         Math.abs(event.clientY - iconStartY) > moveThreshold) {
         isDraggingIcon = true;
     }
-    
+
     if (isDraggingIcon) {
         draggedIcon.x = event.clientX - iconOffsetX;
         draggedIcon.y = event.clientY - iconOffsetY;
-        
+
         // Keep within bounds
         draggedIcon.x = Math.max(0, Math.min(window.innerWidth - 100, draggedIcon.x));
         draggedIcon.y = Math.max(30, Math.min(window.innerHeight - 150, draggedIcon.y));
@@ -770,35 +785,35 @@ function stopDragIcon() {
         isDraggingIcon = false;
         draggedIcon = null;
     }, 10);
-    
+
     document.removeEventListener('mousemove', dragIcon);
     document.removeEventListener('mouseup', stopDragIcon);
 }
 
 function startDragWindow(event) {
     if (isMaximized.value) return;
-    
+
     event.preventDefault();
     isDraggingWindow = true;
     windowStartX = event.clientX;
     windowStartY = event.clientY;
-    
+
     const currentLeft = parseInt(terminalStyle.value.left) || 100;
     const currentTop = parseInt(terminalStyle.value.top) || 100;
-    
+
     windowOffsetX = windowStartX - currentLeft;
     windowOffsetY = windowStartY - currentTop;
-    
+
     document.addEventListener('mousemove', dragWindow);
     document.addEventListener('mouseup', stopDragWindow);
 }
 
 function dragWindow(event) {
     if (!isDraggingWindow) return;
-    
+
     const newLeft = event.clientX - windowOffsetX;
     const newTop = event.clientY - windowOffsetY;
-    
+
     terminalStyle.value.left = Math.max(0, Math.min(window.innerWidth - 400, newLeft)) + 'px';
     terminalStyle.value.top = Math.max(24, Math.min(window.innerHeight - 100, newTop)) + 'px';
 }
@@ -811,7 +826,7 @@ function stopDragWindow() {
 
 function startResize(event, direction) {
     if (isMaximized.value) return;
-    
+
     event.preventDefault();
     event.stopPropagation();
     isResizing = true;
@@ -820,22 +835,22 @@ function startResize(event, direction) {
     resizeStartY = event.clientY;
     resizeStartWidth = parseInt(terminalStyle.value.width) || 1200;
     resizeStartHeight = parseInt(terminalStyle.value.height) || window.innerHeight * 0.85;
-    
+
     document.addEventListener('mousemove', resizeWindow);
     document.addEventListener('mouseup', stopResize);
 }
 
 function resizeWindow(event) {
     if (!isResizing) return;
-    
+
     const deltaX = event.clientX - resizeStartX;
     const deltaY = event.clientY - resizeStartY;
-    
+
     if (resizeDirection === 'right' || resizeDirection === 'corner') {
         const newWidth = resizeStartWidth + deltaX;
         terminalStyle.value.width = Math.max(600, Math.min(window.innerWidth - parseInt(terminalStyle.value.left), newWidth)) + 'px';
     }
-    
+
     if (resizeDirection === 'bottom' || resizeDirection === 'corner') {
         const newHeight = resizeStartHeight + deltaY;
         terminalStyle.value.height = Math.max(400, Math.min(window.innerHeight - parseInt(terminalStyle.value.top), newHeight)) + 'px';
@@ -877,6 +892,21 @@ function openApplication(appName) {
         galleryOpen.value = true;
     } else if (appName === 'notes') {
         notesOpen.value = true;
+    } else if (appName === 'chatbot') {
+        if (!chatbotOpen.value) {
+            chatbotOpen.value = true;
+            chatbotMinimized.value = false;
+            isChatbotMaximized.value = false;
+            chatbotStyle.value = {
+                left: '300px',
+                top: '120px',
+                width: '420px',
+                height: '540px'
+            };
+            // Do not autofocus any input here to avoid browser autofocus errors
+        } else if (chatbotMinimized.value) {
+            chatbotMinimized.value = false;
+        }
     } else if (appName === 'linkedin') {
         window.open('https://www.linkedin.com/in/pasindu-pathum-98a299249', '_blank');
     } else if (appName === 'facebook') {
@@ -888,10 +918,28 @@ function openApplication(appName) {
     } else if (appName === 'resume') {
         pdfOpen.value = true;
     }
-    // Other apps can be implemented later
 }
 
 function selectDockIcon(iconName) {
+    if (iconName === 'chatbot') {
+        if (chatbotMinimized.value) {
+            restoreChatbot();
+        } else if (chatbotOpen.value) {
+            // Already open and not minimized: bring to front (no-op for now)
+        } else {
+            chatbotOpen.value = true;
+            chatbotMinimized.value = false;
+            isChatbotMaximized.value = false;
+            chatbotStyle.value = {
+                left: '300px',
+                top: '120px',
+                width: '420px',
+                height: '540px'
+            };
+            // Do not autofocus any input here to avoid browser autofocus errors
+        }
+        return;
+    }
     if (iconName === 'terminal') {
         if (terminalMinimized.value) {
             restoreTerminal();
@@ -972,27 +1020,27 @@ function toggleSettingsMaximize() {
 
 function startDragSettings(event) {
     if (isSettingsMaximized.value) return;
-    
+
     isDraggingSettings = true;
     settingsStartX = event.clientX;
     settingsStartY = event.clientY;
-    
+
     const currentLeft = parseInt(settingsStyle.value.left) || 0;
     const currentTop = parseInt(settingsStyle.value.top) || 0;
-    
+
     settingsOffsetX = settingsStartX - currentLeft;
     settingsOffsetY = settingsStartY - currentTop;
-    
+
     document.addEventListener('mousemove', onSettingsDrag);
     document.addEventListener('mouseup', stopDragSettings);
 }
 
 function onSettingsDrag(event) {
     if (!isDraggingSettings) return;
-    
+
     const newX = event.clientX - settingsOffsetX;
     const newY = event.clientY - settingsOffsetY;
-    
+
     settingsStyle.value.left = `${Math.max(0, newX)}px`;
     settingsStyle.value.top = `${Math.max(24, newY)}px`;
 }
@@ -1046,27 +1094,27 @@ function togglePdfMaximize() {
 
 function startDragPdf(event) {
     if (isPdfMaximized.value) return;
-    
+
     isDraggingPdf = true;
     pdfStartX = event.clientX;
     pdfStartY = event.clientY;
-    
+
     const currentLeft = parseInt(pdfStyle.value.left) || 0;
     const currentTop = parseInt(pdfStyle.value.top) || 0;
-    
+
     pdfOffsetX = pdfStartX - currentLeft;
     pdfOffsetY = pdfStartY - currentTop;
-    
+
     document.addEventListener('mousemove', onPdfDrag);
     document.addEventListener('mouseup', stopDragPdf);
 }
 
 function onPdfDrag(event) {
     if (!isDraggingPdf) return;
-    
+
     const newX = event.clientX - pdfOffsetX;
     const newY = event.clientY - pdfOffsetY;
-    
+
     pdfStyle.value.left = `${Math.max(0, newX)}px`;
     pdfStyle.value.top = `${Math.max(24, newY)}px`;
 }
@@ -1157,26 +1205,26 @@ function toggleNotesMaximize() {
 function startDragNotes(event) {
     if (isNotesMaximized.value) return;
     event.preventDefault();
-    
+
     const container = document.querySelector('.notes-container');
     const rect = container.getBoundingClientRect();
-    
+
     isDraggingNotes = true;
     notesStartX = event.clientX;
     notesStartY = event.clientY;
     notesOffsetX = event.clientX - rect.left;
     notesOffsetY = event.clientY - rect.top;
-    
+
     document.addEventListener('mousemove', dragNotes);
     document.addEventListener('mouseup', stopDragNotes);
 }
 
 function dragNotes(event) {
     if (!isDraggingNotes) return;
-    
+
     const newX = event.clientX - notesOffsetX;
     const newY = event.clientY - notesOffsetY;
-    
+
     notesStyle.value.left = `${Math.max(0, newX)}px`;
     notesStyle.value.top = `${Math.max(24, newY)}px`;
 }
@@ -1190,29 +1238,29 @@ function stopDragNotes() {
 function startNotesResize(event, direction) {
     if (isNotesMaximized.value) return;
     event.preventDefault();
-    
+
     isNotesResizing = true;
     notesResizeDirection = direction;
     notesResizeStartX = event.clientX;
     notesResizeStartY = event.clientY;
     notesResizeStartWidth = parseInt(notesStyle.value.width);
     notesResizeStartHeight = parseInt(notesStyle.value.height);
-    
+
     document.addEventListener('mousemove', resizeNotes);
     document.addEventListener('mouseup', stopNotesResize);
 }
 
 function resizeNotes(event) {
     if (!isNotesResizing) return;
-    
+
     const deltaX = event.clientX - notesResizeStartX;
     const deltaY = event.clientY - notesResizeStartY;
-    
+
     if (notesResizeDirection === 'right' || notesResizeDirection === 'corner') {
         const newWidth = Math.max(400, notesResizeStartWidth + deltaX);
         notesStyle.value.width = `${newWidth}px`;
     }
-    
+
     if (notesResizeDirection === 'bottom' || notesResizeDirection === 'corner') {
         const newHeight = Math.max(300, notesResizeStartHeight + deltaY);
         notesStyle.value.height = `${newHeight}px`;
@@ -1302,7 +1350,7 @@ function resizeGallery(event) {
     if (!isGalleryResizing) return;
     const deltaX = event.clientX - galleryResizeStartX;
     const deltaY = event.clientY - galleryResizeStartY;
-    
+
     if (galleryResizeDirection === 'right' || galleryResizeDirection === 'corner') {
         galleryStyle.value.width = Math.max(400, galleryResizeStartWidth + deltaX) + 'px';
     }
@@ -1337,22 +1385,22 @@ function executeTerminalCommand() {
         currentCommand.value = '';
         return;
     }
-    
+
     const parts = cmd.split(' ').filter(Boolean);
     const commandName = parts[0];
     const args = parts.slice(1);
-    
+
     commandHistory.value.push(cmd);
     historyIndex.value = commandHistory.value.length;
-    
+
     let output = '';
-    
+
     if (commands[commandName]) {
         output = commands[commandName](args);
     } else {
         output = `<span style="color: #f38ba8;">Command not found: ${commandName}<br>Type 'help' for available commands.</span>`;
     }
-    
+
     if (output !== null) {
         terminalOutput.value.push({
             prompt: cwd.value,
@@ -1361,9 +1409,9 @@ function executeTerminalCommand() {
             type: 'stdout'
         });
     }
-    
+
     currentCommand.value = '';
-    
+
     nextTick(() => {
         if (terminalOutputContainer.value) {
             terminalOutputContainer.value.scrollTop = terminalOutputContainer.value.scrollHeight;
@@ -1375,7 +1423,7 @@ function executeTerminalCommand() {
 function autocompleteCommand() {
     const cmd = currentCommand.value.trim();
     if (!cmd) return;
-    
+
     const matches = Object.keys(commands).filter(c => c.startsWith(cmd));
     if (matches.length === 1) {
         currentCommand.value = matches[0];
@@ -1405,11 +1453,106 @@ function handleLogout() {
 
 let timeInterval;
 
+// ChatBot window state
+const chatbotOpen = ref(false);
+const chatbotMinimized = ref(false);
+const chatbotStyle = ref({
+    left: '300px',
+    top: '120px',
+    width: '420px',
+    height: '380px' // reduced default height
+});
+// ChatBot resizing
+let isChatbotResizing = false;
+let chatbotResizeDirection = null;
+let chatbotResizeStartX = 0;
+let chatbotResizeStartY = 0;
+let chatbotResizeStartWidth = 0;
+let chatbotResizeStartHeight = 0;
+
+function startChatbotResize(event, direction) {
+    isChatbotResizing = true;
+    chatbotResizeDirection = direction;
+    chatbotResizeStartX = event.clientX;
+    chatbotResizeStartY = event.clientY;
+    chatbotResizeStartWidth = parseInt(chatbotStyle.value.width);
+    chatbotResizeStartHeight = parseInt(chatbotStyle.value.height);
+    document.addEventListener('mousemove', resizeChatbot);
+    document.addEventListener('mouseup', stopChatbotResize);
+}
+
+function resizeChatbot(event) {
+    if (!isChatbotResizing) return;
+    if (chatbotResizeDirection === 'right' || chatbotResizeDirection === 'corner') {
+        const newWidth = Math.max(320, chatbotResizeStartWidth + (event.clientX - chatbotResizeStartX));
+        chatbotStyle.value.width = newWidth + 'px';
+    }
+    if (chatbotResizeDirection === 'bottom' || chatbotResizeDirection === 'corner') {
+        const newHeight = Math.max(220, chatbotResizeStartHeight + (event.clientY - chatbotResizeStartY));
+        chatbotStyle.value.height = newHeight + 'px';
+    }
+}
+
+function stopChatbotResize() {
+    isChatbotResizing = false;
+    chatbotResizeDirection = null;
+    document.removeEventListener('mousemove', resizeChatbot);
+    document.removeEventListener('mouseup', stopChatbotResize);
+}
+const isChatbotMaximized = ref(false);
+let previousChatbotStyle = null;
+
+function closeChatbot() {
+    chatbotOpen.value = false;
+    chatbotMinimized.value = false;
+    isChatbotMaximized.value = false;
+}
+function minimizeChatbot() {
+    chatbotMinimized.value = true;
+    if (isChatbotMaximized.value) toggleChatbotMaximize();
+}
+function restoreChatbot() {
+    chatbotMinimized.value = false;
+}
+function toggleChatbotMaximize() {
+    if (isChatbotMaximized.value) {
+        chatbotStyle.value = { ...previousChatbotStyle };
+        isChatbotMaximized.value = false;
+    } else {
+        previousChatbotStyle = { ...chatbotStyle.value };
+        chatbotStyle.value = {
+            left: '0px',
+            top: '24px',
+            width: '100vw',
+            height: 'calc(100vh - 24px)'
+        };
+        isChatbotMaximized.value = true;
+    }
+}
+function startDragChatbot(event) {
+    if (isChatbotMaximized.value) return;
+    event.preventDefault();
+    let startX = event.clientX;
+    let startY = event.clientY;
+    let origLeft = parseInt(chatbotStyle.value.left) || 0;
+    let origTop = parseInt(chatbotStyle.value.top) || 0;
+    function onMove(e) {
+        chatbotStyle.value.left = Math.max(0, origLeft + (e.clientX - startX)) + 'px';
+        chatbotStyle.value.top = Math.max(24, origTop + (e.clientY - startY)) + 'px';
+    }
+    function onUp() {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+}
+
 onMounted(() => {
     updateTime();
     timeInterval = setInterval(updateTime, 1000);
     document.addEventListener('keydown', handleKeydown);
-    
+
     // Load saved wallpaper
     const savedWallpaper = localStorage.getItem('wallpaper');
     if (savedWallpaper && savedWallpaper !== '0') {
@@ -1418,7 +1561,7 @@ onMounted(() => {
             currentWallpaper.value = wallpaper.path;
         }
     }
-    
+
     // Show welcome notification after login
     setTimeout(() => {
         showNotification.value = true;
@@ -1580,7 +1723,7 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     gap: 4px;
-    box-shadow: 
+    box-shadow:
         0 0 0 0.5px rgba(0, 0, 0, 0.3),
         0 10px 40px rgba(0, 0, 0, 0.4),
         inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
@@ -1599,7 +1742,7 @@ onUnmounted(() => {
 }
 
 /* Ensure inner v-html wrapper fills the dock icon so injected SVGs scale properly */
-.dock-icon > div {
+.dock-icon>div {
     width: 48px;
     height: 48px;
     display: flex;
@@ -1616,13 +1759,14 @@ onUnmounted(() => {
 }
 
 /* Desktop-specific dock overrides: ensure desktop dock shows desktop-style icons */
-.mac-dock .dock-icon > div {
+.mac-dock .dock-icon>div {
     width: 48px;
     height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 .mac-dock .dock-icon svg {
     border-radius: 11px;
 }
@@ -1635,6 +1779,7 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
 }
+
 .mac-dock .desktop-dock-icon-inner svg {
     width: 100%;
     height: 100%;
@@ -2032,6 +2177,50 @@ onUnmounted(() => {
     overflow: hidden;
 }
 
+/* Ensure chatbot window floats above the dock, not attached */
+.chatbot-desktop-window {
+    position: absolute;
+    background: rgba(30, 30, 30, 0.541);
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    overflow: hidden;
+}
+
+/* ChatBot resize handles */
+.chatbot-container .resize-handle {
+    position: absolute;
+    background: transparent;
+    z-index: 10;
+}
+
+.chatbot-container .resize-right {
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 100%;
+    cursor: ew-resize;
+}
+
+.chatbot-container .resize-bottom {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 10px;
+    cursor: ns-resize;
+}
+
+.chatbot-container .resize-corner {
+    right: 0;
+    bottom: 0;
+    width: 18px;
+    height: 18px;
+    cursor: nwse-resize;
+}
+
 .gallery-header {
     height: 40px;
     background: rgba(60, 60, 60, 0.9);
@@ -2183,7 +2372,7 @@ onUnmounted(() => {
     align-items: center;
     gap: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
+        0 0 0 1px rgba(255, 255, 255, 0.1);
     z-index: 9999;
 }
 
@@ -2244,6 +2433,7 @@ onUnmounted(() => {
         opacity: 0;
         transform: translateX(100px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -2255,6 +2445,7 @@ onUnmounted(() => {
         opacity: 1;
         transform: translateX(0);
     }
+
     to {
         opacity: 0;
         transform: translateX(100px);

@@ -156,6 +156,38 @@ export const appIcons = {
       </g>
     </svg>
   `,
+    chatbot: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="chatbotGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#4285F4;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#34A853;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#chatbotGrad)"/>
+      <ellipse cx="32" cy="38" rx="18" ry="12" fill="#fff" opacity="0.9"/>
+      <ellipse cx="32" cy="28" rx="14" ry="10" fill="#fff" opacity="0.7"/>
+      <circle cx="24" cy="32" r="2.5" fill="#4285F4"/>
+      <circle cx="40" cy="32" r="2.5" fill="#34A853"/>
+      <rect x="28" y="40" width="8" height="3" rx="1.5" fill="#B0BEC5"/>
+    </svg>
+  `,
+  chatbotMobile: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="chatbotMobileGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#4285F4;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#34A853;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#chatbotMobileGrad)"/>
+      <ellipse cx="32" cy="40" rx="18" ry="12" fill="#fff" opacity="0.9"/>
+      <ellipse cx="32" cy="30" rx="14" ry="10" fill="#fff" opacity="0.7"/>
+      <circle cx="24" cy="34" r="2.5" fill="#4285F4"/>
+      <circle cx="40" cy="34" r="2.5" fill="#34A853"/>
+      <rect x="28" y="44" width="8" height="3" rx="1.5" fill="#B0BEC5"/>
+    </svg>
+  `,
 
   // iOS-specific icons with rounded square backgrounds
   terminalMobile: `

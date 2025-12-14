@@ -24,16 +24,23 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import * as pdfjsLib from 'pdfjs-dist';
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
-// Use the single canonical PDF in public/documents
-// Path served as `/documents/resume.pdf`
-const pdfFile = '/documents/resume.pdf';
+
+import { getDocument, GlobalWorkerOptions, version as pdfjsVersion } from 'pdfjs-dist';
+
+// Set worker source to local file in public folder
+GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+
+// Helper to load base64 from JSON file
+async function getBase64FromJson() {
+    const resp = await fetch('/documents/resume.txt');
+    if (!resp.ok) throw new Error('Failed to load resume.txt');
+    const json = await resp.json();
+    // Assume structure: { file: { mime: ..., data: 'base64string...' } }
+    if (!json.file || !json.file.data) throw new Error('resume.txt missing base64 data');
+    return json.file.data;
+}
 
 const emit = defineEmits(['close', 'minimize', 'toggleMaximize', 'startDrag']);
-
-// PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 const pdfCanvas = ref(null);
 const pdfContainer = ref(null);
@@ -44,23 +51,20 @@ const scale = ref(1.0);
 
 async function loadPDF() {
     try {
-        // Try loading by URL but disable range requests (some dev servers mishandle Range)
-        try {
-            const loadingTask = pdfjsLib.getDocument({ url: pdfFile, disableRange: true, verbosity: 0 });
-            pdfDoc.value = await loadingTask.promise;
-        } catch (urlErr) {
-            console.warn('pdfjs getDocument(url) failed, falling back to fetch:', urlErr);
-
-            // Fallback: fetch entire file as ArrayBuffer and pass it to pdf.js
-            const resp = await fetch(pdfFile);
-            if (!resp.ok) throw new Error(`Network error fetching PDF: ${resp.status}`);
-            const arrayBuffer = await resp.arrayBuffer();
-            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
-            pdfDoc.value = await loadingTask.promise;
-        }
-
-        totalPages.value = pdfDoc.value.numPages;
-        renderPage(currentPage.value);
+        // Load base64 from JSON
+        const base64 = await getBase64FromJson();
+        // Convert base64 to Uint8Array
+        const binary = atob(base64);
+        const len = binary.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) bytes[i] = binary.charCodeAt(i);
+        // Load PDF from bytes
+        const loadingTask = getDocument({ data: bytes });
+        const doc = await loadingTask.promise;
+        pdfDoc.value = doc;
+        totalPages.value = doc.numPages;
+        currentPage.value = 1; // Always start at first page after loading
+        await renderPage(1);
     } catch (error) {
         console.error('Error loading PDF:', error);
         alert('Failed to load PDF: ' + (error && error.message ? error.message : error));
@@ -68,46 +72,40 @@ async function loadPDF() {
 }
 
 async function renderPage(pageNum) {
-    if (!pdfDoc.value || !pdfCanvas.value) return;
-    
+    // Always use the latest pdfDoc reference
+    const doc = pdfDoc.value;
+    if (!doc || !pdfCanvas.value) return;
+    // Ensure pageNum is valid
+    if (pageNum < 1 || pageNum > doc.numPages) return;
     try {
-        const page = await pdfDoc.value.getPage(pageNum);
+        const page = await doc.getPage(pageNum);
         const canvas = pdfCanvas.value;
         const context = canvas.getContext('2d');
-        
         // Get container dimensions
         const container = pdfContainer.value;
         const containerWidth = container.clientWidth - 40; // Account for padding
         const containerHeight = container.clientHeight - 40;
-        
         // Get page viewport at scale 1 first
         const viewport1 = page.getViewport({ scale: 1 });
-        
         // Calculate scale to fit container
         const scaleX = containerWidth / viewport1.width;
         const scaleY = containerHeight / viewport1.height;
         const autoScale = Math.min(scaleX, scaleY) * 0.95; // 95% to add some margin
-        
         // Apply user's scale on top of auto-fit
         const finalScale = autoScale * scale.value;
-        
         const viewport = page.getViewport({ scale: finalScale });
-        
         // Set canvas dimensions
         const outputScale = window.devicePixelRatio || 1;
         canvas.width = Math.floor(viewport.width * outputScale);
         canvas.height = Math.floor(viewport.height * outputScale);
         canvas.style.width = Math.floor(viewport.width) + 'px';
         canvas.style.height = Math.floor(viewport.height) + 'px';
-        
         const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
-        
         const renderContext = {
             canvasContext: context,
             viewport: viewport,
             transform: transform
         };
-        
         await page.render(renderContext).promise;
     } catch (error) {
         console.error('Error rendering page:', error);

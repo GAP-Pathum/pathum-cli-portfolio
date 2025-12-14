@@ -1,10 +1,9 @@
+import ChatBot from './ChatBot.vue';
+
 <template>
-    <div class="iphone-home" 
-         :style="homeBackground"
-         @touchstart="handleTouchStart" 
-         @touchmove="handleTouchMove" 
-         @touchend="handleTouchEnd">
-        
+    <div class="iphone-home" :style="homeBackground" @touchstart="handleTouchStart" @touchmove="handleTouchMove"
+        @touchend="handleTouchEnd">
+
         <!-- Status Bar -->
         <div class="status-bar">
             <div class="status-left">
@@ -94,10 +93,15 @@
             </div>
 
             <!-- Row 4 - Social Media -->
+            <div class="app-icon" @click="handleAppTap('chatbot')" :class="{ 'bouncing': bouncingApp === 'chatbot' }">
+                <div class="icon" v-html="appIcons.chatbotMobile"></div>
+                <div class="app-name">ChatBot</div>
+            </div>
             <div class="app-icon" @click="handleAppTap('linkedin')" :class="{ 'bouncing': bouncingApp === 'linkedin' }">
                 <div class="icon linkedin-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="32" height="32">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        <path
+                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                     </svg>
                 </div>
                 <div class="app-name">LinkedIn</div>
@@ -105,15 +109,18 @@
             <div class="app-icon" @click="handleAppTap('facebook')" :class="{ 'bouncing': bouncingApp === 'facebook' }">
                 <div class="icon facebook-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="32" height="32">
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        <path
+                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                     </svg>
                 </div>
                 <div class="app-name">Facebook</div>
             </div>
-            <div class="app-icon" @click="handleAppTap('instagram')" :class="{ 'bouncing': bouncingApp === 'instagram' }">
+            <div class="app-icon" @click="handleAppTap('instagram')"
+                :class="{ 'bouncing': bouncingApp === 'instagram' }">
                 <div class="icon instagram-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="32" height="32">
-                        <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                        <path
+                            d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
                     </svg>
                 </div>
                 <div class="app-name">Instagram</div>
@@ -181,28 +188,12 @@
         </div>
 
         <!-- Terminal App -->
-        <div 
-            v-if="terminalOpen" 
-            class="app-overlay"
-            @touchstart.stop
-            @touchmove.stop
-            @touchend.stop
-        >
-            <Terminal 
-                @close="closeTerminal"
-                :isDesktopMode="false"
-                :isMobileMode="true"
-            />
+        <div v-if="terminalOpen" class="app-overlay" @touchstart.stop @touchmove.stop @touchend.stop>
+            <Terminal @close="closeTerminal" :isDesktopMode="false" :isMobileMode="true" />
         </div>
 
         <!-- Settings App -->
-        <div 
-            v-if="settingsOpen" 
-            class="settings-modal"
-            @touchstart.stop
-            @touchmove.stop
-            @touchend.stop
-        >
+        <div v-if="settingsOpen" class="settings-modal" @touchstart.stop @touchmove.stop @touchend.stop>
             <div class="settings-header-mobile">
                 <button class="back-btn" @click="closeSettings">
                     ‹ Back
@@ -217,32 +208,21 @@
                         <h4 class="subsection-title">Wallpaper</h4>
                         <div class="wallpaper-grid-mobile">
                             <!-- Default Gradient -->
-                            <div 
-                                class="wallpaper-item-mobile"
-                                :class="{ 'selected': selectedWallpaper === 0 }"
-                                @click="selectWallpaper(0)"
-                            >
+                            <div class="wallpaper-item-mobile" :class="{ 'selected': selectedWallpaper === 0 }"
+                                @click="selectWallpaper(0)">
                                 <div class="wallpaper-thumb">
                                     <div class="gradient-bg"></div>
                                 </div>
                                 <div class="wallpaper-label">Default</div>
                                 <div v-if="selectedWallpaper === 0" class="check-badge">✓</div>
                             </div>
-                            
+
                             <!-- Image Wallpapers -->
-                            <div 
-                                v-for="wallpaper in wallpapers"
-                                :key="wallpaper.id"
-                                class="wallpaper-item-mobile"
+                            <div v-for="wallpaper in wallpapers" :key="wallpaper.id" class="wallpaper-item-mobile"
                                 :class="{ 'selected': selectedWallpaper === wallpaper.id }"
-                                @click="selectWallpaper(wallpaper.id)"
-                            >
+                                @click="selectWallpaper(wallpaper.id)">
                                 <div class="wallpaper-thumb">
-                                    <img 
-                                        :src="wallpaper.thumbnail" 
-                                        :alt="wallpaper.name"
-                                        loading="lazy"
-                                    >
+                                    <img :src="wallpaper.thumbnail" :alt="wallpaper.name" loading="lazy">
                                 </div>
                                 <div class="wallpaper-label">{{ wallpaper.name }}</div>
                                 <div v-if="selectedWallpaper === wallpaper.id" class="check-badge">✓</div>
@@ -254,65 +234,39 @@
         </div>
 
         <!-- Gallery App -->
-        <div 
-            v-if="galleryOpen" 
-            class="gallery-app"
-            @touchstart.stop
-            @touchmove.stop="handleGalleryTouchMove"
-            @touchend.stop
-        >
+        <div v-if="galleryOpen" class="gallery-app" @touchstart.stop @touchmove.stop="handleGalleryTouchMove"
+            @touchend.stop>
             <div class="gallery-header-mobile">
                 <button class="gallery-back" @click="lightboxOpen ? closeLightbox() : closeGallery()">
                     ‹ {{ lightboxOpen ? 'Gallery' : 'Back' }}
                 </button>
-                <span class="gallery-title">{{ lightboxOpen ? `${currentPhotoIndex + 1} of ${photos.length}` : 'Photos' }}</span>
+                <span class="gallery-title">{{ lightboxOpen ? `${currentPhotoIndex + 1} of ${photos.length}` : 'Photos'
+                }}</span>
                 <span class="gallery-spacer"></span>
             </div>
-            
+
             <!-- Photo Grid -->
             <div v-if="!lightboxOpen" class="photo-grid-mobile">
-                <div 
-                    v-for="(photo, index) in photos" 
-                    :key="photo.id" 
-                    class="photo-item-mobile"
-                    @click="openLightbox(index)"
-                >
+                <div v-for="(photo, index) in photos" :key="photo.id" class="photo-item-mobile"
+                    @click="openLightbox(index)">
                     <img :src="photo.src" :alt="photo.title" loading="lazy" />
                 </div>
             </div>
-            
+
             <!-- Lightbox -->
-            <div 
-                v-else 
-                class="lightbox-mobile"
-                @touchstart="handleLightboxTouchStart"
-                @touchmove="handleLightboxTouchMove"
-                @touchend="handleLightboxTouchEnd"
-            >
-                <img 
-                    :src="photos[currentPhotoIndex].src" 
-                    :alt="photos[currentPhotoIndex].title"
-                    :style="{ transform: `translateX(${lightboxSwipeX}px)` }"
-                />
+            <div v-else class="lightbox-mobile" @touchstart="handleLightboxTouchStart"
+                @touchmove="handleLightboxTouchMove" @touchend="handleLightboxTouchEnd">
+                <img :src="photos[currentPhotoIndex].src" :alt="photos[currentPhotoIndex].title"
+                    :style="{ transform: `translateX(${lightboxSwipeX}px)` }" />
                 <div class="lightbox-dots">
-                    <span 
-                        v-for="(_, index) in photos" 
-                        :key="index" 
-                        class="dot"
-                        :class="{ active: index === currentPhotoIndex }"
-                    ></span>
+                    <span v-for="(_, index) in photos" :key="index" class="dot"
+                        :class="{ active: index === currentPhotoIndex }"></span>
                 </div>
             </div>
         </div>
 
         <!-- Notes App -->
-        <div 
-            v-if="notesOpen" 
-            class="notes-app"
-            @touchstart.stop
-            @touchmove.stop
-            @touchend.stop
-        >
+        <div v-if="notesOpen" class="notes-app" @touchstart.stop @touchmove.stop @touchend.stop>
             <div class="notes-header-mobile">
                 <button class="notes-back" @click="showNotesList ? closeNotes() : backToNotesList()">
                     ‹ {{ showNotesList ? 'Back' : 'Notes' }}
@@ -321,7 +275,7 @@
                 <button v-if="showNotesList" class="notes-new-btn" @click="createNewNote">+</button>
                 <span v-else class="notes-spacer"></span>
             </div>
-            
+
             <!-- Notes List -->
             <div v-if="showNotesList" class="notes-list-mobile">
                 <div v-if="notes.length === 0" class="notes-empty">
@@ -329,12 +283,7 @@
                     <p>No notes yet</p>
                     <button @click="createNewNote" class="create-note-btn">Create Note</button>
                 </div>
-                <div 
-                    v-for="note in notes" 
-                    :key="note.id" 
-                    class="note-item-mobile"
-                    @click="selectNote(note.id)"
-                >
+                <div v-for="note in notes" :key="note.id" class="note-item-mobile" @click="selectNote(note.id)">
                     <div class="note-item-content">
                         <div class="note-item-title">{{ note.title || 'Untitled' }}</div>
                         <div class="note-item-preview">{{ getPreview(note.content) }}</div>
@@ -343,25 +292,16 @@
                     <button class="note-delete-btn" @click.stop="deleteNote(note.id)">×</button>
                 </div>
             </div>
-            
+
             <!-- Note Editor -->
             <div v-else class="note-editor-mobile">
-                <input 
-                    v-if="getCurrentNote()"
-                    v-model="getCurrentNote().title"
-                    class="note-title-input-mobile"
-                    placeholder="Note Title"
-                    @input="updateCurrentNote"
-                />
-                <textarea 
-                    v-if="getCurrentNote()"
-                    v-model="getCurrentNote().content"
-                    class="note-textarea-mobile"
-                    placeholder="Start writing..."
-                    @input="updateCurrentNote"
-                ></textarea>
+                <input v-if="getCurrentNote()" v-model="getCurrentNote().title" class="note-title-input-mobile"
+                    placeholder="Note Title" @input="updateCurrentNote" />
+                <textarea v-if="getCurrentNote()" v-model="getCurrentNote().content" class="note-textarea-mobile"
+                    placeholder="Start writing..." @input="updateCurrentNote"></textarea>
             </div>
         </div>
+
 
         <!-- Notification -->
         <div class="notification" :class="{ 'visible': showNotification }">
@@ -371,10 +311,22 @@
                 <div class="notification-text">Welcome to Pathum's Portfolio</div>
             </div>
         </div>
+
+        <!-- ChatBot App (MUST be after other overlays) -->
+        <div v-if="chatbotOpen" class="app-overlay" @touchstart.stop @touchmove.stop @touchend.stop>
+            <div class="mobile-header">
+                <button class="back-btn" @click="closeChatbot">‹ Back</button>
+                <span class="mobile-title">Gemini ChatBot</span>
+                <span class="spacer"></span>
+            </div>
+            <ChatBot />
+        </div>
     </div>
 </template>
 
+
 <script setup>
+import ChatBot from './ChatBot.vue';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import Terminal from './Terminal.vue';
 import { photos } from '../data/photos.js';
@@ -407,17 +359,17 @@ const selectedWallpaper = ref(0);
 
 // Computed property for background
 const homeBackground = computed(() => {
-  if (currentWallpaper.value) {
+    if (currentWallpaper.value) {
+        return {
+            backgroundImage: `url(${currentWallpaper.value})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+        };
+    }
     return {
-      backgroundImage: `url(${currentWallpaper.value})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
     };
-  }
-  return {
-    background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
-  };
 });
 
 let startY = 0;
@@ -440,12 +392,12 @@ function handleTouchStart(e) {
 
 function handleTouchMove(e) {
     if (!isDragging) return;
-    
+
     const currentY = e.touches[0].clientY;
     const currentX = e.touches[0].clientX;
     const diffY = currentY - startY;
     const diffX = currentX - startX;
-    
+
     // Swipe down from top right for Control Center
     if (startY < 100 && startX > window.innerWidth * 0.7 && diffY > 50) {
         showControlCenter.value = true;
@@ -456,9 +408,13 @@ function handleTouchEnd() {
     isDragging = false;
 }
 
+const chatbotOpen = ref(false);
+
 function handleAppTap(appName) {
+    if (appName === 'chatbot') {
+        chatbotOpen.value = true;
+    }
     bouncingApp.value = appName;
-    
     setTimeout(() => {
         bouncingApp.value = null;
         if (appName === 'terminal') {
@@ -475,7 +431,6 @@ function handleAppTap(appName) {
         } else if (appName === 'instagram') {
             window.open('https://www.instagram.com/gap_pathum', '_blank');
         } else if (appName === 'resume') {
-            // Open canonical resume PDF in a new tab on mobile
             window.open('/documents/resume.pdf', '_blank');
         } else if (appName === 'settings') {
             settingsOpen.value = true;
@@ -483,9 +438,12 @@ function handleAppTap(appName) {
     }, 300);
 }
 
-function closeTerminal() {
-    terminalOpen.value = false;
-}
+
+
+
+    function closeTerminal() {
+        terminalOpen.value = false;
+    }
 
 function closeSettings() {
     settingsOpen.value = false;
@@ -522,21 +480,9 @@ function loadNotes() {
 
 function saveNotes() {
     localStorage.setItem('portfolio-notes', JSON.stringify(notes.value));
-}
+    }
 
-function createNewNote() {
-    const newNote = {
-        id: Date.now(),
-        title: '',
-        content: '',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-    };
-    notes.value.unshift(newNote);
-    currentNoteId.value = newNote.id;
-    showNotesList.value = false;
-    saveNotes();
-}
+
 
 function selectNote(id) {
     currentNoteId.value = id;
@@ -579,11 +525,11 @@ function formatNoteDate(dateString) {
     const date = new Date(dateString);
     const now = new Date();
     const diff = now - date;
-    
+
     if (diff < 60000) return 'Just now';
     if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
     if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
-    
+
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
@@ -645,7 +591,7 @@ function handleLogout() {
 function selectWallpaper(id) {
     selectedWallpaper.value = id;
     localStorage.setItem('wallpaper', id.toString());
-    
+
     // Update wallpaper immediately
     if (id === 0) {
         currentWallpaper.value = null;
@@ -662,7 +608,7 @@ let timeInterval;
 onMounted(() => {
     updateTime();
     timeInterval = setInterval(updateTime, 1000);
-    
+
     // Load saved wallpaper
     const savedWallpaper = localStorage.getItem('wallpaper');
     if (savedWallpaper && savedWallpaper !== '0') {
@@ -672,7 +618,7 @@ onMounted(() => {
             selectedWallpaper.value = parseInt(savedWallpaper);
         }
     }
-    
+
     // Show welcome notification after login
     setTimeout(() => {
         showNotification.value = true;
@@ -796,8 +742,15 @@ onUnmounted(() => {
 }
 
 @keyframes bounce {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
 }
 
 .icon {
