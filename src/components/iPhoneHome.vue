@@ -77,6 +77,10 @@
                 <div class="icon">📅</div>
                 <div class="app-name">Calendar</div>
             </div>
+            <div class="app-icon" @click="handleAppTap('youtube')" :class="{ 'bouncing': bouncingApp === 'youtube' }">
+                <div class="icon">📺</div>
+                <div class="app-name">YouTube</div>
+            </div>
             <div class="app-icon" @click="handleAppTap('clock')" :class="{ 'bouncing': bouncingApp === 'clock' }">
                 <div class="icon">⏰</div>
                 <div class="app-name">Clock</div>
@@ -186,13 +190,23 @@
         </div>
 
         <!-- Terminal App -->
-        <div v-if="terminalOpen" class="app-overlay" @touchstart.stop @touchmove.stop @touchend.stop>
+        <div v-if="terminalOpen" class="app-overlay" @touchstart.prevent.stop @touchmove.prevent.stop @touchend.prevent.stop>
             <Terminal @close="closeTerminal" :isDesktopMode="false" :isMobileMode="true" />
         </div>
 
         <!-- Music App -->
         <div v-if="musicOpen" class="app-overlay" @touchstart.stop @touchmove.stop @touchend.stop>
             <MusicPlayer :is-open="musicOpen" :is-minimized="false" :mobile-mode="true" @close="closeMusic" />
+        </div>
+
+        <!-- Calendar App -->
+        <div v-if="calendarOpen" class="app-overlay" @touchstart.stop @touchmove.stop @touchend.stop>
+            <Calendar :is-open="calendarOpen" :is-minimized="false" :mobile-mode="true" @close="closeCalendar" />
+        </div>
+
+        <!-- YouTube App -->
+        <div v-if="youtubeOpen" class="app-overlay" @touchstart.stop @touchmove.stop @touchend.stop>
+            <YouTubePlayer :is-open="youtubeOpen" :is-minimized="false" :mobile-mode="true" @close="closeYoutube" />
         </div>
 
         <!-- Settings App -->
@@ -237,7 +251,7 @@
         </div>
 
         <!-- Notes App -->
-        <div v-if="notesOpen" class="notes-app" @touchstart.stop @touchmove.stop @touchend.stop>
+        <div v-if="notesOpen" class="notes-app" @touchstart.prevent.stop @touchmove.prevent.stop @touchend.prevent.stop>
             <div class="notes-header-mobile">
                 <button class="notes-back" @click="showNotesList ? closeNotes() : backToNotesList()">
                     ‹ {{ showNotesList ? 'Back' : 'Notes' }}
@@ -268,9 +282,9 @@
             <!-- Note Editor -->
             <div v-else class="note-editor-mobile">
                 <input v-if="getCurrentNote()" v-model="getCurrentNote().title" class="note-title-input-mobile"
-                    placeholder="Note Title" @input="updateCurrentNote" />
+                    placeholder="Note Title" @input="updateCurrentNote" autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false" />
                 <textarea v-if="getCurrentNote()" v-model="getCurrentNote().content" class="note-textarea-mobile"
-                    placeholder="Start writing..." @input="updateCurrentNote"></textarea>
+                    placeholder="Start writing..." @input="updateCurrentNote" autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
             </div>
         </div>
 
@@ -305,6 +319,8 @@ import ChatBot from './ChatBot.vue';
 import MusicPlayer from './MusicPlayer.vue';
 import Gallery from './Gallery.vue';
 import Terminal from './Terminal.vue';
+import Calendar from './Calendar.vue';
+import YouTubePlayer from './YouTubePlayer.vue';
 import { appIcons } from '../assets/appIcons.js';
 import { wallpapers } from '../data/wallpapers.js';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
@@ -317,6 +333,8 @@ const terminalOpen = ref(false);
 const galleryOpen = ref(false);
 const notesOpen = ref(false);
 const musicOpen = ref(false);
+const calendarOpen = ref(false);
+const youtubeOpen = ref(false);
 const showControlCenter = ref(false);
 const showNotification = ref(false);
 const showWidgets = ref(false);
@@ -396,6 +414,10 @@ function handleAppTap(appName) {
             galleryOpen.value = true;
         } else if (appName === 'music') {
             musicOpen.value = true;
+        } else if (appName === 'calendar') {
+            calendarOpen.value = true;
+        } else if (appName === 'youtube') {
+            youtubeOpen.value = true;
         } else if (appName === 'notes') {
             notesOpen.value = true;
             loadNotes();
@@ -430,6 +452,14 @@ function closeMusic() {
 
 function closeGallery() {
     galleryOpen.value = false;
+}
+
+function closeCalendar() {
+    calendarOpen.value = false;
+}
+
+function closeYoutube() {
+    youtubeOpen.value = false;
 }
 
 function handleWallpaperChanged({ id, path }) {
@@ -1128,8 +1158,11 @@ onUnmounted(() => {
     font-size: 17px;
     padding: 8px 0;
     cursor: pointer;
-    min-width: 70px;
+    min-width: 80px;
     text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .notes-title {
@@ -1145,7 +1178,7 @@ onUnmounted(() => {
 }
 
 .notes-spacer {
-    min-width: 70px;
+    min-width: 80px;
 }
 
 /* Notes List Mobile */

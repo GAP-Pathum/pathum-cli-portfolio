@@ -1,5 +1,5 @@
 <template>
-    <div class="terminal-wrapper" :class="{ 'desktop-mode': isDesktopMode, 'mobile-mode': isMobileMode }" @touchstart.stop @touchmove.stop @touchend.stop>
+    <div class="terminal-wrapper" :class="{ 'desktop-mode': isDesktopMode, 'mobile-mode': isMobileMode }" @touchstart.prevent.stop @touchmove.prevent.stop @touchend.prevent.stop>
         <!-- Mobile Header -->
         <div v-if="isMobileMode" class="mobile-terminal-header">
             <button class="mobile-back-btn" @click="handleClose">
@@ -56,6 +56,8 @@
                         class="command-input"
                         spellcheck="false"
                         autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="off"
                         placeholder="type 'help' to get started..."
                     />
                 </div>
@@ -358,7 +360,11 @@ function toggleFullscreen() {
 }
 
 onMounted(() => {
-    focusInput();
+    if (isMobileMode) {
+        setTimeout(() => focusInput(), 300);
+    } else {
+        focusInput();
+    }
 });
 
 </script>
@@ -427,6 +433,9 @@ onMounted(() => {
     cursor: pointer;
     min-width: 80px;
     text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .mobile-terminal-title {
@@ -436,7 +445,7 @@ onMounted(() => {
 }
 
 .mobile-spacer {
-    min-width: 60px;
+    min-width: 80px;
 }
 
 .terminal-wrapper {

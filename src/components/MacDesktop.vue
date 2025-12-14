@@ -10,9 +10,19 @@
                 <div class="menu-item">View</div>
             </div>
             <div class="menu-right">
-                <div class="menu-icon">🔋</div>
-                <div class="menu-icon">📶</div>
-                <div class="menu-icon">🔍</div>
+                <div class="menu-icon wifi-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                        <path
+                            d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z" />
+                    </svg>
+                </div>
+                <div class="menu-icon battery-icon">
+                    <svg width="22" height="12" viewBox="0 0 22 12" fill="none">
+                        <rect x="0.5" y="0.5" width="19" height="11" rx="2.5" stroke="white" stroke-opacity="0.8" />
+                        <rect x="2" y="2" width="15" height="8" rx="1" fill="white" />
+                        <path d="M21 4v4c0.5 0 1-0.5 1-1V5c0-0.5-0.5-1-1-1z" fill="white" fill-opacity="0.8" />
+                    </svg>
+                </div>
                 <div class="menu-time">{{ currentTime }}</div>
                 <div class="menu-item logout-btn" @click="handleLogout">Logout</div>
             </div>
@@ -23,7 +33,7 @@
             <div class="desktop-icon" v-for="icon in desktopIcons" :key="icon.id"
                 @mousedown="startDragIcon($event, icon)" @click="handleIconClick(icon.id)"
                 :class="{ selected: selectedIcon === icon.id }" :style="{ left: icon.x + 'px', top: icon.y + 'px' }">
-                <div :class="['icon-image', icon.iconClass]">
+                <div class="icon-image">
                     <!-- Photos -->
                     <div v-if="icon.id === 'photos'" class="app-icon-content" v-html="appIcons.photos"></div>
                     <!-- Music -->
@@ -49,7 +59,7 @@
                             <rect width="24" height="24" rx="5" fill="white" />
                             <rect y="0" width="24" height="7" rx="3" fill="#FF3B30" />
                             <text x="12" y="18" text-anchor="middle" fill="#1C1C1E" font-size="11" font-weight="bold"
-                                font-family="-apple-system">11</text>
+                                font-family="-apple-system">{{ new Date().getDate() }}</text>
                         </svg>
                     </div>
                     <!-- LinkedIn -->
@@ -102,6 +112,9 @@
                     </div>
                     <!-- Terminal -->
                     <div v-else-if="icon.id === 'terminal'" class="app-icon-content" v-html="appIcons.terminal"></div>
+                    <!-- Calendar -->
+                    <div v-else-if="icon.id === 'calendar'" class="app-icon-content" v-html="appIcons.calendar"></div>
+                    <div v-else-if="icon.id === 'youtube'" class="app-icon-content" v-html="appIcons.youtube"></div>
                     <!-- Resume PDF -->
                     <div v-else-if="icon.id === 'resume'" class="app-icon-content" v-html="appIcons.pdf"></div>
                     <!-- ChatBot -->
@@ -112,7 +125,7 @@
         </div>
 
         <!-- Dock -->
-        <div class="dock-container" :class="{ 'dock-hidden': isMaximized || isGalleryMaximized || isNotesMaximized }">
+        <div class="dock-container" :class="{ 'dock-hidden': anyWindowMaximized }">
             <div class="dock mac-dock">
                 <div class="dock-icon finder-dock" @click="selectDockIcon('finder')">
                     <div class="desktop-dock-icon-inner" v-html="appIcons.finder"></div>
@@ -199,6 +212,22 @@
                     </div>
                     <div class="dock-indicator"
                         :class="{ 'minimized-indicator': musicMinimized, 'running-indicator': musicOpen && !musicMinimized }">
+                    </div>
+                </div>
+                <!-- Calendar Dock (shows when running) -->
+                <div v-if="calendarOpen || calendarMinimized" class="dock-icon calendar-dock"
+                    @click="selectDockIcon('calendar')" :class="{ 'has-window': calendarOpen || calendarMinimized }">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.calendar"></div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': calendarMinimized, 'running-indicator': calendarOpen && !calendarMinimized }">
+                    </div>
+                </div>
+                <!-- YouTube Dock (shows when running) -->
+                <div v-if="youtubeOpen || youtubeMinimized" class="dock-icon youtube-dock"
+                    @click="selectDockIcon('youtube')" :class="{ 'has-window': youtubeOpen || youtubeMinimized }">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.youtube"></div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': youtubeMinimized, 'running-indicator': youtubeOpen && !youtubeMinimized }">
                     </div>
                 </div>
                 <!-- ChatBot Window (shown when opened, always in desktop area) -->
@@ -332,12 +361,16 @@
     </div>
 
     <!-- Music Player Window -->
-    <MusicPlayer
-        :is-open="musicOpen"
-        :is-minimized="musicMinimized"
-        @close="closeMusic"
-        @minimize="minimizeMusic"
-    />
+    <MusicPlayer :is-open="musicOpen" :is-minimized="musicMinimized" @close="closeMusic" @minimize="minimizeMusic"
+        @maximize="isMusicMaximized = $event" />
+
+    <!-- Calendar Window -->
+    <Calendar :is-open="calendarOpen" :is-minimized="calendarMinimized" :mobile-mode="false" @close="closeCalendar"
+        @minimize="minimizeCalendar" @maximize="isCalendarMaximized = $event" />
+
+    <!-- YouTube Window -->
+    <YouTubePlayer :is-open="youtubeOpen" :is-minimized="youtubeMinimized" :mobile-mode="false" @close="closeYoutube"
+        @minimize="minimizeYoutube" @maximize="isYoutubeMaximized = $event" />
 
     <!-- macOS Notification Banner -->
     <Transition name="notification">
@@ -362,6 +395,8 @@ import SettingsWindow from './SettingsWindow.vue';
 import PdfViewer from './PdfViewer.vue';
 import ChatBot from './ChatBot.vue';
 import MusicPlayer from './MusicPlayer.vue';
+import Calendar from './Calendar.vue';
+import YouTubePlayer from './YouTubePlayer.vue';
 
 const emit = defineEmits(['logout']);
 
@@ -379,6 +414,13 @@ const pdfOpen = ref(false);
 const pdfMinimized = ref(false);
 const musicOpen = ref(false);
 const musicMinimized = ref(false);
+const isMusicMaximized = ref(false);
+const calendarOpen = ref(false);
+const calendarMinimized = ref(false);
+const isCalendarMaximized = ref(false);
+const youtubeOpen = ref(false);
+const youtubeMinimized = ref(false);
+const isYoutubeMaximized = ref(false);
 const lightboxOpen = ref(false);
 const currentPhotoIndex = ref(0);
 const showNotification = ref(false);
@@ -456,6 +498,11 @@ const desktopBackground = computed(() => {
     return {
         background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
     };
+});
+
+// Computed property to check if any window is maximized
+const anyWindowMaximized = computed(() => {
+    return isMaximized.value || isGalleryMaximized.value || isNotesMaximized.value || isSettingsMaximized.value || isPdfMaximized.value || isChatbotMaximized.value || isMusicMaximized.value || isCalendarMaximized.value || isYoutubeMaximized.value;
 });
 
 const resolvePath = (path) => {
@@ -608,18 +655,20 @@ const commands = {
 // Desktop icons with positions arranged from left side (excluding dock items)
 const desktopIcons = ref([
     // Column 1 - Apps
-    { id: 'terminal', label: 'Terminal', iconClass: 'terminal-icon', x: 20, y: 40 },
-    { id: 'photos', label: 'Photos', iconClass: 'photos-icon', x: 20, y: 130 },
-    { id: 'music', label: 'Music', iconClass: 'music-icon', x: 20, y: 220 },
-    { id: 'notes', label: 'Notes', iconClass: 'notes-icon', x: 20, y: 310 },
-    { id: 'calendar', label: 'Calendar', iconClass: 'calendar-icon', x: 20, y: 400 },
-    // Column 2 - Social Media
-    { id: 'linkedin', label: 'LinkedIn', iconClass: 'linkedin-icon', x: 110, y: 40 },
-    { id: 'facebook', label: 'Facebook', iconClass: 'facebook-icon', x: 110, y: 130 },
-    { id: 'instagram', label: 'Instagram', iconClass: 'instagram-icon', x: 110, y: 220 },
-    { id: 'github', label: 'GitHub', iconClass: 'github-icon', x: 110, y: 310 },
-    { id: 'resume', label: 'Resume', iconClass: 'resume-icon', x: 20, y: 490 },
-    { id: 'chatbot', label: 'ChatBot', iconClass: 'chatbot-icon', x: 20, y: 580 },
+    { id: 'terminal', label: 'Terminal', x: 20, y: 40 },
+    { id: 'photos', label: 'Photos', x: 20, y: 130 },
+    { id: 'music', label: 'Music', x: 20, y: 220 },
+    { id: 'notes', label: 'Notes', x: 20, y: 310 },
+    { id: 'calendar', label: 'Calendar', x: 20, y: 400 },
+    // Column 2 - Social
+    { id: 'linkedin', label: 'LinkedIn', x: 110, y: 40 },
+    { id: 'facebook', label: 'Facebook', x: 110, y: 130 },
+    { id: 'instagram', label: 'Instagram', x: 110, y: 220 },
+    { id: 'youtube', label: 'YouTube', x: 110, y: 310 },
+    { id: 'github', label: 'GitHub', x: 110, y: 400 },
+    // Column 3 - ChatBot & Resume
+    { id: 'chatbot', label: 'ChatBot', x: 200, y: 40 },
+    { id: 'resume', label: 'Resume', x: 200, y: 130 },
 ]);
 
 // Icon dragging
@@ -634,8 +683,8 @@ let iconOffsetY = 0;
 const terminalStyle = ref({
     left: '100px',
     top: '100px',
-    width: '1200px',
-    height: '85vh'
+    width: Math.min(1200, window.innerWidth - 200) + 'px',
+    height: Math.min(680, window.innerHeight - 200) + 'px'
 });
 
 const isMaximized = ref(false);
@@ -645,8 +694,8 @@ let previousStyle = null;
 const galleryStyle = ref({
     left: '150px',
     top: '80px',
-    width: '900px',
-    height: '600px'
+    width: Math.min(900, window.innerWidth - 300) + 'px',
+    height: Math.min(600, window.innerHeight - 200) + 'px'
 });
 
 const isGalleryMaximized = ref(false);
@@ -656,8 +705,8 @@ let previousGalleryStyle = null;
 const notesStyle = ref({
     left: '200px',
     top: '100px',
-    width: '800px',
-    height: '550px'
+    width: Math.min(800, window.innerWidth - 400) + 'px',
+    height: Math.min(550, window.innerHeight - 200) + 'px'
 });
 
 const isNotesMaximized = ref(false);
@@ -680,8 +729,8 @@ let notesResizeStartY = 0;
 const settingsStyle = ref({
     left: '250px',
     top: '80px',
-    width: '800px',
-    height: '600px'
+    width: Math.min(800, window.innerWidth - 500) + 'px',
+    height: Math.min(600, window.innerHeight - 200) + 'px'
 });
 
 const isSettingsMaximized = ref(false);
@@ -691,8 +740,8 @@ let previousSettingsStyle = null;
 const pdfStyle = ref({
     left: '200px',
     top: '100px',
-    width: '900px',
-    height: '700px'
+    width: Math.min(900, window.innerWidth - 400) + 'px',
+    height: Math.min(700, window.innerHeight - 200) + 'px'
 });
 
 const isPdfMaximized = ref(false);
@@ -951,6 +1000,12 @@ function openApplication(appName) {
         pdfOpen.value = true;
     } else if (appName === 'music') {
         musicOpen.value = true;
+    } else if (appName === 'calendar') {
+        calendarOpen.value = true;
+        calendarMinimized.value = false;
+    } else if (appName === 'youtube') {
+        youtubeOpen.value = true;
+        youtubeMinimized.value = false;
     }
 }
 
@@ -1018,6 +1073,18 @@ function selectDockIcon(iconName) {
             restoreMusic();
         } else if (!musicOpen.value) {
             musicOpen.value = true;
+        }
+    } else if (iconName === 'calendar') {
+        if (calendarMinimized.value) {
+            restoreCalendar();
+        } else if (!calendarOpen.value) {
+            calendarOpen.value = true;
+        }
+    } else if (iconName === 'youtube') {
+        if (youtubeMinimized.value) {
+            restoreYoutube();
+        } else if (!youtubeOpen.value) {
+            youtubeOpen.value = true;
         }
     }
 }
@@ -1169,6 +1236,7 @@ function stopDragPdf() {
 function closeMusic() {
     musicOpen.value = false;
     musicMinimized.value = false;
+    isMusicMaximized.value = false;
 }
 
 function minimizeMusic() {
@@ -1177,6 +1245,54 @@ function minimizeMusic() {
 
 function restoreMusic() {
     musicMinimized.value = false;
+}
+
+function toggleMusicMaximize() {
+    // Handled by component
+}
+
+function closeCalendar() {
+    calendarOpen.value = false;
+    calendarMinimized.value = false;
+    isCalendarMaximized.value = false;
+}
+
+function minimizeCalendar() {
+    calendarMinimized.value = true;
+}
+
+function restoreCalendar() {
+    calendarMinimized.value = false;
+}
+
+function toggleCalendarMaximize() {
+    // Handled by component
+}
+
+function closeYoutube() {
+    youtubeOpen.value = false;
+    youtubeMinimized.value = false;
+    isYoutubeMaximized.value = false;
+}
+
+function minimizeYoutube() {
+    youtubeMinimized.value = true;
+}
+
+function restoreYoutube() {
+    youtubeMinimized.value = false;
+}
+
+function toggleYoutubeMaximize() {
+    // Handled by component
+}
+
+function startDragMusic(event) {
+    // Handled by component
+}
+
+function startMusicResize(event, direction) {
+    // Handled by component
 }
 
 function closeTerminal() {
@@ -1514,7 +1630,7 @@ const chatbotStyle = ref({
     left: '300px',
     top: '120px',
     width: '420px',
-    height: '380px' // reduced default height
+    height: Math.min(380, window.innerHeight - 300) + 'px' // reduced default height
 });
 // ChatBot resizing
 let isChatbotResizing = false;

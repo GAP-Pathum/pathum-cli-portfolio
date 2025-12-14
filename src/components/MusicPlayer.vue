@@ -17,7 +17,7 @@
             <div class="window-title">Music</div>
         </div>
         <div class="music-body">
-            <audio ref="audioElement" :src="tracks[currentTrackIndex].src" @timeupdate="updateTime" @loadedmetadata="updateDuration" @ended="nextTrack"></audio>
+            <audio ref="audioElement" :src="tracks[currentTrackIndex].src" @timeupdate="updateTime" @loadedmetadata="updateDuration" @ended="handleTrackEnd"></audio>
             
             <!-- Album Art -->
             <div class="album-art-container">
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="controls">
-                    <button @click="prevTrack" class="control-btn shuffle-btn" :class="{ active: shuffle }">
+                    <button @click="toggleShuffle" class="control-btn shuffle-btn" :class="{ active: shuffle }">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M3 17a4.983 4.983 0 0 1 5 0M3 12a9 9 0 0 1 9 0M3 7a15.3 15.3 0 0 1 15.3 0M12 21v-7M3 9l9-6 9 6M3 12h8M9 3v6"></path>
                         </svg>
@@ -123,7 +123,7 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['close', 'minimize']);
+const emit = defineEmits(['close', 'minimize', 'maximize']);
 
 // Music player state
 const currentTrackIndex = ref(0);
@@ -150,8 +150,8 @@ const windowStyle = ref(props.mobileMode ? {
 } : {
     left: '300px',
     top: '120px',
-    width: '480px',
-    height: '700px'
+    width: Math.min(400, window.innerWidth - 600) + 'px',
+    height: Math.min(600, window.innerHeight - 200) + 'px'
 });
 
 const isMaximized = ref(false);
@@ -190,6 +190,7 @@ function toggleMaximize() {
         // Restore
         windowStyle.value = { ...previousStyle };
         isMaximized.value = false;
+        emit('maximize', false);
     } else {
         // Maximize
         previousStyle = { ...windowStyle.value };
@@ -200,6 +201,7 @@ function toggleMaximize() {
             height: '100vh'
         };
         isMaximized.value = true;
+        emit('maximize', true);
     }
 }
 
@@ -276,7 +278,16 @@ function togglePlay() {
 }
 
 function nextTrack() {
-    currentTrackIndex.value = (currentTrackIndex.value + 1) % tracks.length;
+    if (shuffle.value) {
+        // Pick a random track different from current
+        let newIndex;
+        do {
+            newIndex = Math.floor(Math.random() * tracks.length);
+        } while (newIndex === currentTrackIndex.value && tracks.length > 1);
+        currentTrackIndex.value = newIndex;
+    } else {
+        currentTrackIndex.value = (currentTrackIndex.value + 1) % tracks.length;
+    }
     if (isPlaying.value) {
         nextTick(() => {
             audioElement.value.play();
@@ -285,7 +296,16 @@ function nextTrack() {
 }
 
 function prevTrack() {
-    currentTrackIndex.value = currentTrackIndex.value === 0 ? tracks.length - 1 : currentTrackIndex.value - 1;
+    if (shuffle.value) {
+        // Pick a random track different from current
+        let newIndex;
+        do {
+            newIndex = Math.floor(Math.random() * tracks.length);
+        } while (newIndex === currentTrackIndex.value && tracks.length > 1);
+        currentTrackIndex.value = newIndex;
+    } else {
+        currentTrackIndex.value = currentTrackIndex.value === 0 ? tracks.length - 1 : currentTrackIndex.value - 1;
+    }
     if (isPlaying.value) {
         nextTick(() => {
             audioElement.value.play();
@@ -295,6 +315,17 @@ function prevTrack() {
 
 function toggleRepeat() {
     repeat.value = !repeat.value;
+}
+
+function handleTrackEnd() {
+    if (repeat.value) {
+        // Replay the same track
+        nextTick(() => {
+            audioElement.value.play();
+        });
+    } else {
+        nextTrack();
+    }
 }
 
 function updateTime() {
@@ -398,7 +429,7 @@ function formatTime(time) {
 
 .music-body {
     flex: 1;
-    padding: 24px;
+    padding: 18px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -423,25 +454,25 @@ function formatTime(time) {
 }
 
 .album-art-container {
-    margin-bottom: 28px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: center;
 }
 
 .album-art {
-    width: 240px;
-    height: 240px;
-    border-radius: 16px;
+    width: 180px;
+    height: 180px;
+    border-radius: 12px;
     background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(107, 142, 255, 0.2) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 20px 60px rgba(255, 107, 107, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 45px rgba(255, 107, 107, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .album-art .album-placeholder {
-    font-size: 80px;
+    font-size: 60px;
     opacity: 0.6;
 }
 
@@ -451,13 +482,13 @@ function formatTime(time) {
 }
 
 .track-info {
-    margin-bottom: 24px;
+    margin-bottom: 18px;
 }
 
 .track-name {
     color: rgba(255, 255, 255, 0.95);
-    margin: 0 0 8px 0;
-    font-size: 16px;
+    margin: 0 0 6px 0;
+    font-size: 14px;
     font-weight: 600;
     line-height: 1.3;
 }
@@ -465,15 +496,15 @@ function formatTime(time) {
 .track-artist {
     color: rgba(255, 255, 255, 0.5);
     margin: 0;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
 }
 
 .time-display {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 28px;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .time {
@@ -549,8 +580,8 @@ function formatTime(time) {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 24px;
-    margin-bottom: 28px;
+    gap: 16px;
+    margin-bottom: 20px;
 }
 
 .control-btn {
@@ -579,22 +610,22 @@ function formatTime(time) {
 }
 
 .control-btn .icon {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
 }
 
 .control-btn .icon-large {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
 }
 
 .play-btn {
     background: linear-gradient(135deg, #ff6159 0%, #ff5449 100%);
     color: white;
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    box-shadow: 0 8px 24px rgba(255, 97, 89, 0.3);
+    box-shadow: 0 6px 20px rgba(255, 97, 89, 0.3);
     transition: all 0.2s ease;
 }
 
@@ -610,9 +641,9 @@ function formatTime(time) {
 .volume-control {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     padding: 0 8px;
 }
 
@@ -686,13 +717,13 @@ function formatTime(time) {
 }
 
 .playlist-section {
-    margin-top: 20px;
+    margin-top: 16px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding-top: 16px;
+    padding-top: 12px;
 }
 
 .playlist-header {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .playlist-header h4 {
@@ -713,12 +744,12 @@ function formatTime(time) {
 .playlist-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px 12px;
-    border-radius: 8px;
+    gap: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
     background: transparent;
     color: rgba(255, 255, 255, 0.5);
-    font-size: 13px;
+    font-size: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
 }

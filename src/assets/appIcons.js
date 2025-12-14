@@ -279,5 +279,169 @@ export const appIcons = {
       <path d="M40 12 L40 20 L48 20" fill="white" opacity="0.15"/>
       <text x="32" y="38" font-family="-apple-system, 'SF Pro Display'" font-size="16" font-weight="900" fill="white" text-anchor="middle" letter-spacing="1">PDF</text>
     </svg>
+  `,
+
+  music: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="musicGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+          <stop offset="50%" style="stop-color:#4ECDC4;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#45B7D1;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#musicGrad)"/>
+      <path d="M20 48 L20 24 C20 20 24 16 28 16 L36 16 C40 16 44 20 44 24 L44 48" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="32" cy="44" r="8" fill="white"/>
+      <circle cx="32" cy="44" r="4" fill="url(#musicGrad)"/>
+      <path d="M44 32 L52 28 L52 36 Z" fill="white"/>
+    </svg>
+  `,
+
+  calendar: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="calendarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#74B9FF;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#0984E3;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#calendarGrad)"/>
+      <rect x="12" y="20" width="40" height="32" rx="4" fill="white" opacity="0.9"/>
+      <rect x="16" y="12" width="32" height="4" rx="2" fill="white"/>
+      <rect x="20" y="8" width="4" height="8" rx="2" fill="white"/>
+      <rect x="40" y="8" width="4" height="8" rx="2" fill="white"/>
+      <rect x="16" y="28" width="32" height="2" fill="url(#calendarGrad)" opacity="0.3"/>
+      <rect x="16" y="34" width="32" height="2" fill="url(#calendarGrad)" opacity="0.3"/>
+      <rect x="16" y="40" width="32" height="2" fill="url(#calendarGrad)" opacity="0.3"/>
+      <rect x="16" y="46" width="32" height="2" fill="url(#calendarGrad)" opacity="0.3"/>
+    </svg>
+  `,
+
+  youtube: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="youtubeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#FF0000;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#CC0000;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#youtubeGrad)"/>
+      <!-- Play button triangle -->
+      <path d="M40 28 L24 38 L24 18 Z" fill="white"/>
+      
+    </svg>
+  `,
+
+  linkedin: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="linkedinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#005582;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#linkedinGrad)"/>
+      <circle cx="20" cy="20" r="6" fill="white"/>
+      <rect x="14" y="28" width="12" height="24" rx="2" fill="white"/>
+      <circle cx="20" cy="44" r="6" fill="url(#linkedinGrad)"/>
+      <rect x="32" y="16" width="4" height="20" rx="2" fill="white"/>
+      <rect x="40" y="16" width="4" height="20" rx="2" fill="white"/>
+      <rect x="48" y="16" width="4" height="20" rx="2" fill="white"/>
+    </svg>
+  `,
+
+  facebook: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="facebookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#1877F2;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#0C5DC7;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#facebookGrad)"/>
+      <path d="M40 20 L32 20 L32 24 L36 24 L36 28 L32 28 L32 44 L28 44 L28 28 L24 28 L24 24 L28 24 L28 20 C28 16 32 16 32 20 L32 24 L36 24 L40 20 Z" fill="white"/>
+    </svg>
+  `,
+
+  instagram: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="instagramGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" style="stop-color:#f09433;stop-opacity:1" />
+          <stop offset="25%" style="stop-color:#e6683c;stop-opacity:1" />
+          <stop offset="50%" style="stop-color:#dc2743;stop-opacity:1" />
+          <stop offset="75%" style="stop-color:#cc2366;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#bc1888;stop-opacity:1" />
+        </radialGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#instagramGrad)"/>
+      <circle cx="32" cy="32" r="16" fill="none" stroke="white" stroke-width="2"/>
+      <circle cx="32" cy="32" r="4" fill="white"/>
+      <circle cx="44" cy="20" r="2" fill="white"/>
+    </svg>
+  `,
+
+  github: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="githubGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#333;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#000;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#githubGrad)"/>
+      <path d="M32 12 C20.96 12 12 20.96 12 32 C12 40.84 17.64 48.24 25.68 51.12 C26.64 51.28 27 50.68 27 50.16 L27 46.16 C21.72 47.28 20.64 43.56 20.64 43.56 C19.84 41.52 18.64 40.92 18.64 40.92 C17.04 39.8 18.8 39.84 18.8 39.84 C20.64 39.96 21.52 41.68 21.52 41.68 C23.12 44.4 25.6 43.56 27.12 43.04 C27.28 41.92 27.76 41.08 28.32 40.56 C23.04 40 17.52 37.92 17.52 27.04 C17.52 24.24 18.48 21.92 20.16 20.08 C19.96 19.56 19.12 16.8 20.4 13.44 C20.4 13.44 22.56 12.72 27 15.84 C29.04 15.28 31.2 15 32 15 C32.8 15 35 15.28 37.04 15.84 C41.48 12.72 43.64 13.44 43.64 13.44 C44.92 16.8 44.08 19.56 43.88 20.08 C45.56 21.92 46.52 24.24 46.52 27.04 C46.52 37.96 41 40 35.68 40.56 C36.4 41.16 37.04 42.24 37.04 44.24 L37.04 50.16 C37.04 50.72 37.36 51.28 38.32 51.12 C46.36 48.24 52 40.84 52 32 C52 20.96 43.04 12 32 12 Z" fill="white"/>
+    </svg>
+  `,
+
+  resume: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="resumeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#2E7D32;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#resumeGrad)"/>
+      <rect x="12" y="16" width="40" height="32" rx="4" fill="white" opacity="0.9"/>
+      <rect x="16" y="20" width="32" height="2" rx="1" fill="url(#resumeGrad)" opacity="0.6"/>
+      <rect x="16" y="26" width="24" height="2" rx="1" fill="url(#resumeGrad)" opacity="0.6"/>
+      <rect x="16" y="32" width="28" height="2" rx="1" fill="url(#resumeGrad)" opacity="0.6"/>
+      <rect x="16" y="38" width="20" height="2" rx="1" fill="url(#resumeGrad)" opacity="0.6"/>
+      <rect x="16" y="44" width="16" height="2" rx="1" fill="url(#resumeGrad)" opacity="0.6"/>
+    </svg>
+  `,
+
+  calendar: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="calendarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#FF6B9D;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#C44569;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#calendarGrad)"/>
+      <rect x="8" y="16" width="48" height="40" rx="6" fill="white" opacity="0.95"/>
+      <rect x="8" y="16" width="48" height="12" rx="6" fill="url(#calendarGrad)" opacity="0.8"/>
+      <rect x="12" y="10" width="8" height="6" rx="1" fill="white"/>
+      <rect x="44" y="10" width="8" height="6" rx="1" fill="white"/>
+      <circle cx="16" cy="28" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="24" cy="28" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="32" cy="28" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="40" cy="28" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="48" cy="28" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="16" cy="36" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="24" cy="36" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="32" cy="36" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="40" cy="36" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="48" cy="36" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="16" cy="44" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="24" cy="44" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="32" cy="44" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="40" cy="44" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="48" cy="44" r="2" fill="url(#calendarGrad)"/>
+      <text x="32" y="38" font-family="-apple-system, 'SF Pro Display'" font-size="16" font-weight="700" fill="url(#calendarGrad)" text-anchor="middle">15</text>
+    </svg>
   `
 };
