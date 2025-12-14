@@ -1,18 +1,14 @@
-import { GoogleGenAI } from '@google/genai';
 import { ref } from 'vue';
 
-// IMPORTANT: Never expose the raw key in production. Use a server proxy.
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-const ai = new GoogleGenAI({ apiKey });
-
+// Mock implementation without API key requirement
 export function useGeminiStream() {
   const responseText = ref('');
   const isLoading = ref(false);
   const error = ref(null);
 
   /**
-   * Streams content from the Gemini model chunk-by-chunk.
-   * @param {string} prompt The text prompt to send to the model
+   * Mock streaming content - provides a sample response without API calls
+   * @param {string} prompt The text prompt (not used in mock)
    */
   async function generateContentStream(prompt) {
     isLoading.value = true;
@@ -20,21 +16,20 @@ export function useGeminiStream() {
     responseText.value = '';
 
     try {
-      // 1. Call the streaming method
-      const stream = await ai.models.generateContentStream({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-      });
+      // Simulate streaming delay
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      // 2. Process the stream chunk-by-chunk
-      for await (const chunk of stream) {
-        if (chunk.text) {
-          responseText.value += chunk.text;
-        }
+      // Mock response chunks
+      const mockResponse = "Hello! I'm a demo chatbot. The Gemini API integration has been disabled for smooth project running. This is a placeholder response to demonstrate the chat interface functionality.";
+
+      // Simulate streaming by adding text character by character
+      for (let i = 0; i < mockResponse.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 20)); // 20ms delay between characters
+        responseText.value += mockResponse[i];
       }
     } catch (err) {
-      console.error("Gemini API Error:", err);
-      error.value = "An error occurred while streaming the response.";
+      console.error("Mock streaming error:", err);
+      error.value = "An error occurred while generating the response.";
     } finally {
       isLoading.value = false;
     }
