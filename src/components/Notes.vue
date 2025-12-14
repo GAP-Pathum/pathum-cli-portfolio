@@ -12,8 +12,8 @@
             <!-- Sidebar -->
             <div class="notes-sidebar">
                 <div class="sidebar-header">
-                    <button class="new-note-btn" @click="createNewNote">
-                        <span class="btn-icon">+</span>
+                    <button class="new-note-btn" type="button" aria-label="Create new note" @click="createNewNote">
+                        <span class="btn-icon" aria-hidden="true">+</span>
                         New Note
                     </button>
                 </div>

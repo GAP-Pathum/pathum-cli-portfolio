@@ -251,7 +251,7 @@
         </div>
 
         <!-- Notes App -->
-        <div v-if="notesOpen" class="notes-app" @touchstart.prevent.stop @touchmove.prevent.stop @touchend.prevent.stop>
+        <div v-if="notesOpen" class="notes-app" @touchstart.stop @touchmove.stop @touchend.stop>
             <div class="notes-header-mobile">
                 <button class="notes-back" @click="showNotesList ? closeNotes() : backToNotesList()">
                     ‹ {{ showNotesList ? 'Back' : 'Notes' }}
@@ -263,7 +263,6 @@
 
             <!-- Notes List -->
             <div v-if="showNotesList" class="notes-list-mobile">
-                <button v-if="notes.length > 0" @click="createNewNote" class="create-note-btn" style="margin: 8px; width: calc(100% - 16px);">+ New Note</button>
                 <div v-if="notes.length === 0" class="notes-empty">
                     <span class="empty-icon">📝</span>
                     <p>No notes yet</p>
@@ -493,6 +492,20 @@ function saveNotes() {
     }
 
 
+
+function createNewNote() {
+    const newNote = {
+        id: Date.now(),
+        title: '',
+        content: '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+    };
+    notes.value.unshift(newNote);
+    currentNoteId.value = newNote.id;
+    showNotesList.value = false;
+    saveNotes();
+}
 
 function selectNote(id) {
     currentNoteId.value = id;
