@@ -60,11 +60,11 @@
                 <div class="app-name">Photos</div>
             </div>
             <div class="app-icon" @click="handleAppTap('music')" :class="{ 'bouncing': bouncingApp === 'music' }">
-                <div class="icon">🎵</div>
+                <div class="icon" v-html="appIcons.music"></div>
                 <div class="app-name">Music</div>
             </div>
             <div class="app-icon" @click="handleAppTap('files')" :class="{ 'bouncing': bouncingApp === 'files' }">
-                <div class="icon">📁</div>
+                <div class="icon" v-html="appIcons.files"></div>
                 <div class="app-name">Files</div>
             </div>
             <div class="app-icon" @click="handleAppTap('notes')" :class="{ 'bouncing': bouncingApp === 'notes' }">
@@ -74,23 +74,23 @@
 
             <!-- Row 3 -->
             <div class="app-icon" @click="handleAppTap('calendar')" :class="{ 'bouncing': bouncingApp === 'calendar' }">
-                <div class="icon">📅</div>
+                <div class="icon" v-html="appIcons.calendar"></div>
                 <div class="app-name">Calendar</div>
             </div>
             <div class="app-icon" @click="handleAppTap('youtube')" :class="{ 'bouncing': bouncingApp === 'youtube' }">
-                <div class="icon">📺</div>
+                <div class="icon" v-html="appIcons.youtube"></div>
                 <div class="app-name">YouTube</div>
             </div>
             <div class="app-icon" @click="handleAppTap('clock')" :class="{ 'bouncing': bouncingApp === 'clock' }">
-                <div class="icon">⏰</div>
+                <div class="icon" v-html="appIcons.clock"></div>
                 <div class="app-name">Clock</div>
             </div>
             <div class="app-icon" @click="handleAppTap('weather')" :class="{ 'bouncing': bouncingApp === 'weather' }">
-                <div class="icon">🌤️</div>
+                <div class="icon" v-html="appIcons.weather"></div>
                 <div class="app-name">Weather</div>
             </div>
             <div class="app-icon" @click="handleAppTap('maps')" :class="{ 'bouncing': bouncingApp === 'maps' }">
-                <div class="icon">🗺️</div>
+                <div class="icon" v-html="appIcons.maps"></div>
                 <div class="app-name">Maps</div>
             </div>
 

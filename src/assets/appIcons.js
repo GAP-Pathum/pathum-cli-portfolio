@@ -301,20 +301,125 @@ export const appIcons = {
   calendar: `
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="calendarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <linearGradient id="calendarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#FF6B9D;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#C44569;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#calendarGrad)"/>
+      <rect x="8" y="16" width="48" height="40" rx="6" fill="white" opacity="0.95"/>
+      <rect x="8" y="16" width="48" height="12" rx="6" fill="url(#calendarGrad)" opacity="0.8"/>
+      <rect x="12" y="10" width="8" height="6" rx="1" fill="white"/>
+      <rect x="44" y="10" width="8" height="6" rx="1" fill="white"/>
+      <circle cx="16" cy="28" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="24" cy="28" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="32" cy="28" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="40" cy="28" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="48" cy="28" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="16" cy="36" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="24" cy="36" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="32" cy="36" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="40" cy="36" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="48" cy="36" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="16" cy="44" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="24" cy="44" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="32" cy="44" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="40" cy="44" r="2" fill="url(#calendarGrad)"/>
+      <circle cx="48" cy="44" r="2" fill="url(#calendarGrad)"/>
+      <text x="32" y="38" font-family="-apple-system, 'SF Pro Display'" font-size="16" font-weight="700" fill="url(#calendarGrad)" text-anchor="middle">15</text>
+    </svg>
+  `,
+
+  clock: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="clockGrad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" style="stop-color:#74B9FF;stop-opacity:1" />
           <stop offset="100%" style="stop-color:#0984E3;stop-opacity:1" />
         </linearGradient>
       </defs>
-      <rect width="64" height="64" rx="14" fill="url(#calendarGrad)"/>
-      <rect x="12" y="20" width="40" height="32" rx="4" fill="white" opacity="0.9"/>
-      <rect x="16" y="12" width="32" height="4" rx="2" fill="white"/>
-      <rect x="20" y="8" width="4" height="8" rx="2" fill="white"/>
-      <rect x="40" y="8" width="4" height="8" rx="2" fill="white"/>
-      <rect x="16" y="28" width="32" height="2" fill="url(#calendarGrad)" opacity="0.3"/>
-      <rect x="16" y="34" width="32" height="2" fill="url(#calendarGrad)" opacity="0.3"/>
-      <rect x="16" y="40" width="32" height="2" fill="url(#calendarGrad)" opacity="0.3"/>
-      <rect x="16" y="46" width="32" height="2" fill="url(#calendarGrad)" opacity="0.3"/>
+      <rect width="64" height="64" rx="14" fill="url(#clockGrad)"/>
+      <circle cx="32" cy="32" r="24" fill="white" opacity="0.9"/>
+      <circle cx="32" cy="32" r="20" fill="none" stroke="url(#clockGrad)" stroke-width="2"/>
+      <!-- Hour markers -->
+      <line x1="32" y1="14" x2="32" y2="18" stroke="url(#clockGrad)" stroke-width="2" stroke-linecap="round"/>
+      <line x1="50" y1="32" x2="46" y2="32" stroke="url(#clockGrad)" stroke-width="2" stroke-linecap="round"/>
+      <line x1="32" y1="50" x2="32" y2="46" stroke="url(#clockGrad)" stroke-width="2" stroke-linecap="round"/>
+      <line x1="14" y1="32" x2="18" y2="32" stroke="url(#clockGrad)" stroke-width="2" stroke-linecap="round"/>
+      <!-- Hands -->
+      <line x1="32" y1="32" x2="32" y2="24" stroke="url(#clockGrad)" stroke-width="3" stroke-linecap="round"/>
+      <line x1="32" y1="32" x2="40" y2="32" stroke="url(#clockGrad)" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  `,
+
+  weather: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="weatherGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#74B9FF;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#0984E3;stop-opacity:1" />
+        </linearGradient>
+        <radialGradient id="sunGrad" cx="50%" cy="30%" r="60%">
+          <stop offset="0%" style="stop-color:#FFD93D;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+        </radialGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#weatherGrad)"/>
+      <!-- Sun -->
+      <circle cx="45" cy="20" r="8" fill="url(#sunGrad)"/>
+      <line x1="45" y1="8" x2="45" y2="12" stroke="#FFD93D" stroke-width="2" stroke-linecap="round"/>
+      <line x1="45" y1="28" x2="45" y2="32" stroke="#FFD93D" stroke-width="2" stroke-linecap="round"/>
+      <line x1="33" y1="20" x2="37" y2="20" stroke="#FFD93D" stroke-width="2" stroke-linecap="round"/>
+      <line x1="53" y1="20" x2="57" y2="20" stroke="#FFD93D" stroke-width="2" stroke-linecap="round"/>
+      <line x1="37" y1="12" x2="39.5" y2="14.5" stroke="#FFD93D" stroke-width="2" stroke-linecap="round"/>
+      <line x1="50.5" y1="25.5" x2="52.5" y2="27.5" stroke="#FFD93D" stroke-width="2" stroke-linecap="round"/>
+      <line x1="50.5" y1="14.5" x2="52.5" y2="12.5" stroke="#FFD93D" stroke-width="2" stroke-linecap="round"/>
+      <line x1="37" y1="27.5" x2="39.5" y2="25.5" stroke="#FFD93D" stroke-width="2" stroke-linecap="round"/>
+      <!-- Cloud -->
+      <path d="M20 40 Q20 35 25 35 Q30 30 35 35 Q40 35 40 40 Q40 45 35 45 L25 45 Q20 45 20 40 Z" fill="white" opacity="0.9"/>
+    </svg>
+  `,
+
+  maps: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="mapsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#EE5A24;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#mapsGrad)"/>
+      <!-- Map outline -->
+      <path d="M16 20 L24 16 L40 20 L48 16 L48 44 L40 48 L24 44 L16 48 Z" fill="white" opacity="0.9"/>
+      <path d="M24 16 L24 44 M40 20 L40 48" stroke="url(#mapsGrad)" stroke-width="2" stroke-linecap="round"/>
+      <!-- Location pin -->
+      <circle cx="32" cy="30" r="4" fill="url(#mapsGrad)"/>
+      <path d="M32 34 L32 42" stroke="url(#mapsGrad)" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="32" cy="30" r="2" fill="white"/>
+    </svg>
+  `,
+
+  files: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="filesGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#A8E6CF;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#4ECDC4;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#filesGrad)"/>
+      <!-- Folder -->
+      <path d="M12 20 L12 48 L52 48 L52 24 L36 24 L32 20 Z" fill="white" opacity="0.9"/>
+      <path d="M32 20 L32 24 L36 24" fill="white" opacity="0.7"/>
+      <!-- Files -->
+      <rect x="16" y="28" width="24" height="16" rx="2" fill="url(#filesGrad)" opacity="0.6"/>
+      <rect x="20" y="32" width="16" height="2" rx="1" fill="white"/>
+      <rect x="20" y="36" width="12" height="2" rx="1" fill="white"/>
+      <rect x="20" y="40" width="8" height="2" rx="1" fill="white"/>
+      <!-- Second file -->
+      <rect x="24" y="30" width="20" height="14" rx="2" fill="white" opacity="0.8"/>
+      <rect x="28" y="34" width="12" height="2" rx="1" fill="url(#filesGrad)"/>
+      <rect x="28" y="38" width="8" height="2" rx="1" fill="url(#filesGrad)"/>
     </svg>
   `,
 
