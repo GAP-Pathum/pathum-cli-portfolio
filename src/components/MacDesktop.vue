@@ -28,6 +28,9 @@
             </div>
         </div>
 
+        <!-- Global Drag Overlay: Prevents lag and iframe interference during drag -->
+        <div v-show="isDraggingAnything" class="global-drag-overlay"></div>
+
         <!-- Desktop Icons -->
         <div class="desktop-icons">
             <div class="desktop-icon" v-for="icon in desktopIcons" :key="icon.id"
@@ -1129,6 +1132,7 @@ function startDragSettings(event) {
     if (isSettingsMaximized.value) return;
 
     isDraggingSettings = true;
+    isDraggingAnything.value = true;
     settingsStartX = event.clientX;
     settingsStartY = event.clientY;
 
@@ -1144,16 +1148,21 @@ function startDragSettings(event) {
 
 function onSettingsDrag(event) {
     if (!isDraggingSettings) return;
+    if (rafId) cancelAnimationFrame(rafId);
 
-    const newX = event.clientX - settingsOffsetX;
-    const newY = event.clientY - settingsOffsetY;
+    rafId = requestAnimationFrame(() => {
+        const newX = event.clientX - settingsOffsetX;
+        const newY = event.clientY - settingsOffsetY;
 
-    settingsStyle.value.left = `${Math.max(0, newX)}px`;
-    settingsStyle.value.top = `${Math.max(24, newY)}px`;
+        settingsStyle.value.left = `${Math.max(0, newX)}px`;
+        settingsStyle.value.top = `${Math.max(24, newY)}px`;
+    });
 }
 
 function stopDragSettings() {
     isDraggingSettings = false;
+    isDraggingAnything.value = false;
+    if (rafId) cancelAnimationFrame(rafId);
     document.removeEventListener('mousemove', onSettingsDrag);
     document.removeEventListener('mouseup', stopDragSettings);
 }
@@ -1191,9 +1200,9 @@ function togglePdfMaximize() {
         previousPdfStyle = { ...pdfStyle.value };
         pdfStyle.value = {
             left: '0',
-            top: '24px',
+            top: '0',
             width: '100vw',
-            height: 'calc(100vh - 94px)'
+            height: '100vh'
         };
         isPdfMaximized.value = true;
     }
@@ -1203,6 +1212,7 @@ function startDragPdf(event) {
     if (isPdfMaximized.value) return;
 
     isDraggingPdf = true;
+    isDraggingAnything.value = true;
     pdfStartX = event.clientX;
     pdfStartY = event.clientY;
 
@@ -1218,16 +1228,21 @@ function startDragPdf(event) {
 
 function onPdfDrag(event) {
     if (!isDraggingPdf) return;
+    if (rafId) cancelAnimationFrame(rafId);
 
-    const newX = event.clientX - pdfOffsetX;
-    const newY = event.clientY - pdfOffsetY;
+    rafId = requestAnimationFrame(() => {
+        const newX = event.clientX - pdfOffsetX;
+        const newY = event.clientY - pdfOffsetY;
 
-    pdfStyle.value.left = `${Math.max(0, newX)}px`;
-    pdfStyle.value.top = `${Math.max(24, newY)}px`;
+        pdfStyle.value.left = `${Math.max(0, newX)}px`;
+        pdfStyle.value.top = `${Math.max(24, newY)}px`;
+    });
 }
 
 function stopDragPdf() {
     isDraggingPdf = false;
+    isDraggingAnything.value = false;
+    if (rafId) cancelAnimationFrame(rafId);
     document.removeEventListener('mousemove', onPdfDrag);
     document.removeEventListener('mouseup', stopDragPdf);
 }
@@ -1372,6 +1387,27 @@ function toggleNotesMaximize() {
     }
 }
 
+function dragNotes(event) {
+    if (!isDraggingNotes) return;
+    if (rafId) cancelAnimationFrame(rafId);
+
+    rafId = requestAnimationFrame(() => {
+        const newX = event.clientX - notesOffsetX;
+        const newY = event.clientY - notesOffsetY;
+
+        notesStyle.value.left = `${Math.max(0, newX)}px`;
+        notesStyle.value.top = `${Math.max(24, newY)}px`;
+    });
+}
+
+function stopDragNotes() {
+    isDraggingNotes = false;
+    isDraggingAnything.value = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    document.removeEventListener('mousemove', dragNotes);
+    document.removeEventListener('mouseup', stopDragNotes);
+}
+
 function startDragNotes(event) {
     if (isNotesMaximized.value) return;
     event.preventDefault();
@@ -1380,6 +1416,7 @@ function startDragNotes(event) {
     const rect = container.getBoundingClientRect();
 
     isDraggingNotes = true;
+    isDraggingAnything.value = true;
     notesStartX = event.clientX;
     notesStartY = event.clientY;
     notesOffsetX = event.clientX - rect.left;
@@ -1387,22 +1424,6 @@ function startDragNotes(event) {
 
     document.addEventListener('mousemove', dragNotes);
     document.addEventListener('mouseup', stopDragNotes);
-}
-
-function dragNotes(event) {
-    if (!isDraggingNotes) return;
-
-    const newX = event.clientX - notesOffsetX;
-    const newY = event.clientY - notesOffsetY;
-
-    notesStyle.value.left = `${Math.max(0, newX)}px`;
-    notesStyle.value.top = `${Math.max(24, newY)}px`;
-}
-
-function stopDragNotes() {
-    isDraggingNotes = false;
-    document.removeEventListener('mousemove', dragNotes);
-    document.removeEventListener('mouseup', stopDragNotes);
 }
 
 function startNotesResize(event, direction) {
@@ -2627,5 +2648,27 @@ onUnmounted(() => {
     .desktop {
         display: none !important;
     }
+}
+
+/* Global Drag Overlay */
+.global-drag-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: transparent;
+    cursor: move;
+}
+
+/* Enhanced Window Transitions and Performance */
+.calendar-container,
+.chatbot-container,
+.gallery-container,
+.notes-container,
+.pdf-container,
+.settings-container,
+.terminal-container,
+.music-container,
+.youtube-container {
+    will-change: left, top, width, height;
 }
 </style>

@@ -1,14 +1,25 @@
 <template>
-    <div class="terminal-wrapper" :class="{ 'desktop-mode': isDesktopMode, 'mobile-mode': isMobileMode }" @touchstart.stop @touchmove.stop @touchend.stop>
+    <div class="terminal-wrapper" :class="{ 'desktop-mode': isDesktopMode, 'mobile-mode': isMobileMode }"
+        @touchstart.stop @touchmove.stop @touchend.stop>
         <!-- Mobile Header -->
         <div v-if="isMobileMode" class="mobile-terminal-header">
             <button class="mobile-back-btn" @click="handleClose">
-                ‹ Back
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+                </svg>
+                Back
             </button>
             <span class="mobile-terminal-title">Terminal</span>
-            <span class="mobile-spacer"></span>
+            <div class="mobile-terminal-tools">
+                <button @click="clearScreen" class="tool-btn">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path
+                            d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zM11 17H9V8h2v9zm4 0h-2V8h2v9z" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        
+
         <div class="terminal-window" @click="focusInput">
             <div class="terminal-header" v-if="!isMobileMode">
                 <div class="traffic-lights">
@@ -21,10 +32,10 @@
                     <span class="title-text">pathum@portfolio — zsh</span>
                 </div>
             </div>
-            
+
             <div class="terminal-body" ref="outputContainer">
                 <div v-html="welcomeMessage" class="welcome-output"></div>
-                
+
                 <div v-for="(item, index) in outputHistory" :key="index" class="output-block">
                     <div v-if="item.command" class="command-line">
                         <span class="prompt-user">pathum</span>
@@ -37,30 +48,36 @@
                     </div>
                     <div v-if="item.output" class="output-content" :class="item.type" v-html="item.output"></div>
                 </div>
-                
-                <div class="input-line">
-                    <span class="prompt-user">pathum</span>
-                    <span class="prompt-separator">@</span>
-                    <span class="prompt-host">portfolio</span>
-                    <span class="prompt-separator">:</span>
-                    <span class="prompt-path">{{ cwd }}</span>
-                    <span class="prompt-symbol">$</span>
-                    <input 
-                        ref="commandInput"
-                        v-model="currentCommand"
-                        @keydown.enter="executeCommand"
-                        @keydown.tab.prevent="autocomplete"
-                        @keydown.up.prevent="navigateHistory('up')"
-                        @keydown.down.prevent="navigateHistory('down')"
-                        @keydown.ctrl.l.prevent="clearScreen"
-                        class="command-input"
-                        spellcheck="false"
-                        autocomplete="off"
-                        autocorrect="off"
+
+                <div class="input-line" :class="{ 'mobile-input-line': isMobileMode }">
+                    <div class="prompt-container">
+                        <span v-if="!isMobileMode" class="prompt-user">pathum</span>
+                        <span v-if="!isMobileMode" class="prompt-separator">@</span>
+                        <span v-if="!isMobileMode" class="prompt-host">portfolio</span>
+                        <span v-if="!isMobileMode" class="prompt-separator">:</span>
+                        <span class="prompt-path">{{ cwd }}</span>
+                        <span class="prompt-symbol">$</span>
+                    </div>
+                    <input ref="commandInput" v-model="currentCommand" @keydown.enter="executeCommand"
+                        @keydown.tab.prevent="autocomplete" @keydown.up.prevent="navigateHistory('up')"
+                        @keydown.down.prevent="navigateHistory('down')" @keydown.ctrl.l.prevent="clearScreen"
+                        class="command-input" spellcheck="false" autocomplete="off" autocorrect="off"
                         autocapitalize="off"
-                        placeholder="type 'help' to get started..."
-                    />
+                        :placeholder="isMobileMode ? 'Type command...' : 'type \'help\' to get started...'" />
+                    <button v-if="isMobileMode && currentCommand" @click="executeCommand" class="mobile-send-btn">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                        </svg>
+                    </button>
                 </div>
+            </div>
+
+            <!-- Mobile Keyboard Toolbar -->
+            <div v-if="isMobileMode" class="mobile-shortcuts">
+                <button v-for="cmd in ['ls', 'help', 'cd ..', 'clear', 'exit']" :key="cmd" @click="runShortcut(cmd)"
+                    class="shortcut-btn">
+                    {{ cmd }}
+                </button>
             </div>
         </div>
     </div>
@@ -164,7 +181,7 @@ const commands = {
         output: '<b>Available Commands:</b><ul><li><b>cd [dir]</b> - Change directory</li><li><b>ls</b> - List files</li><li><b>cat [file]</b> - Read file</li><li><b>clear</b> - Clear screen</li><li><b>banner</b> - Show stylish banner</li><li><b>whoami</b> - Show bio</li><li><b>open [resume/project-name]</b> - Open link</li><li><b>exit</b> - Farewell message</li><li><b>pwd</b> - Current directory</li><li><b>echo [text]</b> - Echo with colors</li><li><b>history</b> - Show command history</li></ul>',
         type: 'stdout'
     }),
-    
+
     ls: () => {
         const dir = getDir(cwd.value);
         if (typeof dir !== 'object') return { output: 'Not a directory', type: 'stderr' };
@@ -177,7 +194,7 @@ const commands = {
         }).join('  ');
         return { output, type: 'stdout' };
     },
-    
+
     cd: (args) => {
         const dir = args.join(' ').trim();
         if (!dir) {
@@ -192,7 +209,7 @@ const commands = {
         }
         return { output: `cd: no such directory: ${dir}`, type: 'stderr' };
     },
-    
+
     cat: (args) => {
         const file = args.join(' ').trim();
         if (!file) return { output: 'cat: missing file operand<br>Try \'help\' for available commands.', type: 'stderr' };
@@ -203,16 +220,16 @@ const commands = {
         }
         return { output: `cat: ${file}: No such file<br>Type 'ls' to see available files.`, type: 'stderr' };
     },
-    
+
     banner: () => ({ output: generateBanner(), type: 'stdout' }),
-    
+
     clear: () => {
         outputHistory.value = [];
         return null;
     },
-    
+
     whoami: () => ({ output: fileSystem['~']['bio.txt'], type: 'stdout' }),
-    
+
     open: (args) => {
         const target = args[0];
         if (!target) return { output: 'open: missing argument<br>Usage: open [resume|project-name|email]', type: 'stderr' };
@@ -226,29 +243,29 @@ const commands = {
         }
         return { output: `open: unknown target '${target}'<br>Try 'cd projects' and 'ls' to see available projects.`, type: 'stderr' };
     },
-    
-    exit: () => ({ 
-        output: '<b>Farewell!</b> Contact me at <a href="mailto:pathumpasindu41@gmail.com">pathumpasindu41@gmail.com</a>. Reload to restart.', 
-        type: 'stdout' 
+
+    exit: () => ({
+        output: '<b>Farewell!</b> Contact me at <a href="mailto:pathumpasindu41@gmail.com">pathumpasindu41@gmail.com</a>. Reload to restart.',
+        type: 'stdout'
     }),
-    
+
     pwd: () => ({ output: cwd.value, type: 'stdout' }),
-    
+
     echo: (args) => {
         const text = args.join(' ');
         if (!text) return { output: '', type: 'stdout' };
-        const coloredText = text.split(' ').map(word => 
+        const coloredText = text.split(' ').map(word =>
             `<span style="color: hsl(${Math.random() * 360}, 100%, 50%);">${word}</span>`
         ).join(' ');
         return { output: coloredText, type: 'stdout' };
     },
-    
+
     history: () => {
         if (commandHistory.value.length === 0) return { output: '(no commands in history)', type: 'stdout' };
         const historyList = commandHistory.value.map((cmd, idx) => `${idx + 1}  ${cmd}`).join('<br>');
         return { output: historyList, type: 'stdout' };
     },
-    
+
     fullscreen: () => {
         if (document.documentElement.requestFullscreen) {
             document.documentElement.requestFullscreen().catch(err => {
@@ -266,14 +283,14 @@ function executeCommand() {
         currentCommand.value = '';
         return;
     }
-    
+
     const parts = cmd.split(' ').filter(Boolean);
     const commandName = parts[0];
     const args = parts.slice(1);
-    
+
     commandHistory.value.push(cmd);
     historyIndex.value = commandHistory.value.length;
-    
+
     if (commands[commandName]) {
         const result = commands[commandName](args);
         if (result) {
@@ -295,14 +312,14 @@ function executeCommand() {
             'stderr'
         );
     }
-    
+
     currentCommand.value = '';
 }
 
 function autocomplete() {
     const parts = currentCommand.value.split(' ');
     const commandName = parts[0];
-    
+
     if (parts.length === 1) {
         const matches = Object.keys(commands).filter(cmd => cmd.startsWith(commandName));
         if (matches.length === 1) {
@@ -357,6 +374,16 @@ function toggleFullscreen() {
             document.exitFullscreen();
         }
     }
+}
+
+function runShortcut(cmd) {
+    if (cmd === 'clear') {
+        clearScreen();
+    } else {
+        currentCommand.value = cmd;
+        executeCommand();
+    }
+    focusInput();
 }
 
 onMounted(() => {
@@ -415,13 +442,18 @@ onMounted(() => {
 
 /* Mobile Terminal Header */
 .mobile-terminal-header {
-    height: 56px;
-    background: rgba(30, 30, 30, 0.95);
+    height: 60px;
+    background: rgba(28, 28, 30, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
+    padding-top: env(safe-area-inset-top);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
     flex-shrink: 0;
+    z-index: 10;
 }
 
 .mobile-back-btn {
@@ -429,24 +461,36 @@ onMounted(() => {
     border: none;
     color: #007AFF;
     font-size: 17px;
+    font-weight: 500;
     padding: 8px 0;
     cursor: pointer;
-    min-width: 80px;
-    text-align: left;
     display: flex;
-    justify-content: flex-start;
     align-items: center;
+    gap: 4px;
 }
 
 .mobile-terminal-title {
     color: white;
     font-size: 17px;
     font-weight: 600;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-.mobile-spacer {
-    min-width: 80px;
+.mobile-terminal-tools {
+    display: flex;
+    gap: 12px;
 }
+
+.tool-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 8px;
+    cursor: pointer;
+}
+
 
 .terminal-wrapper {
     background: #1e1e1e;
@@ -468,7 +512,7 @@ onMounted(() => {
 .terminal-window {
     background: #1e1e1e;
     box-shadow: 0 20px 70px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(0, 0, 0, 0.3);
+        0 0 0 1px rgba(0, 0, 0, 0.3);
 }
 
 .terminal-header {
@@ -774,9 +818,16 @@ onMounted(() => {
 
 .input-line {
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 4px;
     margin-top: 8px;
+}
+
+.prompt-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    white-space: nowrap;
 }
 
 .command-input {
@@ -788,17 +839,64 @@ onMounted(() => {
     font-size: inherit;
     color: inherit;
     padding: 0;
-    margin-left: 4px;
-    min-width: 200px;
+    min-width: 50px;
+}
+
+.mobile-input-line {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 12px;
+    border-radius: 12px;
+    margin: 10px 0;
+    align-items: center;
+}
+
+.mobile-send-btn {
+    background: #007AFF;
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.mobile-shortcuts {
+    height: 50px;
+    background: rgba(28, 28, 30, 0.98);
+    border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-shrink: 0;
+}
+
+.mobile-shortcuts::-webkit-scrollbar {
+    display: none;
+}
+
+.shortcut-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
 }
 
 .command-input::placeholder {
     font-style: italic;
-}
-
-.command-input::placeholder {
     color: rgba(255, 255, 255, 0.3);
 }
+
 
 /* Typography styles */
 .terminal-wrapper :deep(a) {
@@ -865,36 +963,36 @@ onMounted(() => {
     .terminal-wrapper {
         padding: 10px;
     }
-    
+
     .terminal-window {
         max-width: 100%;
         height: 95vh;
         border-radius: 8px;
     }
-    
+
     .terminal-body {
         font-size: 12px;
         padding: 16px;
     }
-    
+
     .terminal-header {
         padding: 10px 12px;
     }
-    
+
     .terminal-title {
         font-size: 12px;
     }
-    
+
     .light {
         width: 10px;
         height: 10px;
     }
-    
+
     .ascii-banner {
         font-size: 7px;
         line-height: 1.1;
     }
-    
+
     .welcome-info {
         font-size: 11px;
     }
@@ -905,12 +1003,12 @@ onMounted(() => {
         font-size: 5.5px;
         line-height: 1;
     }
-    
+
     .terminal-body {
         font-size: 11px;
         padding: 12px;
     }
-    
+
     .welcome-info {
         font-size: 10px;
     }
@@ -928,6 +1026,7 @@ onMounted(() => {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -947,6 +1046,7 @@ onMounted(() => {
         opacity: 0;
         transform: translateY(50px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -957,6 +1057,7 @@ onMounted(() => {
     from {
         transform: translateY(100%);
     }
+
     to {
         transform: translateY(0);
     }

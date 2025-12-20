@@ -21,18 +21,21 @@ import iPhoneHome from './components/iPhoneHome.vue';
 
 const isMobile = ref(false);
 const currentView = ref('login');
+const isViewInitialized = ref(false);
 
 function detectDevice() {
   const width = window.innerWidth;
-  
-  // Only use width for detection - simpler and more reliable
+  const wasMobile = isMobile.value;
   isMobile.value = width < 768;
-  
-  // Set initial view based on device
-  if (isMobile.value) {
-    currentView.value = 'lock';
-  } else {
-    currentView.value = 'login';
+
+  // Only set initial view once, or if switching between mobile/desktop modes
+  if (!isViewInitialized.value || wasMobile !== isMobile.value) {
+    if (isMobile.value) {
+      currentView.value = 'lock';
+    } else {
+      currentView.value = 'login';
+    }
+    isViewInitialized.value = true;
   }
 }
 

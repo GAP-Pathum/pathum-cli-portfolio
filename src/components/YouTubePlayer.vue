@@ -1,136 +1,177 @@
 <template>
-    <div v-if="isOpen && !isMinimized" class="youtube-container" :class="{ 'mobile-mode': mobileMode }" :style="windowStyle">
-        <!-- Mobile Header -->
+    <div v-if="isOpen && !isMinimized" class="youtube-container"
+        :class="{ 'mobile-mode': mobileMode, 'maximized': isMaximized }" :style="windowStyle">
+        <!-- Modern Header -->
         <div v-if="mobileMode" class="mobile-header">
-            <button class="back-btn" @click="close">‹ Back</button>
-            <span class="mobile-title">{{ currentVideo ? currentVideo.title : 'YouTube' }}</span>
-            <button class="playlist-btn" @click="playlistOpen = !playlistOpen">
-                <span class="playlist-icon">📋</span>
+            <button class="back-btn" @click="close">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                    <path d="M15 18l-6-6 6-6" />
+                </svg>
+                <span>Back</span>
+            </button>
+            <div class="mobile-center">
+                <span class="mobile-title">{{ currentVideo ? currentVideo.title : 'YouTube' }}</span>
+            </div>
+            <button class="playlist-btn-mobile" @click="playlistOpen = !playlistOpen" :class="{ active: playlistOpen }">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                    <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+                </svg>
             </button>
         </div>
 
-        <!-- Desktop Header -->
         <div v-else class="youtube-header" @mousedown="startDrag">
             <div class="window-controls">
-                <div class="window-dot close" @click.stop="close"></div>
-                <div class="window-dot minimize" @click.stop="minimize"></div>
-                <div class="window-dot maximize" @click.stop="toggleMaximize"></div>
+                <div class="window-dot close" @click.stop="close">
+                    <svg viewBox="0 0 12 12">
+                        <path d="M4 4l4 4m0-4L4 8" stroke="currentColor" stroke-width="1.2" />
+                    </svg>
+                </div>
+                <div class="window-dot minimize" @click.stop="minimize">
+                    <svg viewBox="0 0 12 12">
+                        <path d="M2.5 6h7" stroke="currentColor" stroke-width="1.2" />
+                    </svg>
+                </div>
+                <div class="window-dot maximize" @click.stop="toggleMaximize">
+                    <svg viewBox="0 0 12 12">
+                        <path d="M3 3h6v6H3z" stroke="currentColor" stroke-width="1.2" fill="none" />
+                    </svg>
+                </div>
             </div>
-            <div class="window-title">YouTube Player</div>
+            <div class="window-title">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="#FF0000">
+                    <path
+                        d="M23.5 6.2c-.3-1.1-1.1-1.9-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5c-1.1.3-1.9 1.1-2.2 2.2C0 8.2 0 12 0 12s0 3.8.5 5.8c.3 1.1 1.1 1.9 2.2 2.2 2 1 9.3 1 9.3 1s7.3 0 9.3-.5c1.1-.3 1.9-1.1 2.2-2.2.5-2 .5-5.8.5-5.8s0-3.8-.5-5.8z" />
+                    <path d="M9.6 15.3l6.2-3.3-6.2-3.3v6.6z" fill="white" />
+                </svg>
+                <span>YouTube Player</span>
+            </div>
+            <div class="header-right"></div>
         </div>
 
         <div class="youtube-body">
             <!-- Desktop Layout -->
             <template v-if="!mobileMode">
-                <div class="video-list">
-                    <h3>Playlist</h3>
-                    <div class="video-item" v-for="video in videos" :key="video.id" :class="{ active: currentVideo && currentVideo.id === video.id }" @click="selectVideo(video)">
-                        <div class="video-thumb">
-                            <div v-if="!video.loaded" class="thumb-skeleton"></div>
-                            <img 
-                                v-else
-                                :src="`https://img.youtube.com/vi/${video.id}/default.jpg`" 
-                                :alt="video.title"
-                                @load="video.loaded = true"
-                                @error="video.loaded = true"
-                            />
-                        </div>
-                        <div class="video-info">
-                            <div v-if="!video.loaded" class="title-skeleton"></div>
-                            <div v-else class="video-title">{{ video.title }}</div>
+                <div class="video-list-sidebar">
+                    <div class="sidebar-header">
+                        <h3>Playlist</h3>
+                        <span class="video-count">{{ videos.length }} videos</span>
+                    </div>
+                    <div class="sidebar-scroll">
+                        <div class="video-item" v-for="video in videos" :key="video.id"
+                            :class="{ active: currentVideo && currentVideo.id === video.id }"
+                            @click="selectVideo(video)">
+                            <div class="video-thumb">
+                                <div v-if="!video.loaded" class="thumb-skeleton"></div>
+                                <img v-show="video.loaded" :src="`https://img.youtube.com/vi/${video.id}/mqdefault.jpg`"
+                                    :alt="video.title" @load="video.loaded = true" @error="video.loaded = true" />
+                                <div class="play-overlay">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="video-info">
+                                <div v-if="!video.loaded" class="title-skeleton"></div>
+                                <div v-else class="video-title-wrap">
+                                    <div class="video-title">{{ video.title }}</div>
+                                    <div class="video-meta">YouTube • Portfolio</div>
+                                </div>
+                            </div>
+                            <div v-if="currentVideo && currentVideo.id === video.id" class="playing-indicator">
+                                <span></span><span></span><span></span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="video-player">
-                    <div v-if="isLoading" class="player-skeleton">
-                        <div class="skeleton-video"></div>
-                        <div class="skeleton-controls">
-                            <div class="skeleton-play"></div>
-                            <div class="skeleton-progress"></div>
-                            <div class="skeleton-buttons"></div>
+
+                <div class="main-player-area">
+                    <div class="player-wrapper">
+                        <div v-if="isLoading" class="player-skeleton-v2">
+                            <div class="shimmer"></div>
+                        </div>
+                        <div v-else-if="currentVideo" class="player-view">
+                            <iframe :src="currentVideo.embedUrl + '?autoplay=0&rel=0&modestbranding=1'" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen width="100%" height="100%" @load="playerLoaded = true"></iframe>
+                        </div>
+                        <div v-else class="empty-player">
+                            <div class="empty-icon-v2">
+                                <svg viewBox="0 0 24 24" width="64" height="64" fill="currentColor" opacity="0.2">
+                                    <path
+                                        d="M21 16.5l-9-5.2v10.4l9-5.2zm-9-15l-9 5.2v10.4l9 5.2 9-5.2V6.7l-9-5.2zm7 13.9l-7 4-7-4V6.7l7-4 7 4v8.7z" />
+                                </svg>
+                            </div>
+                            <p>Select a video to start watching</p>
                         </div>
                     </div>
-                    <div v-else-if="currentVideo" class="player-container">
-                        <div v-if="!playerLoaded" class="loading-overlay">
-                            <div class="loading-spinner"></div>
-                            <p>Loading video...</p>
+                    <div class="video-details" v-if="currentVideo && !isLoading">
+                        <div class="details-left">
+                            <h2 class="playing-title">{{ currentVideo.title }}</h2>
+                            <p class="playing-meta">4.2K views • Published in Portfolio</p>
                         </div>
-                        <iframe
-                            :src="currentVideo.embedUrl + '?autoplay=0&rel=0'"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                            width="100%"
-                            height="100%"
-                            @load="playerLoaded = true"
-                        ></iframe>
-                    </div>
-                    <div v-else class="no-video">
-                        <div class="no-video-icon">📺</div>
-                        <p>Select a video to play</p>
+                        <div class="details-right">
+                            <button class="action-btn">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M14 9l-5 5 5 5M9 14h12" />
+                                </svg>
+                                <span>Share</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </template>
 
             <!-- Mobile Layout -->
             <template v-else>
-                <div class="video-player mobile-player">
-                    <div v-if="isLoading" class="player-skeleton">
-                        <div class="skeleton-video"></div>
-                        <div class="skeleton-controls">
-                            <div class="skeleton-play"></div>
-                            <div class="skeleton-progress"></div>
-                            <div class="skeleton-buttons"></div>
+                <div class="mobile-player-v2">
+                    <div class="video-stage">
+                        <div v-if="isLoading" class="mobile-skeleton">
+                            <div class="shimmer"></div>
+                        </div>
+                        <div v-else-if="currentVideo" class="mobile-iframe-container">
+                            <iframe :src="currentVideo.embedUrl + '?autoplay=0&rel=0&modestbranding=1'" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen width="100%" height="100%"></iframe>
                         </div>
                     </div>
-                    <div v-else-if="currentVideo" class="player-container">
-                        <div v-if="!playerLoaded" class="loading-overlay">
-                            <div class="loading-spinner"></div>
-                            <p>Loading video...</p>
+
+                    <div class="mobile-video-info" v-if="currentVideo && !isLoading">
+                        <h1 class="mobile-active-title">{{ currentVideo.title }}</h1>
+                        <div class="mobile-stats">
+                            <span>Portfolio Project</span>
+                            <span>•</span>
+                            <span>YouTube Video</span>
                         </div>
-                        <iframe
-                            :src="currentVideo.embedUrl + '?autoplay=0&rel=0'"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                            width="100%"
-                            height="100%"
-                            @load="playerLoaded = true"
-                        ></iframe>
-                    </div>
-                    <div v-else class="no-video">
-                        <div class="no-video-icon">📺</div>
-                        <p>Select a video to play</p>
+                        <div class="mobile-actions">
+                            <button class="mob-action"><span class="icon">👍</span><span>Like</span></button>
+                            <button class="mob-action"><span class="icon">🔗</span><span>Share</span></button>
+                            <button class="mob-action"><span class="icon">➕</span><span>Save</span></button>
+                        </div>
                     </div>
 
-                    <!-- Playlist Toggle Button -->
-                    <button class="playlist-toggle" @click="playlistOpen = !playlistOpen">
-                        <span class="toggle-icon">{{ playlistOpen ? '▼' : '▲' }}</span>
-                        <span class="toggle-text">Playlist ({{ videos.length }})</span>
-                    </button>
-                </div>
-
-                <!-- Mobile Playlist Drawer -->
-                <div class="mobile-playlist" :class="{ open: playlistOpen }">
-                    <div class="playlist-header">
-                        <h3>Playlist</h3>
-                        <button class="close-playlist" @click="playlistOpen = false">×</button>
-                    </div>
-                    <div class="playlist-content">
-                        <div class="video-item" v-for="video in videos" :key="video.id" :class="{ active: currentVideo && currentVideo.id === video.id }" @click="selectVideo(video); playlistOpen = false">
-                            <div class="video-thumb">
-                                <div v-if="!video.loaded" class="thumb-skeleton"></div>
-                                <img 
-                                    v-else
-                                    :src="`https://img.youtube.com/vi/${video.id}/default.jpg`" 
-                                    :alt="video.title"
-                                    @load="video.loaded = true"
-                                    @error="video.loaded = true"
-                                />
-                            </div>
-                            <div class="video-info">
-                                <div v-if="!video.loaded" class="title-skeleton"></div>
-                                <div v-else class="video-title">{{ video.title }}</div>
+                    <!-- Next Up Section -->
+                    <div class="mobile-next-up">
+                        <div class="section-title">Up Next</div>
+                        <div class="mobile-list-content">
+                            <div class="video-item mini" v-for="video in videos" :key="'mob-' + video.id"
+                                :class="{ active: currentVideo && currentVideo.id === video.id }"
+                                @click="selectVideo(video)">
+                                <div class="item-inner">
+                                    <div class="mini-thumb">
+                                        <img :src="`https://img.youtube.com/vi/${video.id}/default.jpg`"
+                                            :alt="video.title" />
+                                    </div>
+                                    <div class="mini-info">
+                                        <div class="mini-title">{{ video.title }}</div>
+                                        <div class="mini-meta">Pathum • Portfolio</div>
+                                    </div>
+                                    <div v-if="currentVideo && currentVideo.id === video.id" class="wave-indicator">
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -138,15 +179,39 @@
             </template>
         </div>
 
-        <!-- Resize Handles -->
-        <div class="resize-handle resize-right" @mousedown="startResize($event, 'right')"></div>
-        <div class="resize-handle resize-bottom" @mousedown="startResize($event, 'bottom')"></div>
-        <div class="resize-handle resize-corner" @mousedown="startResize($event, 'corner')"></div>
+        <!-- Mobile Playlist Drawer Overlay -->
+        <div v-if="mobileMode && playlistOpen" class="drawer-overlay" @click="playlistOpen = false"></div>
+        <div v-if="mobileMode" class="mobile-playlist-drawer" :class="{ open: playlistOpen }">
+            <div class="drawer-handle" @click="playlistOpen = false"></div>
+            <div class="drawer-header">
+                <h3>Playlist</h3>
+                <button class="close-drawer" @click="playlistOpen = false">DONE</button>
+            </div>
+            <div class="drawer-content">
+                <div class="video-item-drawer" v-for="video in videos" :key="'drawer-' + video.id"
+                    :class="{ active: currentVideo && currentVideo.id === video.id }"
+                    @click="selectVideo(video); playlistOpen = false">
+                    <img :src="`https://img.youtube.com/vi/${video.id}/default.jpg`" :alt="video.title"
+                        class="drawer-thumb" />
+                    <div class="drawer-info">
+                        <div class="drawer-title">{{ video.title }}</div>
+                        <div class="drawer-meta">Portfolio Project</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resize Handles for Desktop -->
+        <template v-if="!mobileMode && !isMaximized">
+            <div class="resize-handle r" @mousedown="startResize($event, 'right')"></div>
+            <div class="resize-handle b" @mousedown="startResize($event, 'bottom')"></div>
+            <div class="resize-handle se" @mousedown="startResize($event, 'corner')"></div>
+        </template>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { youtubeVideos } from '../data/youtubeVideos.js';
 
 const props = defineProps({
@@ -166,7 +231,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'minimize', 'maximize']);
 
-const videos = ref(youtubeVideos);
+const videos = ref(youtubeVideos.map(v => ({ ...v, loaded: false })));
 const currentVideo = ref(null);
 const isMaximized = ref(false);
 const isLoading = ref(false);
@@ -175,16 +240,40 @@ const playlistOpen = ref(false);
 let previousStyle = null;
 
 // Window state
+const initialWidth = Math.min(960, window.innerWidth - 80);
+const initialHeight = Math.min(680, window.innerHeight - 120);
+
 const windowStyle = ref(props.mobileMode ? {
     left: '0px',
     top: '0px',
     width: '100vw',
     height: '100vh'
 } : {
-    left: '400px',
-    top: '100px',
-    width: Math.min(800, window.innerWidth - 300) + 'px',
-    height: Math.min(600, window.innerHeight - 150) + 'px'
+    left: ((window.innerWidth - initialWidth) / 2) + 'px',
+    top: '60px',
+    width: initialWidth + 'px',
+    height: initialHeight + 'px'
+});
+
+// Watch for mobile mode changes
+watch(() => props.mobileMode, (isMobile) => {
+    if (isMobile) {
+        windowStyle.value = {
+            left: '0px',
+            top: '0px',
+            width: '100vw',
+            height: '100vh'
+        };
+    } else {
+        const w = Math.min(960, window.innerWidth - 80);
+        const h = Math.min(680, window.innerHeight - 120);
+        windowStyle.value = {
+            left: ((window.innerWidth - w) / 2) + 'px',
+            top: '60px',
+            width: w + 'px',
+            height: h + 'px'
+        };
+    }
 });
 
 // Dragging state
@@ -274,10 +363,10 @@ function resize(event) {
     let newHeight = resizeStartHeight;
 
     if (resizeDirection === 'right' || resizeDirection === 'corner') {
-        newWidth = Math.max(400, resizeStartWidth + deltaX);
+        newWidth = Math.max(600, resizeStartWidth + deltaX);
     }
     if (resizeDirection === 'bottom' || resizeDirection === 'corner') {
-        newHeight = Math.max(300, resizeStartHeight + deltaY);
+        newHeight = Math.max(400, resizeStartHeight + deltaY);
     }
 
     windowStyle.value.width = newWidth + 'px';
@@ -292,31 +381,21 @@ function stopResize() {
 
 function selectVideo(video) {
     if (currentVideo.value && currentVideo.value.id === video.id) return;
-    
+
     isLoading.value = true;
     playerLoaded.value = false;
     currentVideo.value = video;
-    
-    // Simulate network latency for realistic loading
+
+    // Smooth transition simulation
     setTimeout(() => {
         playerLoaded.value = true;
         setTimeout(() => {
             isLoading.value = false;
-        }, 500);
-    }, 800 + Math.random() * 1200); // 800-2000ms random delay
+        }, 300);
+    }, 600);
 }
 
 onMounted(() => {
-    // Preload thumbnails
-    videos.value.forEach(video => {
-        video.loaded = false;
-        const img = new Image();
-        img.onload = () => {
-            video.loaded = true;
-        };
-        img.src = `https://img.youtube.com/vi/${video.id}/default.jpg`;
-    });
-    
     if (videos.value.length > 0) {
         currentVideo.value = videos.value[0];
         selectVideo(videos.value[0]);
@@ -329,31 +408,39 @@ onMounted(() => {
     position: fixed;
     display: flex;
     flex-direction: column;
-    background: rgba(30, 30, 46, 0.98);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border-radius: 16px;
+    background: rgba(15, 15, 20, 0.85);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
     z-index: 500;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease;
 }
 
+.youtube-container.maximized {
+    border-radius: 0;
+}
+
+/* Header Styles */
 .youtube-header {
-    height: 36px;
-    background: rgba(45, 45, 65, 0.8);
+    height: 44px;
+    background: rgba(30, 30, 40, 0.4);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
-    padding: 0 12px;
+    padding: 0 16px;
     cursor: move;
     user-select: none;
-    -webkit-user-select: none;
+    justify-content: space-between;
 }
 
 .window-controls {
     display: flex;
     gap: 8px;
+    width: 60px;
 }
 
 .window-dot {
@@ -361,65 +448,108 @@ onMounted(() => {
     height: 12px;
     border-radius: 50%;
     cursor: pointer;
-    border: 0.5px solid rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.2s ease;
 }
 
-.window-dot:hover {
-    transform: scale(1.1);
+.window-dot svg {
+    width: 8px;
+    height: 8px;
+    opacity: 0;
+    color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.2s ease;
+}
+
+.window-dot:hover svg {
+    opacity: 1;
 }
 
 .window-dot.close {
-    background: linear-gradient(135deg, #ff6159 0%, #ff5449 100%);
+    background: #ff5f57;
 }
 
 .window-dot.minimize {
-    background: linear-gradient(135deg, #ffbd44 0%, #ffb529 100%);
+    background: #febc2e;
 }
 
 .window-dot.maximize {
-    background: linear-gradient(135deg, #27c93f 0%, #1fb934 100%);
+    background: #28c840;
 }
 
 .window-title {
-    flex: 1;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.8);
     font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.3px;
-    margin-right: 76px;
+    letter-spacing: 0.2px;
 }
 
+.header-right {
+    width: 60px;
+}
+
+/* Body Layout */
 .youtube-body {
     flex: 1;
     display: flex;
-    height: calc(100% - 36px);
+    overflow: hidden;
 }
 
-.video-list {
-    width: 250px;
-    background: rgba(20, 20, 40, 0.5);
+/* Sidebar Playlist */
+.video-list-sidebar {
+    width: 300px;
+    background: rgba(0, 0, 0, 0.2);
     border-right: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 16px;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
-.video-list h3 {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0 0 16px 0;
+.sidebar-header {
+    padding: 20px 16px;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 700;
+}
+
+.video-count {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 4px;
+    display: block;
+}
+
+.sidebar-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 8px 20px;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
 }
 
 .video-item {
     display: flex;
-    align-items: center;
-    padding: 8px;
-    border-radius: 8px;
+    padding: 10px;
+    gap: 12px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+    position: relative;
 }
 
 .video-item:hover {
@@ -427,16 +557,17 @@ onMounted(() => {
 }
 
 .video-item.active {
-    background: rgba(255, 107, 107, 0.2);
-    border: 1px solid rgba(255, 107, 107, 0.3);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .video-thumb {
-    width: 80px;
-    height: 45px;
-    border-radius: 4px;
+    width: 100px;
+    height: 56px;
+    border-radius: 8px;
     overflow: hidden;
-    margin-right: 12px;
+    position: relative;
+    flex-shrink: 0;
+    background: #000;
 }
 
 .video-thumb img {
@@ -445,413 +576,501 @@ onMounted(() => {
     object-fit: cover;
 }
 
+.play-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.video-item:hover .play-overlay {
+    opacity: 1;
+}
+
 .video-info {
     flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .video-title {
-    color: rgba(255, 255, 255, 0.9);
+    color: #fff;
     font-size: 13px;
     font-weight: 500;
-    line-height: 1.3;
-}
-
-.video-player {
-    flex: 1;
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.player-container {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
-.player-container iframe {
-    border-radius: 8px;
+.video-meta {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 4px;
 }
 
-.no-video {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 16px;
-}
-
-/* Resize Handles */
-.resize-handle {
+/* Playing Indicator */
+.playing-indicator {
     position: absolute;
-    background: transparent;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 12px;
 }
 
-.resize-right {
-    right: 0;
-    top: 36px;
-    bottom: 0;
-    width: 10px;
-    cursor: ew-resize;
+.playing-indicator span {
+    width: 2px;
+    background: #FF0000;
+    animation: wave 1s ease-in-out infinite;
 }
 
-.resize-bottom {
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 10px;
-    cursor: ns-resize;
+.playing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+    height: 100%;
 }
 
-.resize-corner {
-    right: 0;
-    bottom: 0;
-    width: 20px;
-    height: 20px;
-    cursor: nw-resize;
+.playing-indicator span:nth-child(1) {
+    height: 60%;
+}
+
+.playing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+    height: 80%;
+}
+
+@keyframes wave {
+
+    0%,
+    100% {
+        height: 30%;
+    }
+
+    50% {
+        height: 100%;
+    }
+}
+
+/* Main Player Area */
+.main-player-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    background: #0f0f0f;
+}
+
+.player-wrapper {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.player-view {
+    width: 100%;
+    height: 100%;
+}
+
+.player-skeleton-v2 {
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.video-details {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.playing-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.playing-meta {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 6px 0 0;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 /* Mobile Mode Styles */
-.mobile-mode .youtube-header {
-    display: none;
-}
-
-.mobile-mode .resize-handle {
-    display: none;
-}
-
-.mobile-mode .youtube-container {
-    position: static !important;
+.mobile-mode {
     border-radius: 0 !important;
-    box-shadow: none !important;
-    z-index: auto !important;
 }
 
-.mobile-mode .youtube-body {
-    flex-direction: column;
-    height: calc(100vh - 56px);
-}
-
-.mobile-mode .video-list {
-    width: 100%;
-    height: 200px;
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.mobile-mode .video-player {
-    flex: 1;
-}
-
-/* Mobile Player Enhancements */
-.mobile-player {
-    position: relative;
-}
-
-.playlist-toggle {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    border: none;
-    color: white;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    z-index: 10;
-    transition: all 0.3s ease;
-}
-
-.playlist-toggle:hover {
-    background: rgba(0, 0, 0, 0.9);
-}
-
-.toggle-icon {
-    font-size: 12px;
-    transition: transform 0.3s ease;
-}
-
-.mobile-playlist {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(30, 30, 46, 0.98);
-    backdrop-filter: blur(30px);
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
-    max-height: 60vh;
-    overflow: hidden;
-    border-radius: 16px 16px 0 0;
-    z-index: 1000;
-}
-
-.mobile-playlist.open {
-    transform: translateY(0);
-}
-
-.playlist-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.playlist-header h3 {
-    margin: 0;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.close-playlist {
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-}
-
-.close-playlist:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-}
-
-.playlist-content {
-    max-height: calc(60vh - 70px);
-    overflow-y: auto;
-    padding: 16px;
-}
-
-/* Skeleton Loading */
-.thumb-skeleton {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 75%);
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.5s infinite;
-    border-radius: 4px;
-}
-
-.title-skeleton {
-    height: 13px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 75%);
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.5s infinite;
-    border-radius: 4px;
-    margin-bottom: 4px;
-}
-
-.title-skeleton:last-child {
-    width: 70%;
-}
-
-.player-skeleton {
-    width: 100%;
-    height: 100%;
-    background: rgba(20, 20, 40, 0.5);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-}
-
-.skeleton-video {
-    width: 90%;
-    height: 70%;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 75%);
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.5s infinite;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.skeleton-controls {
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.skeleton-play {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 75%);
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.5s infinite;
-    border-radius: 50%;
-    align-self: center;
-}
-
-.skeleton-progress {
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 75%);
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.5s infinite;
-    border-radius: 2px;
-}
-
-.skeleton-buttons {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.skeleton-buttons::before,
-.skeleton-buttons::after {
-    content: '';
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 75%);
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.5s infinite;
-    border-radius: 8px;
-}
-
-@keyframes skeleton-loading {
-    0% {
-        background-position: -200% 0;
-    }
-    100% {
-        background-position: 200% 0;
-    }
-}
-
-/* Loading Overlay */
-.loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    border-radius: 8px;
-}
-
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top: 3px solid #ff0000;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 16px;
-}
-
-.loading-overlay p {
-    color: white;
-    font-size: 14px;
-    font-weight: 500;
-    margin: 0;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Enhanced No Video State */
-.no-video {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 16px;
-}
-
-.no-video-icon {
-    font-size: 48px;
-    margin-bottom: 16px;
-    opacity: 0.5;
-}
-
-/* Mobile Header Styles */
 .mobile-header {
     height: 56px;
-    background: rgba(30, 30, 30, 0.95);
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0 16px;
-    flex-shrink: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: #0f0f0f;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .back-btn {
     background: none;
     border: none;
-    color: #007AFF;
-    font-size: 17px;
-    padding: 8px 0;
-    cursor: pointer;
-    min-width: 80px;
-    text-align: left;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 16px;
+    padding: 0;
+    min-width: 60px;
+}
+
+.mobile-center {
+    flex: 1;
+    text-align: center;
+    padding: 0 12px;
+    min-width: 0;
 }
 
 .mobile-title {
-    color: white;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 600;
-    flex: 1;
-    text-align: center;
+    color: #fff;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 0 8px;
+    display: block;
 }
 
-.playlist-btn {
+.playlist-btn-mobile {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 16px;
-    padding: 8px;
-    cursor: pointer;
-    min-width: 80px;
-    text-align: right;
+    color: #fff;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    transition: all 0.2s ease;
+    justify-content: center;
+    border-radius: 50%;
+    min-width: 40px;
 }
 
-.playlist-btn:hover {
-    color: white;
+.playlist-btn-mobile.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FF0000;
 }
 
-.playlist-icon {
+.mobile-player-v2 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: #0f0f0f;
+}
+
+.video-stage {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.mobile-iframe-container {
+    width: 100%;
+    height: 100%;
+}
+
+.mobile-video-info {
+    padding: 16px;
+}
+
+.mobile-active-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.mobile-stats {
+    display: flex;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 8px;
+}
+
+.mobile-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mob-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 11px;
+}
+
+.mob-action .icon {
+    font-size: 20px;
+}
+
+.mobile-next-up {
+    padding: 16px;
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.video-item.mini {
+    margin-bottom: 12px;
+}
+
+.item-inner {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.mini-thumb {
+    width: 120px;
+    aspect-ratio: 16/9;
+    background: #1a1a1a;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.mini-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mini-info {
+    flex: 1;
+}
+
+.mini-title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.mini-meta {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 4px;
+}
+
+/* Drawer Styles */
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+}
+
+.mobile-playlist-drawer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0f0f0f;
+    border-radius: 20px 20px 0 0;
+    z-index: 1001;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.3, 0, 0.1, 1);
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.mobile-playlist-drawer.open {
+    transform: translateY(0);
+}
+
+.drawer-handle {
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    margin: 12px auto;
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.drawer-header h3 {
+    margin: 0;
+    color: #fff;
     font-size: 18px;
 }
 
-.spacer {
-    min-width: 80px;
+.close-drawer {
+    background: none;
+    border: none;
+    color: #3ea6ff;
+    font-weight: 600;
+    font-size: 14px;
 }
 
-/* Responsive */
+.drawer-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.video-item-drawer {
+    display: flex;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.drawer-thumb {
+    width: 100px;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.drawer-info {
+    flex: 1;
+}
+
+.drawer-title {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.drawer-meta {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 4px;
+}
+
+/* Resize Handles */
+.resize-handle {
+    position: absolute;
+    z-index: 10;
+}
+
+.resize-handle.r {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 6px;
+    cursor: ew-resize;
+}
+
+.resize-handle.b {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6px;
+    cursor: ns-resize;
+}
+
+.resize-handle.se {
+    right: 0;
+    bottom: 0;
+    width: 12px;
+    height: 12px;
+    cursor: nwse-resize;
+}
+
+/* Empty Player State */
+.empty-player {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.empty-icon-v2 {
+    margin-bottom: 16px;
+}
+
 @media (max-width: 768px) {
-    .video-list {
-        width: 200px;
+    .video-list-sidebar {
+        display: none;
     }
 }
 </style>

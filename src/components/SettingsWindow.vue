@@ -6,54 +6,39 @@
         <span class="window-dot minimize" @click.stop="$emit('minimize')"></span>
         <span class="window-dot maximize" @click.stop="$emit('toggleMaximize')"></span>
       </div>
-      <div class="window-title">Settings</div>
+      <div class="window-title-container">
+        <span class="window-icon">⚙️</span>
+        <span class="window-title">System Settings</span>
+      </div>
     </div>
-    
+
     <div class="settings-content">
       <div class="settings-sidebar">
-        <div 
-          class="sidebar-item" 
-          :class="{ active: activeTab === 'appearance' }"
-          @click="activeTab = 'appearance'"
-        >
-          <span class="sidebar-icon">🎨</span>
+        <div class="sidebar-item" :class="{ active: activeTab === 'appearance' }" @click="activeTab = 'appearance'">
+          <span class="sidebar-icon">🖼️</span>
           Appearance
         </div>
       </div>
-      
+
       <div class="settings-main">
         <div v-if="activeTab === 'appearance'" class="settings-section">
           <h2 class="section-title">Wallpaper</h2>
           <div class="wallpaper-grid">
             <!-- Default Gradient -->
-            <div 
-              class="wallpaper-item"
-              :class="{ selected: selectedWallpaper === 0 }"
-              @click="selectWallpaper(0)"
-            >
+            <div class="wallpaper-item" :class="{ selected: selectedWallpaper === 0 }" @click="selectWallpaper(0)">
               <div class="wallpaper-preview gradient-preview">
                 <div class="gradient-bg"></div>
               </div>
               <div class="wallpaper-name">Default</div>
               <div v-if="selectedWallpaper === 0" class="check-icon">✓</div>
             </div>
-            
+
             <!-- Image Wallpapers -->
-            <div 
-              v-for="wallpaper in wallpapers"
-              :key="wallpaper.id"
-              class="wallpaper-item"
-              :class="{ selected: selectedWallpaper === wallpaper.id }"
-              @click="selectWallpaper(wallpaper.id)"
-            >
+            <div v-for="wallpaper in wallpapers" :key="wallpaper.id" class="wallpaper-item"
+              :class="{ selected: selectedWallpaper === wallpaper.id }" @click="selectWallpaper(wallpaper.id)">
               <div class="wallpaper-preview">
-                <img 
-                  :src="wallpaper.thumbnail" 
-                  :alt="wallpaper.name"
-                  loading="lazy"
-                  @load="handleImageLoad"
-                  @error="handleImageError"
-                >
+                <img :src="wallpaper.thumbnail" :alt="wallpaper.name" loading="lazy" @load="handleImageLoad"
+                  @error="handleImageError">
               </div>
               <div class="wallpaper-name">{{ wallpaper.name }}</div>
               <div v-if="selectedWallpaper === wallpaper.id" class="check-icon">✓</div>
@@ -84,7 +69,7 @@ onMounted(() => {
 const selectWallpaper = (id) => {
   selectedWallpaper.value = id;
   localStorage.setItem('wallpaper', id.toString());
-  
+
   // Emit wallpaper change event
   if (id === 0) {
     emit('wallpaperChanged', { id, path: null });
@@ -108,38 +93,35 @@ const handleImageError = (event) => {
 
 <style scoped>
 .settings-window {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 800px;
-  height: 600px;
-  background: rgba(30, 30, 30, 0.95);
-  backdrop-filter: blur(40px);
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  z-index: 1000;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
 }
 
 .settings-header {
-  height: 36px;
-  background: rgba(40, 40, 58, 0.95);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  height: 48px;
+  background: rgba(230, 230, 230, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
-  padding: 0 12px;
+  padding: 0 16px;
   cursor: move;
   user-select: none;
   flex-shrink: 0;
+  position: relative;
 }
 
 .window-controls {
   display: flex;
   gap: 8px;
-  margin-right: 12px;
+  z-index: 2;
+}
+
+.window-dots {
+  display: flex;
+  gap: 8px;
 }
 
 .window-dot {
@@ -147,31 +129,48 @@ const handleImageError = (event) => {
   height: 12px;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
 }
 
 .window-dot.close {
-  background: linear-gradient(135deg, #ff6159 0%, #ff5449 100%);
+  background: #ff5f57;
 }
 
 .window-dot.minimize {
-  background: linear-gradient(135deg, #ffbd44 0%, #ffb529 100%);
+  background: #febc2e;
 }
 
 .window-dot.maximize {
-  background: linear-gradient(135deg, #27c93f 0%, #1fb934 100%);
+  background: #28c840;
 }
 
-.window-dot:active {
-  transform: scale(0.95);
+.window-dot:hover {
+  filter: brightness(0.9);
+}
+
+.window-title-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  gap: 8px;
+}
+
+.window-icon {
+  font-size: 16px;
 }
 
 .window-title {
-  flex: 1;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .settings-content {
@@ -181,37 +180,40 @@ const handleImageError = (event) => {
 }
 
 .settings-sidebar {
-  width: 200px;
-  background: rgba(0, 0, 0, 0.2);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 12px 0;
+  width: 180px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .sidebar-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 20px;
-  color: rgba(255, 255, 255, 0.7);
+  gap: 12px;
+  padding: 8px 12px;
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
-  transition: all 0.2s;
-  font-size: 14px;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 8px;
 }
 
 .sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .sidebar-item.active {
-  background: rgba(10, 132, 255, 0.2);
-  color: #0a84ff;
-  border-left: 3px solid #0a84ff;
-  padding-left: 17px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar-icon {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .settings-main {

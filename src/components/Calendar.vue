@@ -1,5 +1,6 @@
 <template>
-    <div v-if="isOpen && !isMinimized" class="calendar-container" :class="{ 'mobile-mode': mobileMode }" :style="windowStyle">
+    <div v-if="isOpen && !isMinimized" class="calendar-container" :class="{ 'mobile-mode': mobileMode }"
+        :style="windowStyle">
         <!-- Mobile Header -->
         <div v-if="mobileMode" class="mobile-header">
             <button class="back-btn" @click="close">‹ Back</button>
@@ -33,34 +34,19 @@
                 </div>
 
                 <!-- Empty cells for days before the first day of the month -->
-                <div
-                    v-for="empty in emptyDays"
-                    :key="'empty-' + empty"
-                    class="calendar-day empty"
-                ></div>
+                <div v-for="empty in emptyDays" :key="'empty-' + empty" class="calendar-day empty"></div>
 
                 <!-- Calendar days -->
-                <div
-                    v-for="day in daysInMonth"
-                    :key="day"
-                    class="calendar-day"
-                    :class="{
-                        'today': isToday(day),
-                        'selected': selectedDate && selectedDate.getDate() === day && selectedDate.getMonth() === currentMonth && selectedDate.getFullYear() === currentYear,
-                        'birthday': isBirthday(day),
-                        'event-day': hasEvent(day)
-                    }"
-                    @click="selectDate(day)"
-                >
+                <div v-for="day in daysInMonth" :key="day" class="calendar-day" :class="{
+                    'today': isToday(day),
+                    'selected': selectedDate && selectedDate.getDate() === day && selectedDate.getMonth() === currentMonth && selectedDate.getFullYear() === currentYear,
+                    'birthday': isBirthday(day),
+                    'event-day': hasEvent(day)
+                }" @click="selectDate(day)">
                     <span class="day-number">{{ day }}</span>
                     <div class="day-events">
-                        <div
-                            v-for="event in getEventsForDay(day)"
-                            :key="event.id"
-                            class="event-indicator"
-                            :class="event.type"
-                            :title="event.title"
-                        ></div>
+                        <div v-for="event in getEventsForDay(day)" :key="event.id" class="event-indicator"
+                            :class="event.type" :title="event.title"></div>
                     </div>
                 </div>
             </div>
@@ -68,7 +54,9 @@
             <!-- Selected Date Details -->
             <div v-if="selectedDate" class="date-details">
                 <h3 class="selected-date-title">
-                    {{ selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
+                    {{ selectedDate.toLocaleDateString('en-US', {
+                        weekday: 'long', year: 'numeric', month: 'long', day:
+                    'numeric' }) }}
                 </h3>
 
                 <!-- Birthday Surprise -->
@@ -76,10 +64,12 @@
                     <div class="birthday-message">
                         <div class="birthday-icon">🎂</div>
                         <h4>Happy Birthday! 🎉</h4>
-                        <p>Wishing you a fantastic year ahead! May all your dreams come true and your code always compile on the first try! 🚀</p>
+                        <p>Wishing you a fantastic year ahead! May all your dreams come true and your code always
+                            compile on the first try! 🚀</p>
                         <div class="birthday-gift">
                             <div class="gift-box">🎁</div>
-                            <p class="gift-message">Here's a virtual gift from your portfolio: <strong>100% Bug-Free Code</strong> ✨</p>
+                            <p class="gift-message">Here's a virtual gift from your portfolio: <strong>100% Bug-Free
+                                    Code</strong> ✨</p>
                         </div>
                     </div>
                 </div>
@@ -87,12 +77,8 @@
                 <!-- Events for selected date -->
                 <div v-if="getEventsForDay(selectedDate.getDate()).length > 0" class="events-list">
                     <h4>Events:</h4>
-                    <div
-                        v-for="event in getEventsForDay(selectedDate.getDate())"
-                        :key="event.id"
-                        class="event-item"
-                        :class="event.type"
-                    >
+                    <div v-for="event in getEventsForDay(selectedDate.getDate())" :key="event.id" class="event-item"
+                        :class="event.type">
                         <div class="event-time">{{ event.time }}</div>
                         <div class="event-title">{{ event.title }}</div>
                         <div v-if="event.description" class="event-description">{{ event.description }}</div>
@@ -322,8 +308,8 @@ function selectDate(day) {
 function isToday(day) {
     const today = new Date();
     return today.getDate() === day &&
-           today.getMonth() === currentMonth.value &&
-           today.getFullYear() === currentYear.value;
+        today.getMonth() === currentMonth.value &&
+        today.getFullYear() === currentYear.value;
 }
 
 function isBirthday(day) {

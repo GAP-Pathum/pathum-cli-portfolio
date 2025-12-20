@@ -1,5 +1,6 @@
 <template>
-    <div v-if="isOpen && !isMinimized" class="music-container" :class="{ 'mobile-mode': mobileMode }" :style="windowStyle">
+    <div v-if="isOpen && !isMinimized" class="music-container" :class="{ 'mobile-mode': mobileMode }"
+        :style="windowStyle">
         <!-- Mobile Header -->
         <div v-if="mobileMode" class="mobile-header">
             <button class="back-btn" @click="close">‹ Back</button>
@@ -17,8 +18,9 @@
             <div class="window-title">Music</div>
         </div>
         <div class="music-body">
-            <audio ref="audioElement" :src="tracks[currentTrackIndex].src" @timeupdate="updateTime" @loadedmetadata="updateDuration" @ended="handleTrackEnd"></audio>
-            
+            <audio ref="audioElement" :src="tracks[currentTrackIndex].src" @timeupdate="updateTime"
+                @loadedmetadata="updateDuration" @ended="handleTrackEnd"></audio>
+
             <!-- Album Art -->
             <div class="album-art-container">
                 <div class="album-art" :style="{ animationPlayState: isPlaying ? 'running' : 'paused' }">
@@ -35,8 +37,10 @@
                 <div class="time-display">
                     <span class="time">{{ formatTime(currentTime) }}</span>
                     <div class="progress-bar">
-                        <div class="progress-fill" :style="{ width: duration ? (currentTime / duration * 100) + '%' : '0%' }"></div>
-                        <input type="range" min="0" :max="duration" v-model="currentTime" @input="seek" class="progress-slider">
+                        <div class="progress-fill"
+                            :style="{ width: duration ? (currentTime / duration * 100) + '%' : '0%' }"></div>
+                        <input type="range" min="0" :max="duration" v-model="currentTime" @input="seek"
+                            class="progress-slider">
                     </div>
                     <span class="time">{{ formatTime(duration) }}</span>
                 </div>
@@ -44,25 +48,27 @@
                 <div class="controls">
                     <button @click="toggleShuffle" class="control-btn shuffle-btn" :class="{ active: shuffle }">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 17a4.983 4.983 0 0 1 5 0M3 12a9 9 0 0 1 9 0M3 7a15.3 15.3 0 0 1 15.3 0M12 21v-7M3 9l9-6 9 6M3 12h8M9 3v6"></path>
+                            <path
+                                d="M3 17a4.983 4.983 0 0 1 5 0M3 12a9 9 0 0 1 9 0M3 7a15.3 15.3 0 0 1 15.3 0M12 21v-7M3 9l9-6 9 6M3 12h8M9 3v6">
+                            </path>
                         </svg>
                     </button>
                     <button @click="prevTrack" class="control-btn prev-btn">
                         <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M6 6h2v12H6V6zm3.5 6l8.5 6V6l-8.5 6z"/>
+                            <path d="M6 6h2v12H6V6zm3.5 6l8.5 6V6l-8.5 6z" />
                         </svg>
                     </button>
                     <button @click="togglePlay" class="control-btn play-btn">
                         <svg class="icon-large" v-if="!isPlaying" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M8 5v14l11-7z"/>
+                            <path d="M8 5v14l11-7z" />
                         </svg>
                         <svg class="icon-large" v-else viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
                         </svg>
                     </button>
                     <button @click="nextTrack" class="control-btn next-btn">
                         <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M16 18h2V6h-2v12zM2 6v12l8.5-6L2 6z"/>
+                            <path d="M16 18h2V6h-2v12zM2 6v12l8.5-6L2 6z" />
                         </svg>
                     </button>
                     <button @click="toggleRepeat" class="control-btn repeat-btn" :class="{ active: repeat }">
@@ -77,9 +83,11 @@
 
                 <div class="volume-control">
                     <svg class="icon-small" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.3-2.5-4.04v8.08c1.48-.74 2.5-2.27 2.5-4.04zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                        <path
+                            d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.3-2.5-4.04v8.08c1.48-.74 2.5-2.27 2.5-4.04zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
                     </svg>
-                    <input type="range" min="0" max="1" step="0.01" v-model="volume" @input="changeVolume" class="volume-slider">
+                    <input type="range" min="0" max="1" step="0.01" v-model="volume" @input="changeVolume"
+                        class="volume-slider">
                     <span class="volume-percent">{{ Math.round(volume * 100) }}%</span>
                 </div>
 
@@ -89,7 +97,8 @@
                         <h4>Up Next</h4>
                     </div>
                     <div class="playlist">
-                        <div v-for="(track, index) in tracks" :key="index" class="playlist-item" :class="{ active: index === currentTrackIndex }" @click="currentTrackIndex = index">
+                        <div v-for="(track, index) in tracks" :key="index" class="playlist-item"
+                            :class="{ active: index === currentTrackIndex }" @click="currentTrackIndex = index">
                             <span class="track-number">{{ index + 1 }}</span>
                             <span class="track-title">{{ track.name }}</span>
                         </div>
@@ -97,7 +106,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Resize Handles -->
         <div class="resize-handle resize-right" @mousedown="startResize($event, 'right')"></div>
         <div class="resize-handle resize-bottom" @mousedown="startResize($event, 'bottom')"></div>
@@ -826,7 +835,8 @@ function formatTime(time) {
 
 .mobile-mode .music-body {
     padding: 20px;
-    height: calc(100vh - 56px); /* Account for mobile header */
+    height: calc(100vh - 56px);
+    /* Account for mobile header */
     overflow-y: auto;
 }
 

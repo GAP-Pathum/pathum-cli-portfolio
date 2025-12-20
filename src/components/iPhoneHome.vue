@@ -190,7 +190,7 @@
         </div>
 
         <!-- Terminal App -->
-        <div v-if="terminalOpen" class="app-overlay" @touchstart.prevent.stop @touchmove.prevent.stop @touchend.prevent.stop>
+        <div v-if="terminalOpen" class="app-overlay" @touchstart.stop @touchmove.stop @touchend.stop>
             <Terminal @close="closeTerminal" :isDesktopMode="false" :isMobileMode="true" />
         </div>
 
@@ -281,9 +281,11 @@
             <!-- Note Editor -->
             <div v-else class="note-editor-mobile">
                 <input v-if="getCurrentNote()" v-model="getCurrentNote().title" class="note-title-input-mobile"
-                    placeholder="Note Title" @input="updateCurrentNote" autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false" />
+                    placeholder="Note Title" @input="updateCurrentNote" autocorrect="off" autocomplete="off"
+                    autocapitalize="off" spellcheck="false" />
                 <textarea v-if="getCurrentNote()" v-model="getCurrentNote().content" class="note-textarea-mobile"
-                    placeholder="Start writing..." @input="updateCurrentNote" autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+                    placeholder="Start writing..." @input="updateCurrentNote" autocorrect="off" autocomplete="off"
+                    autocapitalize="off" spellcheck="false"></textarea>
             </div>
         </div>
 
@@ -309,6 +311,11 @@
 
         <!-- Gallery App -->
         <Gallery :is-open="galleryOpen" @close="closeGallery" />
+
+        <!-- PDF App -->
+        <div v-if="pdfOpen" class="app-overlay" @touchstart.stop @touchmove.stop @touchend.stop>
+            <PdfViewer :is-mobile-mode="true" @close="closePdf" />
+        </div>
     </div>
 </template>
 
@@ -320,6 +327,7 @@ import Gallery from './Gallery.vue';
 import Terminal from './Terminal.vue';
 import Calendar from './Calendar.vue';
 import YouTubePlayer from './YouTubePlayer.vue';
+import PdfViewer from './PdfViewer.vue';
 import { appIcons } from '../assets/appIcons.js';
 import { wallpapers } from '../data/wallpapers.js';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
@@ -334,6 +342,7 @@ const notesOpen = ref(false);
 const musicOpen = ref(false);
 const calendarOpen = ref(false);
 const youtubeOpen = ref(false);
+const pdfOpen = ref(false);
 const showControlCenter = ref(false);
 const showNotification = ref(false);
 const showWidgets = ref(false);
@@ -427,7 +436,7 @@ function handleAppTap(appName) {
         } else if (appName === 'instagram') {
             window.open('https://www.instagram.com/gap_pathum', '_blank');
         } else if (appName === 'resume') {
-            window.open('/documents/resume.pdf', '_blank');
+            pdfOpen.value = true;
         } else if (appName === 'settings') {
             settingsOpen.value = true;
         } else if (appName === 'phone') {
@@ -441,9 +450,9 @@ function handleAppTap(appName) {
 
 
 
-    function closeTerminal() {
-        terminalOpen.value = false;
-    }
+function closeTerminal() {
+    terminalOpen.value = false;
+}
 
 function closeSettings() {
     settingsOpen.value = false;
@@ -463,6 +472,10 @@ function closeCalendar() {
 
 function closeYoutube() {
     youtubeOpen.value = false;
+}
+
+function closePdf() {
+    pdfOpen.value = false;
 }
 
 function handleWallpaperChanged({ id, path }) {
@@ -489,7 +502,7 @@ function loadNotes() {
 
 function saveNotes() {
     localStorage.setItem('portfolio-notes', JSON.stringify(notes.value));
-    }
+}
 
 
 

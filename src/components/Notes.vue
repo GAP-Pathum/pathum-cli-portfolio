@@ -18,13 +18,8 @@
                     </button>
                 </div>
                 <div class="notes-list">
-                    <div 
-                        v-for="note in notes" 
-                        :key="note.id"
-                        class="note-item"
-                        :class="{ active: currentNoteId === note.id }"
-                        @click="selectNote(note.id)"
-                    >
+                    <div v-for="note in notes" :key="note.id" class="note-item"
+                        :class="{ active: currentNoteId === note.id }" @click="selectNote(note.id)">
                         <div class="note-item-title">{{ note.title || 'Untitled' }}</div>
                         <div class="note-item-preview">{{ getPreview(note.content) }}</div>
                         <div class="note-item-date">{{ formatDate(note.updatedAt) }}</div>
@@ -35,18 +30,10 @@
             <!-- Editor -->
             <div class="notes-editor">
                 <div v-if="currentNote" class="editor-content">
-                    <input 
-                        v-model="currentNote.title"
-                        class="note-title-input"
-                        placeholder="Note Title"
-                        @input="saveNote"
-                    />
-                    <textarea 
-                        v-model="currentNote.content"
-                        class="note-textarea"
-                        placeholder="Start writing..."
-                        @input="saveNote"
-                    ></textarea>
+                    <input v-model="currentNote.title" class="note-title-input" placeholder="Note Title"
+                        @input="saveNote" />
+                    <textarea v-model="currentNote.content" class="note-textarea" placeholder="Start writing..."
+                        @input="saveNote"></textarea>
                 </div>
                 <div v-else class="no-note-selected">
                     <div class="empty-state">
@@ -161,11 +148,11 @@ function formatDate(dateString) {
     const date = new Date(dateString);
     const now = new Date();
     const diff = now - date;
-    
+
     if (diff < 60000) return 'Just now';
     if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
     if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
-    
+
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
