@@ -1,6 +1,6 @@
 <template>
-    <div v-if="isOpen && !isMinimized" class="music-container" :class="{ 'mobile-mode': mobileMode }"
-        :style="windowStyle">
+    <div v-if="isOpen && !isMinimized" class="music-container"
+        :class="{ 'mobile-mode': mobileMode, playing: isPlaying }" :style="windowStyle">
         <!-- Mobile Header -->
         <div v-if="mobileMode" class="mobile-header">
             <button class="back-btn" @click="close">‹ Back</button>
@@ -374,14 +374,15 @@ function formatTime(time) {
     position: fixed;
     display: flex;
     flex-direction: column;
-    background: rgba(30, 30, 46, 0.98);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
+    background: rgba(30, 30, 46, 0.92);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     z-index: 500;
     border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .music-header {
@@ -478,6 +479,23 @@ function formatTime(time) {
     justify-content: center;
     box-shadow: 0 15px 45px rgba(255, 107, 107, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: spin 8s linear infinite;
+    animation-play-state: paused;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* When playing, resume animation */
+.music-container.playing .album-art {
+    animation-play-state: running;
 }
 
 .album-art .album-placeholder {
@@ -827,10 +845,14 @@ function formatTime(time) {
 }
 
 .mobile-mode .music-container {
-    position: static !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
     border-radius: 0 !important;
     box-shadow: none !important;
-    z-index: auto !important;
+    z-index: 1000 !important;
 }
 
 .mobile-mode .music-body {
