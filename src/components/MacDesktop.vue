@@ -119,6 +119,16 @@
                     <div v-else-if="icon.id === 'resume'" class="app-icon-content" v-html="appIcons.pdf"></div>
                     <!-- ChatBot -->
                     <div v-else-if="icon.id === 'chatbot'" class="app-icon-content" v-html="appIcons.chatbot"></div>
+                    <!-- FileManager -->
+                    <div v-else-if="icon.id === 'filemanager'">
+                        <svg width="48" height="48" viewBox="0 0 48 48">
+                            <rect x="6" y="12" width="36" height="28" rx="4" fill="#e0e0e0" stroke="#bdbdbd"
+                                stroke-width="2" />
+                            <rect x="6" y="12" width="36" height="8" rx="2" fill="#bdbdbd" />
+                            <rect x="10" y="20" width="8" height="4" rx="1" fill="#90caf9" />
+                            <rect x="20" y="20" width="18" height="4" rx="1" fill="#cfd8dc" />
+                        </svg>
+                    </div>
                 </div>
                 <div class="icon-label">{{ icon.label }}</div>
             </div>
@@ -231,6 +241,20 @@
                     </div>
                 </div>
                 <!-- ChatBot Window (shown when opened, always in desktop area) -->
+                <div v-if="chatbotOpen || chatbotMinimized" class="dock-icon chatbot-dock"
+                    @click="selectDockIcon('chatbot')" :class="{ 'has-window': chatbotOpen || chatbotMinimized }">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.chatbot"></div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': chatbotMinimized, 'running-indicator': chatbotOpen && !chatbotMinimized }">
+                    </div>
+                </div>
+                <div v-if="youtubeOpen || youtubeMinimized" class="dock-icon youtube-dock"
+                    @click="selectDockIcon('youtube')" :class="{ 'has-window': youtubeOpen || youtubeMinimized }">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.youtube"></div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': youtubeMinimized, 'running-indicator': youtubeOpen && !youtubeMinimized }">
+                    </div>
+                </div>
             </div> <!-- close .dock.mac-dock -->
         </div> <!-- close .dock-container -->
 
@@ -253,6 +277,33 @@
             <div class="resize-handle resize-bottom" @mousedown="startChatbotResize($event, 'bottom')"></div>
             <div class="resize-handle resize-corner" @mousedown="startChatbotResize($event, 'corner')"></div>
         </div>
+
+        <!-- File Manager Window -->
+        <div v-if="fileManagerOpen && !fileManagerMinimized" class="filemanager-container window" :style="fileManagerStyle"
+            @mousedown.self="startDragFileManager">
+            <div class="window-header filemanager-header" @mousedown.stop="startDragFileManager">
+                <div class="fm-header-left">
+                    <button class="fm-btn close" @click="closeFileManager" aria-label="Close"></button>
+                    <button class="fm-btn minimize" @click="minimizeFileManager" aria-label="Minimize"></button>
+                    <button class="fm-btn maximize" @click="toggleFileManagerMaximize" aria-label="Maximize"></button>
+                </div>
+                <span class="fm-title">File Manager</span>
+                <span class="fm-header-right"></span>
+            </div>
+            <div class="window-body">
+                <FileManager
+                    :dark-mode="true"
+                    :maximized="isFileManagerMaximized"
+                    :minimized="fileManagerMinimized"
+                    @close="closeFileManager"
+                    @minimize="minimizeFileManager"
+                    @maximize="toggleFileManagerMaximize"
+                    @restore="restoreFileManager"
+                    @focus="startDragFileManager"
+                />
+            </div>
+        </div>
+
     </div>
 
     <!-- Terminal Window (shown when opened) -->
@@ -383,6 +434,25 @@
             <button class="notification-close" @click="showNotification = false">×</button>
         </div>
     </Transition>
+
+    <!-- File Manager Window -->
+    <div v-if="fileManagerOpen && !fileManagerMinimized" class="filemanager-container window" :style="fileManagerStyle"
+        @mousedown.self="startDragFileManager">
+        <div class="window-header" @mousedown.stop="startDragFileManager">
+            <div class="window-controls">
+                <span class="window-dot close" @click="closeFileManager"></span>
+                <span class="window-dot minimize" @click="minimizeFileManager"></span>
+                <span class="window-dot maximize" @click="toggleFileManagerMaximize"></span>
+            </div>
+            <span class="window-title">File Manager</span>
+        </div>
+        <div class="window-body">
+            <FileManager :dark-mode="true" :is-draggable="true" :maximized="isFileManagerMaximized"
+                :minimized="fileManagerMinimized" :onMaximize="toggleFileManagerMaximize"
+                :onMinimize="minimizeFileManager" :onRestore="restoreFileManager" :onDragStart="onFileManagerDragStart"
+                :onDrag="onFileManagerDrag" :onDragEnd="onFileManagerDragEnd" />
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -397,6 +467,7 @@ import ChatBot from './ChatBot.vue';
 import MusicPlayer from './MusicPlayer.vue';
 import Calendar from './Calendar.vue';
 import YouTubePlayer from './YouTubePlayer.vue';
+import FileManager from './FileManager.vue';
 
 const emit = defineEmits(['logout']);
 
@@ -666,9 +737,10 @@ const desktopIcons = ref([
     { id: 'instagram', label: 'Instagram', x: 110, y: 220 },
     { id: 'youtube', label: 'YouTube', x: 110, y: 310 },
     { id: 'github', label: 'GitHub', x: 110, y: 400 },
-    // Column 3 - ChatBot & Resume
-    { id: 'chatbot', label: 'ChatBot', x: 200, y: 40 },
-    { id: 'resume', label: 'Resume', x: 200, y: 130 },
+    // Column 3 - FileManager, ChatBot & Resume
+    { id: 'filemanager', label: 'File Manager', x: 200, y: 40 },
+    { id: 'chatbot', label: 'ChatBot', x: 200, y: 130 },
+    { id: 'resume', label: 'Resume', x: 200, y: 220 },
 ]);
 
 // Icon dragging
@@ -963,8 +1035,57 @@ function toggleMaximize() {
     }
 }
 
+const fileManagerOpen = ref(false);
+const fileManagerMinimized = ref(false);
+const fileManagerStyle = ref({
+    left: '320px',
+    top: '120px',
+    width: '700px',
+    height: Math.min(600, window.innerHeight - 200) + 'px',
+});
+const isFileManagerMaximized = ref(false);
+let previousFileManagerStyle = null;
+
+function closeFileManager() {
+    fileManagerOpen.value = false;
+    fileManagerMinimized.value = false;
+    isFileManagerMaximized.value = false;
+}
+function minimizeFileManager() {
+    fileManagerMinimized.value = true;
+    if (isFileManagerMaximized.value) toggleFileManagerMaximize();
+}
+function restoreFileManager() {
+    fileManagerMinimized.value = false;
+}
+function toggleFileManagerMaximize() {
+    if (isFileManagerMaximized.value) {
+        fileManagerStyle.value = { ...previousFileManagerStyle };
+        isFileManagerMaximized.value = false;
+    } else {
+        previousFileManagerStyle = { ...fileManagerStyle.value };
+        fileManagerStyle.value = {
+            left: '0px',
+            top: '24px',
+            width: '100vw',
+            height: 'calc(100vh - 24px)'
+        };
+        isFileManagerMaximized.value = true;
+    }
+}
+
 function openApplication(appName) {
-    if (appName === 'terminal') {
+    if (appName === 'filemanager') {
+        fileManagerOpen.value = true;
+        fileManagerMinimized.value = false;
+        isFileManagerMaximized.value = false;
+        fileManagerStyle.value = {
+            left: '320px',
+            top: '120px',
+            width: '700px',
+            height: Math.min(600, window.innerHeight - 200) + 'px',
+        };
+    } else if (appName === 'terminal') {
         terminalOpen.value = true;
         nextTick(() => {
             terminalInput.value?.focus();
