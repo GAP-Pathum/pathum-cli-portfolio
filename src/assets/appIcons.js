@@ -18,7 +18,7 @@ export const appIcons = {
       <path d="M24 35 L28 39 L40 27" stroke="#3182CE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
     </svg>
   `,
-  
+
   safari: `
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -48,7 +48,7 @@ export const appIcons = {
       <circle cx="32" cy="32" r="2.5" fill="white"/>
     </svg>
   `,
-  
+
   mail: `
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -63,7 +63,7 @@ export const appIcons = {
       <path d="M8 20 L8 16 C8 16 8 16 12 16 L52 16 C56 16 56 16 56 16 L56 20 L32 36 Z" fill="#1890F1" opacity="0.15"/>
     </svg>
   `,
-  
+
   messages: `
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -78,7 +78,7 @@ export const appIcons = {
       </g>
     </svg>
   `,
-  
+
   terminal: `
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -93,7 +93,7 @@ export const appIcons = {
       <line x1="28" y1="34" x2="40" y2="34" stroke="#00FF7F" stroke-width="3" stroke-linecap="round"/>
     </svg>
   `,
-  
+
   photos: `
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -119,7 +119,7 @@ export const appIcons = {
       </g>
     </svg>
   `,
-  
+
   notes: `
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -139,7 +139,7 @@ export const appIcons = {
       <line x1="14" y1="50" x2="40" y2="50" stroke="#E5E5E5" stroke-width="1" stroke-linecap="round"/>
     </svg>
   `,
-  
+
   settings: `
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -156,7 +156,7 @@ export const appIcons = {
       </g>
     </svg>
   `,
-    chatbot: `
+  chatbot: `
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="chatbotGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -515,6 +515,54 @@ export const appIcons = {
       <rect x="16" y="32" width="28" height="2" rx="1" fill="url(#resumeGrad)" opacity="0.6"/>
       <rect x="16" y="38" width="20" height="2" rx="1" fill="url(#resumeGrad)" opacity="0.6"/>
       <rect x="16" y="44" width="16" height="2" rx="1" fill="url(#resumeGrad)" opacity="0.6"/>
+    </svg>
+  `,
+
+  projects: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="projectsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#667EEA;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#764BA2;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#projectsGrad)"/>
+      <!-- Main folder -->
+      <path d="M10 18 L10 50 L54 50 L54 24 L36 24 L32 18 Z" fill="white" opacity="0.95"/>
+      <path d="M32 18 L34 21 L36 24" fill="white" opacity="0.8"/>
+      <!--Code brackets-->
+      <path d="M22 30 L18 34 L22 38" stroke="url(#projectsGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M42 30 L46 34 L42 38" stroke="url(#projectsGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <!--Forward slash-->
+      <line x1="28" y1="38" x2="36" y2="30" stroke="url(#projectsGrad)" stroke-width="2.5" stroke-linecap="round"/>
+      <!--Dots / files indicator-->
+      <circle cx="20" cy="44" r="1.5" fill="url(#projectsGrad)" opacity="0.6"/>
+      <circle cx="26" cy="44" r="1.5" fill="url(#projectsGrad)" opacity="0.6"/>
+      <circle cx="32" cy="44" r="1.5" fill="url(#projectsGrad)" opacity="0.6"/>
+    </svg>
+  `,
+
+  projectsMobile: `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="projectsMobileGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#667EEA;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#764BA2;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#projectsMobileGrad)"/>
+      <!--Main folder-->
+      <path d="M10 18 L10 50 L54 50 L54 24 L36 24 L32 18 Z" fill="white" opacity="0.95"/>
+      <path d="M32 18 L34 21 L36 24" fill="white" opacity="0.8"/>
+      <!--Code brackets-->
+      <path d="M22 30 L18 34 L22 38" stroke="url(#projectsMobileGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M42 30 L46 34 L42 38" stroke="url(#projectsMobileGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <!--Forward slash-->
+      <line x1="28" y1="38" x2="36" y2="30" stroke="url(#projectsMobileGrad)" stroke-width="2.5" stroke-linecap="round"/>
+      <!--Dots / files indicator-->
+      <circle cx="20" cy="44" r="1.5" fill="url(#projectsMobileGrad)" opacity="0.6"/>
+      <circle cx="26" cy="44" r="1.5" fill="url(#projectsMobileGrad)" opacity="0.6"/>
+      <circle cx="32" cy="44" r="1.5" fill="url(#projectsMobileGrad)" opacity="0.6"/>
     </svg>
   `,
 

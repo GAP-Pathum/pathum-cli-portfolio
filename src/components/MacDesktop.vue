@@ -119,6 +119,8 @@
                     <div v-else-if="icon.id === 'resume'" class="app-icon-content" v-html="appIcons.pdf"></div>
                     <!-- ChatBot -->
                     <div v-else-if="icon.id === 'chatbot'" class="app-icon-content" v-html="appIcons.chatbot"></div>
+                    <!-- Projects -->
+                    <div v-else-if="icon.id === 'projects'" class="app-icon-content" v-html="appIcons.projects"></div>
                 </div>
                 <div class="icon-label">{{ icon.label }}</div>
             </div>
@@ -228,6 +230,14 @@
                     <div class="desktop-dock-icon-inner" v-html="appIcons.youtube"></div>
                     <div class="dock-indicator"
                         :class="{ 'minimized-indicator': youtubeMinimized, 'running-indicator': youtubeOpen && !youtubeMinimized }">
+                    </div>
+                </div>
+                <!-- Projects Dock (shows when running) -->
+                <div v-if="projectsOpen || projectsMinimized" class="dock-icon projects-dock"
+                    @click="selectDockIcon('projects')" :class="{ 'has-window': projectsOpen || projectsMinimized }">
+                    <div class="desktop-dock-icon-inner" v-html="appIcons.projects"></div>
+                    <div class="dock-indicator"
+                        :class="{ 'minimized-indicator': projectsMinimized, 'running-indicator': projectsOpen && !projectsMinimized }">
                     </div>
                 </div>
                 <!-- ChatBot Window (shown when opened, always in desktop area) -->
@@ -372,6 +382,10 @@
     <YouTubePlayer :is-open="youtubeOpen" :is-minimized="youtubeMinimized" :mobile-mode="false" @close="closeYoutube"
         @minimize="minimizeYoutube" @maximize="isYoutubeMaximized = $event" />
 
+    <!-- Projects Window -->
+    <Projects :is-open="projectsOpen" :is-minimized="projectsMinimized" :mobile-mode="false" @close="closeProjects"
+        @minimize="minimizeProjects" @maximize="isProjectsMaximized = $event" />
+
     <!-- macOS Notification Banner -->
     <Transition name="notification">
         <div v-if="showNotification" class="macos-notification">
@@ -397,6 +411,7 @@ import ChatBot from './ChatBot.vue';
 import MusicPlayer from './MusicPlayer.vue';
 import Calendar from './Calendar.vue';
 import YouTubePlayer from './YouTubePlayer.vue';
+import Projects from './Projects.vue';
 
 const emit = defineEmits(['logout']);
 
@@ -421,6 +436,9 @@ const isCalendarMaximized = ref(false);
 const youtubeOpen = ref(false);
 const youtubeMinimized = ref(false);
 const isYoutubeMaximized = ref(false);
+const projectsOpen = ref(false);
+const projectsMinimized = ref(false);
+const isProjectsMaximized = ref(false);
 const lightboxOpen = ref(false);
 const currentPhotoIndex = ref(0);
 const showNotification = ref(false);
@@ -502,7 +520,7 @@ const desktopBackground = computed(() => {
 
 // Computed property to check if any window is maximized
 const anyWindowMaximized = computed(() => {
-    return isMaximized.value || isGalleryMaximized.value || isNotesMaximized.value || isSettingsMaximized.value || isPdfMaximized.value || isChatbotMaximized.value || isMusicMaximized.value || isCalendarMaximized.value || isYoutubeMaximized.value;
+    return isMaximized.value || isGalleryMaximized.value || isNotesMaximized.value || isSettingsMaximized.value || isPdfMaximized.value || isChatbotMaximized.value || isMusicMaximized.value || isCalendarMaximized.value || isYoutubeMaximized.value || isProjectsMaximized.value;
 });
 
 const resolvePath = (path) => {
@@ -666,9 +684,10 @@ const desktopIcons = ref([
     { id: 'instagram', label: 'Instagram', x: 110, y: 220 },
     { id: 'youtube', label: 'YouTube', x: 110, y: 310 },
     { id: 'github', label: 'GitHub', x: 110, y: 400 },
-    // Column 3 - ChatBot & Resume
+    // Column 3 - ChatBot, Resume & Projects
     { id: 'chatbot', label: 'ChatBot', x: 200, y: 40 },
     { id: 'resume', label: 'Resume', x: 200, y: 130 },
+    { id: 'projects', label: 'Projects', x: 200, y: 220 },
 ]);
 
 // Icon dragging
@@ -1006,6 +1025,9 @@ function openApplication(appName) {
     } else if (appName === 'youtube') {
         youtubeOpen.value = true;
         youtubeMinimized.value = false;
+    } else if (appName === 'projects') {
+        projectsOpen.value = true;
+        projectsMinimized.value = false;
     }
 }
 
@@ -1085,6 +1107,12 @@ function selectDockIcon(iconName) {
             restoreYoutube();
         } else if (!youtubeOpen.value) {
             youtubeOpen.value = true;
+        }
+    } else if (iconName === 'projects') {
+        if (projectsMinimized.value) {
+            restoreProjects();
+        } else if (!projectsOpen.value) {
+            projectsOpen.value = true;
         }
     }
 }
@@ -1284,6 +1312,24 @@ function restoreYoutube() {
 }
 
 function toggleYoutubeMaximize() {
+    // Handled by component
+}
+
+function closeProjects() {
+    projectsOpen.value = false;
+    projectsMinimized.value = false;
+    isProjectsMaximized.value = false;
+}
+
+function minimizeProjects() {
+    projectsMinimized.value = true;
+}
+
+function restoreProjects() {
+    projectsMinimized.value = false;
+}
+
+function toggleProjectsMaximize() {
     // Handled by component
 }
 
