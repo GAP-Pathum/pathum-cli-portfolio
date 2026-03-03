@@ -1,0 +1,204 @@
+{
+  "personal": {
+    "fullName": "Galathara Arachchilage Pasindu Pathum",
+    "nicknames": ["Pathum", "G.A.P.Pathum", "Pasindu Pathum", "Pasindu"],
+    "name": "Pathum",
+    "title": "Software Engineer | Full Stack Developer",
+    "location": "Ragala, Sri Lanka",
+    "birthPlace": "Nuwara Eliya District, Sri Lanka",
+    "bio": "Passionate software engineer with expertise in full-stack development. Building real products that solve problems. Love writing clean, maintainable code and always learning new technologies."
+  },
+  "contact": {
+    "email": "pathumpasindu41@gmail.com",
+    "mobile": "0752955301",
+    "whatsapp": "0752955301",
+    "github": "https://github.com/GAP-Pathum",
+    "linkedin": "https://www.linkedin.com/in/pasindu-pathum-98a299249",
+    "instagram": "https://www.instagram.com/g_a_p_pathum/",
+    "facebook": "https://www.facebook.com/pasindu.pathum.584868/",
+    "medium": "https://medium.com/@pathumpasindu41"
+  },
+  "professional": {
+    "currentRole": {
+      "company": "VFT Holding PVT LTD",
+      "position": "Junior Software Engineer",
+      "location": "Maharagama, Sri Lanka"
+    },
+    "internshipRole": {
+      "company": "Biometrix PVT LTD",
+      "subsidiary": "VFT Holdings",
+      "position": "Intern Software Engineer",
+      "location": "Maharagama, Sri Lanka",
+      "projects": ["BIO HRIS", "FUTURA HRIS", "Attendance Payroll Softwares"]
+    }
+  },
+  "skills": {
+    "frontend": ["React", "Vue.js", "Vite", "Tailwind CSS", "Bootstrap", "HTML5", "CSS3", "JavaScript"],
+    "backend": ["Node.js", "Express.js", "PHP", "Python"],
+    "database": ["MongoDB", "Firebase", "MySQL", "PostgreSQL"],
+    "tools": ["Git", "GitHub", "Docker", "REST APIs", "Vercel", "Netlify", "Postman"],
+    "specializations": [
+      "Full-Stack Development",
+      "Web Application Development",
+      "E-Commerce Platforms",
+      "Dashboard Development",
+      "HRIS Systems",
+      "Responsive Web Design",
+      "Machine Learning (Learning)",
+      "API Development"
+    ],
+    "currentlyLearning": ["Machine Learning", "Cloud Computing", "IoT"]
+  },
+  "education": {
+    "current": {
+      "degree": "BSc. Hons in Computing and Information Systems",
+      "institution": "Faculty of Computing, Sabaragamuwa University of Sri Lanka",
+      "studyYears": 4,
+      "currentYear": 2,
+      "keySubjects": [
+        "Object Oriented Programming",
+        "Web Application Development",
+        "Data Structures & Algorithms",
+        "Software Engineering",
+        "Database Management Systems",
+        "Data Communication & Networks",
+        "Machine Learning",
+        "Cloud Computing",
+        "Distributed Systems",
+        "Agile Software Development"
+      ]
+    },
+    "secondary": {
+      "advancedLevel": "Physics Stream - T.B.M.Herath National College, Ragala",
+      "ordinaryLevel": "T.B.M.Herath National College, Ragala"
+    },
+    "primary": "Junior Model School, Ragala"
+  },
+  "projects": [
+    {
+      "id": "buildmate-plus",
+      "name": "BuildMate Plus",
+      "description": "Comprehensive construction management platform for tracking materials, budgets, and progress",
+      "type": "Full-Stack",
+      "tech": ["React", "Node.js", "MongoDB", "Express.js", "Tailwind CSS"],
+      "highlights": ["Material Tracking", "Budget Management", "Real-time Updates"],
+      "github": "https://github.com/GAP-Pathum/BuildMate_Plus",
+      "live": "https://buildmateplus.vercel.app/"
+    },
+    {
+      "id": "foody",
+      "name": "Foody",
+      "description": "Online food ordering application with user-friendly interface and real-time order management",
+      "type": "Full-Stack",
+      "tech": ["React", "Node.js", "MongoDB", "Tailwind CSS"],
+      "highlights": ["User-Friendly Interface", "Real-time Orders", "Payment Integration"],
+      "github": "https://github.com/GAP-Pathum/Foody",
+      "live": "https://foodybypathum.vercel.app/"
+    },
+    {
+      "id": "hashanESolution",
+      "name": "HashanESolution (E-Commerce)",
+      "description": "Full-featured e-commerce platform with product management and checkout system",
+      "type": "Full-Stack",
+      "tech": ["React", "Node.js", "Tailwind CSS"],
+      "highlights": ["Product Catalog", "Shopping Cart", "Checkout System"],
+      "github": "https://github.com/code-ft-pathum/HashanESolution",
+      "live": "https://hashanesolution.netlify.app/"
+    },
+    {
+      "id": "react-dashboard",
+      "name": "React Dashboard",
+      "description": "Administrative dashboard with analytics and data visualization capabilities",
+      "type": "Frontend",
+      "tech": ["React", "Tailwind CSS", "JavaScript"],
+      "highlights": ["Data Visualization", "Real-time Analytics", "Responsive Design"],
+      "github": "https://github.com/GAP-Pathum/react_temp_v1",
+      "live": "https://react-temp-v1.vercel.app/home"
+    },
+    {
+      "id": "lms-school-web",
+      "name": "LMS & School Web",
+      "description": "Learning Management System with course management, student portal, and assignment tracking",
+      "type": "Full-Stack",
+      "tech": ["React", "Node.js", "MongoDB"],
+      "highlights": ["Course Management", "Student Portal", "Assignment Tracking"],
+      "github": "https://github.com/GAP-Pathum/LMS",
+      "live": "https://paathagamamv.vercel.app/"
+    },
+    {
+      "id": "coffee-shop",
+      "name": "Coffee Shop",
+      "description": "Coffee shop website with product showcase and responsive design",
+      "type": "Frontend",
+      "tech": ["HTML", "CSS", "JavaScript", "React"],
+      "highlights": ["Product Display", "Responsive Design", "Clean UI"],
+      "github": "https://github.com/GAP-Pathum/CoffeeShop",
+      "live": "https://github.com/GAP-Pathum/CoffeeShop/settings/pages"
+    },
+    {
+      "id": "restaurant",
+      "name": "Restaurant App",
+      "description": "Restaurant website with menu display, reservations, and contact management",
+      "type": "Frontend",
+      "tech": ["HTML", "CSS", "JavaScript"],
+      "highlights": ["Menu Display", "Reservation System", "Contact Forms"],
+      "github": "https://github.com/GAP-Pathum/restaurant",
+      "live": "https://gap-pathum.github.io/restaurant/"
+    },
+    {
+      "id": "spam-detector",
+      "name": "Spam Detector",
+      "description": "Machine learning application for detecting spam messages in emails and SMS",
+      "type": "ML/Python",
+      "tech": ["Python", "Machine Learning", "NLP"],
+      "highlights": ["Email Spam Detection", "SMS Spam Detection", "ML Algorithms"],
+      "github": "https://github.com/GAP-Pathum/spam-detector"
+    },
+    {
+      "id": "jarvis-chatbot",
+      "name": "JARVIS AI Chatbot",
+      "description": "AI-powered chatbot assistant with natural language processing capabilities",
+      "type": "AI/ML",
+      "tech": ["Python", "NLP", "Machine Learning", "AI"],
+      "highlights": ["Conversational AI", "Intent Recognition", "Response Generation"],
+      "github": "https://github.com/GAP-Pathum/JARVIS"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Foundation of Project Management",
+      "issuer": "Google (Coursera Certified)",
+      "description": "Project management skills and leadership across industries",
+      "date": "August 30, 2024"
+    },
+    {
+      "name": "HTML, CSS, and JavaScript for Web Developers Specialization",
+      "issuer": "Johns Hopkins University",
+      "description": "Comprehensive web development fundamentals and best practices",
+      "date": "August 30, 2024"
+    },
+    {
+      "name": "Python for Beginners",
+      "issuer": "University of Moratuwa, Department of Computer Sciences and Engineering",
+      "description": "Online learning programme in Python programming",
+      "date": "August 31, 2024"
+    }
+  ],
+  "interests": [
+    "Building real products that solve problems",
+    "Clean code and maintainability",
+    "Full-stack development",
+    "Web technologies and frameworks",
+    "Machine learning and AI",
+    "System design and architecture",
+    "Open source contributions",
+    "Mentoring junior developers",
+    "Continuous learning and innovation"
+  ],
+  "availability": {
+    "freelance": true,
+    "fullTime": true,
+    "consultation": true,
+    "collaboration": true
+  }
+}

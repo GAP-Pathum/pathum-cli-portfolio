@@ -383,8 +383,23 @@
         @minimize="minimizeYoutube" @maximize="isYoutubeMaximized = $event" />
 
     <!-- Projects Window -->
-    <Projects :is-open="projectsOpen" :is-minimized="projectsMinimized" :mobile-mode="false" @close="closeProjects"
-        @minimize="minimizeProjects" @maximize="isProjectsMaximized = $event" />
+    <div v-if="projectsOpen && !projectsMinimized" class="projects-container" :style="projectsStyle">
+        <div class="projects-header" @mousedown="startDragProjects">
+            <div class="window-controls">
+                <span class="window-dot close" @click.stop="closeProjects"></span>
+                <span class="window-dot minimize" @click.stop="minimizeProjects"></span>
+                <span class="window-dot maximize" @click.stop="toggleProjectsMaximize"></span>
+            </div>
+            <div class="window-title">Projects</div>
+        </div>
+        <div class="projects-body">
+            <Projects :isDesktopMode="true" :isMobileMode="false" />
+        </div>
+        <!-- Projects Resize Handles -->
+        <div class="resize-handle resize-right" @mousedown="startProjectsResize($event, 'right')"></div>
+        <div class="resize-handle resize-bottom" @mousedown="startProjectsResize($event, 'bottom')"></div>
+        <div class="resize-handle resize-corner" @mousedown="startProjectsResize($event, 'corner')"></div>
+    </div>
 
     <!-- macOS Notification Banner -->
     <Transition name="notification">
@@ -781,6 +796,31 @@ let settingsOffsetX = 0;
 let settingsOffsetY = 0;
 let notesResizeStartWidth = 0;
 let notesResizeStartHeight = 0;
+
+// Projects window state
+const projectsStyle = ref({
+    left: '150px',
+    top: '80px',
+    width: Math.min(1000, window.innerWidth - 300) + 'px',
+    height: Math.min(650, window.innerHeight - 160) + 'px'
+});
+
+let previousProjectsStyle = null;
+
+// Projects dragging
+let isDraggingProjects = false;
+let projectsStartX = 0;
+let projectsStartY = 0;
+let projectsOffsetX = 0;
+let projectsOffsetY = 0;
+
+// Projects resizing
+let isProjectsResizing = false;
+let projectsResizeDirection = null;
+let projectsResizeStartX = 0;
+let projectsResizeStartY = 0;
+let projectsResizeStartWidth = 0;
+let projectsResizeStartHeight = 0;
 
 // Gallery dragging
 let isDraggingGallery = false;
@@ -1330,7 +1370,84 @@ function restoreProjects() {
 }
 
 function toggleProjectsMaximize() {
-    // Handled by component
+    if (isProjectsMaximized.value) {
+        projectsStyle.value = { ...previousProjectsStyle };
+        isProjectsMaximized.value = false;
+    } else {
+        previousProjectsStyle = { ...projectsStyle.value };
+        projectsStyle.value = {
+            left: '0px',
+            top: '24px',
+            width: '100vw',
+            height: 'calc(100vh - 24px)'
+        };
+        isProjectsMaximized.value = true;
+    }
+}
+
+function startDragProjects(event) {
+    if (isProjectsMaximized.value) return;
+    event.preventDefault();
+    isDraggingProjects = true;
+    projectsStartX = event.clientX;
+    projectsStartY = event.clientY;
+    projectsOffsetX = parseInt(projectsStyle.value.left) || 0;
+    projectsOffsetY = parseInt(projectsStyle.value.top) || 0;
+    document.addEventListener('mousemove', dragProjects);
+    document.addEventListener('mouseup', stopDragProjects);
+}
+
+function dragProjects(event) {
+    if (!isDraggingProjects) return;
+    const deltaX = event.clientX - projectsStartX;
+    const deltaY = event.clientY - projectsStartY;
+    projectsStyle.value.left = (projectsOffsetX + deltaX) + 'px';
+    projectsStyle.value.top = Math.max(24, projectsOffsetY + deltaY) + 'px';
+}
+
+function stopDragProjects() {
+    isDraggingProjects = false;
+    document.removeEventListener('mousemove', dragProjects);
+    document.removeEventListener('mouseup', stopDragProjects);
+}
+
+function startProjectsResize(event, direction) {
+    if (isProjectsMaximized.value) return;
+    event.preventDefault();
+
+    isProjectsResizing = true;
+    projectsResizeDirection = direction;
+    projectsResizeStartX = event.clientX;
+    projectsResizeStartY = event.clientY;
+    projectsResizeStartWidth = parseInt(projectsStyle.value.width);
+    projectsResizeStartHeight = parseInt(projectsStyle.value.height);
+
+    document.addEventListener('mousemove', resizeProjects);
+    document.addEventListener('mouseup', stopProjectsResize);
+}
+
+function resizeProjects(event) {
+    if (!isProjectsResizing) return;
+
+    const deltaX = event.clientX - projectsResizeStartX;
+    const deltaY = event.clientY - projectsResizeStartY;
+
+    if (projectsResizeDirection === 'right' || projectsResizeDirection === 'corner') {
+        const newWidth = Math.max(600, projectsResizeStartWidth + deltaX);
+        projectsStyle.value.width = `${newWidth}px`;
+    }
+
+    if (projectsResizeDirection === 'bottom' || projectsResizeDirection === 'corner') {
+        const newHeight = Math.max(400, projectsResizeStartHeight + deltaY);
+        projectsStyle.value.height = `${newHeight}px`;
+    }
+}
+
+function stopProjectsResize() {
+    isProjectsResizing = false;
+    projectsResizeDirection = null;
+    document.removeEventListener('mousemove', resizeProjects);
+    document.removeEventListener('mouseup', stopProjectsResize);
 }
 
 function startDragMusic(event) {
@@ -2391,6 +2508,37 @@ onUnmounted(() => {
     flex-direction: column;
     z-index: 450;
     overflow: hidden;
+}
+
+/* Projects Container */
+.projects-container {
+    position: absolute;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    z-index: 500;
+    overflow: hidden;
+}
+
+.projects-header {
+    height: 36px;
+    background: rgba(40, 40, 58, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    cursor: move;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.projects-body {
+    flex: 1;
+    overflow: hidden;
+    background: transparent;
 }
 
 /* Ensure chatbot window floats above the dock, not attached */

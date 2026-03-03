@@ -1,3 +1,17 @@
 User-agent: *
 Allow: /
-Sitemap: https://www.pasindupathum.me/sitemap.xml  # Update to your domain
+Disallow: /node_modules/
+Disallow: /.git/
+
+Sitemap: https://pathumgap.vercel.app/sitemap.xml
+Host: pathumgap.vercel.app
+
+# Search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

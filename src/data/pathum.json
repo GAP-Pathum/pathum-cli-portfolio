@@ -1,0 +1,287 @@
+{
+  "personal": {
+    "fullName": "Galathara Arachchilage Pasindu Pathum",
+    "nicknames": ["Pathum", "G.A.P.Pathum", "Pasindu Pathum", "Pasindu"],
+    "title": "Software Engineer | Full Stack Developer",
+    "location": {
+      "current": "Ragala, Sri Lanka",
+      "birthDistrict": "Nuwara Eliya District"
+    },
+    "contact": {
+      "mobile": "0752955301",
+      "email": "pathumpasindu41@gmail.com",
+      "whatsapp": "0752955301"
+    },
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/pasindu-pathum-98a299249",
+      "github": "https://github.com/GAP-Pathum",
+      "instagram": "https://www.instagram.com/g_a_p_pathum/",
+      "facebook": "https://www.facebook.com/pasindu.pathum.584868/",
+      "medium": "https://medium.com/@pathumpasindu41"
+    }
+  },
+  "professional": {
+    "currentJob": {
+      "company": "VFT Holding PVT LTD",
+      "location": "Maharagama, Sri Lanka",
+      "position": "Junior Software Engineer",
+      "techStack": ["JavaScript", "TypeScript", "Node.js", "PHP", "JS Frameworks"]
+    },
+    "internship": {
+      "company": "Biometrix PVT LTD (Subsidiary of VFT Holdings)",
+      "location": "Maharagama, Sri Lanka",
+      "position": "Intern Software Engineer",
+      "currentProjects": ["BIO HRIS", "FUTURA HRIS", "Attendance Payroll Softwares"]
+    }
+  },
+  "skills": {
+    "frontend": {
+      "frameworks": ["React", "Vue.js"],
+      "styling": ["Tailwind CSS", "CSS3", "Bootstrap"],
+      "languages": ["JavaScript", "TypeScript"]
+    },
+    "backend": {
+      "runtime": ["Node.js"],
+      "frameworks": ["Express.js"],
+      "languages": ["JavaScript", "TypeScript", "PHP", "Python"]
+    },
+    "database": {
+      "relational": ["MySQL", "PostgreSQL"],
+      "noSQL": ["MongoDB", "Firebase"]
+    },
+    "tools": {
+      "version_control": ["Git", "GitHub"],
+      "deployment": ["Vercel", "Netlify"],
+      "other": ["Docker", "REST APIs", "Postman"]
+    },
+    "specializations": ["Full-Stack Development", "Web Development", "HRIS Systems", "E-Commerce Platforms", "Dashboard Development", "Machine Learning (Learning)"],
+    "inProgress": ["Machine Learning", "Cloud Computing", "IoT"]
+  },
+  "education": {
+    "current": {
+      "degree": "BSc. Hons in Computing and Information Systems",
+      "institution": "Faculty of Computing, Sabaragamuwa University of Sri Lanka",
+      "years": 4,
+      "completedYear": 2,
+      "year1Subjects": [
+        "Fundamentals of Information Systems",
+        "Structured Programming Techniques",
+        "Structured Programming Practicum",
+        "Theories of Information Systems",
+        "Computer System Organization",
+        "Foundations of Web Technologies",
+        "Personal Productivity with IT",
+        "Fundamentals of Mathematics",
+        "Statistics & Probability Theory",
+        "Communication Skills I",
+        "Academic Integrity",
+        "General English I",
+        "Object Oriented Programming",
+        "Object Oriented Programming Practicum",
+        "Emerging IS Technologies",
+        "Database Management Systems",
+        "Database Management Systems Practicum",
+        "Data Communication & Networks",
+        "Social & Professional Issues",
+        "Human Computer Interaction",
+        "Information Assurance & Security",
+        "Software Project Initiation & Planning",
+        "Advanced Mathematics",
+        "General English II"
+      ],
+      "year2Subjects": [
+        "Object Oriented Analysis & Design",
+        "Data Structures & Algorithms",
+        "IT Governance",
+        "Software Engineering",
+        "IS Risk Management",
+        "IS Sustainability",
+        "Management Information Systems",
+        "E-Business",
+        "Digital Innovation",
+        "Academic English I",
+        "IT Auditing",
+        "Web Application Development",
+        "Operating Systems",
+        "System Administration & Maintenance",
+        "IT Procurement Management",
+        "Software Architecture",
+        "Professionalism & Ethics in Computing",
+        "IS Strategies",
+        "Agile Software Development",
+        "Capstone Project"
+      ],
+      "year3Subjects": [
+        "Entrepreneurship & Innovation",
+        "Enterprise Architecture",
+        "High Performance Computing",
+        "Research Methodologies",
+        "Mobile Application Development (Elective)",
+        "Design Patterns (Elective)",
+        "Business English",
+        "Professional Practice (Industrial Training)"
+      ],
+      "year4Subjects": [
+        "Research Methodologies (Advanced)",
+        "Business Process Management",
+        "Distributed Systems",
+        "Cloud Computing",
+        "Machine Learning (Elective)",
+        "Internet of Things (Elective)",
+        "Research Project in IS (Final)",
+        "Business/IT Alignment",
+        "Information Systems Economics",
+        "Enterprise Modeling Ontologies",
+        "Game Development (Elective)",
+        "Computer Vision (Elective)"
+      ]
+    },
+    "secondary": [
+      {
+        "level": "Advanced Levels",
+        "stream": "Physics Stream",
+        "school": "T.B.M.Herath National College, Ragala"
+      },
+      {
+        "level": "Ordinary Levels",
+        "school": "T.B.M.Herath National College, Ragala"
+      }
+    ],
+    "primary": [
+      {
+        "school": "Junior Model School, Ragala"
+      },
+      {
+        "type": "Dhamma School",
+        "name": "Priyarathana Dhamma School, Ragala"
+      }
+    ]
+  },
+  "projects": [
+    {
+      "id": "buildmate-plus",
+      "name": "BuildMate Plus",
+      "description": "Construction management platform for tracking materials, budgets, and progress",
+      "type": "Full-Stack Web Application",
+      "tech": ["React", "Node.js", "MongoDB", "Express.js", "Tailwind CSS"],
+      "highlights": ["Material Tracking", "Budget Management", "Progress Monitoring", "Real-time Updates"],
+      "github": "https://github.com/GAP-Pathum/BuildMate_Plus",
+      "live": "https://buildmateplus.vercel.app/"
+    },
+    {
+      "id": "foody",
+      "name": "Foody",
+      "description": "Online food ordering application with intuitive user interface",
+      "type": "Full-Stack Web Application",
+      "tech": ["React", "Node.js", "MongoDB", "Tailwind CSS"],
+      "highlights": ["User-Friendly Interface", "Real-time Orders", "Payment Integration"],
+      "github": "https://github.com/GAP-Pathum/Foody",
+      "live": "https://foodybypathum.vercel.app/"
+    },
+    {
+      "id": "hashanESolution",
+      "name": "HashanESolution (E-Commerce)",
+      "description": "Full-featured e-commerce platform with product management and checkout",
+      "type": "Full-Stack E-Commerce",
+      "tech": ["React", "Node.js", "Tailwind CSS"],
+      "highlights": ["Product Catalog", "Shopping Cart", "Checkout System"],
+      "github": "https://github.com/code-ft-pathum/HashanESolution",
+      "live": "https://hashanesolution.netlify.app/"
+    },
+    {
+      "id": "react-dashboard",
+      "name": "React Dashboard",
+      "description": "Administrative dashboard with analytics and data visualization",
+      "type": "Frontend",
+      "tech": ["React", "Tailwind CSS", "Charts.js"],
+      "highlights": ["Data Visualization", "Real-time Analytics", "Responsive Design"],
+      "github": "https://github.com/GAP-Pathum/react_temp_v1",
+      "live": "https://react-temp-v1.vercel.app/home"
+    },
+    {
+      "id": "restaurant-app",
+      "name": "Restaurant App",
+      "description": "Restaurant website with menu, reservations, and contact information",
+      "type": "Frontend",
+      "tech": ["HTML", "CSS", "JavaScript", "Responsive Design"],
+      "highlights": ["Menu Display", "Reservation System", "Contact Forms"],
+      "github": "https://github.com/GAP-Pathum/restaurant",
+      "live": "https://gap-pathum.github.io/restaurant/"
+    },
+    {
+      "id": "lms-school-web",
+      "name": "LMS & School Web",
+      "description": "Learning Management System and school website platform",
+      "type": "Full-Stack Web Application",
+      "tech": ["React", "Node.js", "MongoDB"],
+      "highlights": ["Course Management", "Student Portal", "Assignment Tracking"],
+      "github": "https://github.com/GAP-Pathum/LMS",
+      "live": "https://paathagamamv.vercel.app/"
+    },
+    {
+      "id": "coffee-shop",
+      "name": "Coffee Shop",
+      "description": "Coffee shop website with product showcase and ordering system",
+      "type": "Frontend/E-Commerce",
+      "tech": ["HTML", "CSS", "JavaScript", "React"],
+      "highlights": ["Product Display", "Responsive Design", "Clean UI"],
+      "github": "https://github.com/GAP-Pathum/CoffeeShop",
+      "live": "https://github.com/GAP-Pathum/CoffeeShop/settings/pages"
+    },
+    {
+      "id": "spam-detector",
+      "name": "Spam Detector",
+      "description": "Machine learning application to detect spam messages",
+      "type": "ML/Python Application",
+      "tech": ["Python", "Machine Learning", "NLP"],
+      "highlights": ["Email Spam Detection", "SMS Spam Detection", "ML Algorithms"],
+      "github": "https://github.com/GAP-Pathum/spam-detector"
+    },
+    {
+      "id": "jarvis-chatbot",
+      "name": "JARVIS AI Chatbot",
+      "description": "AI-powered chatbot assistant using NLP and machine learning",
+      "type": "AI/ML Application",
+      "tech": ["Python", "NLP", "Machine Learning", "AI"],
+      "highlights": ["Conversational AI", "Intent Recognition", "Response Generation"],
+      "github": "https://github.com/GAP-Pathum/JARVIS"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Foundation of Project Management",
+      "issuer": "Google (Coursera Certified)",
+      "description": "Project management skills and leadership across industries",
+      "date": "August 30, 2024"
+    },
+    {
+      "name": "HTML, CSS, and JavaScript for Web Developers Specialization",
+      "issuer": "Johns Hopkins University (Coursera)",
+      "description": "Comprehensive web development fundamentals and best practices",
+      "date": "August 30, 2024"
+    },
+    {
+      "name": "Python for Beginners",
+      "issuer": "Department of Computer Sciences and Engineering, University of Moratuwa",
+      "description": "Online learning programme in Python programming",
+      "date": "August 31, 2024"
+    }
+  ],
+  "interests": [
+    "Building real products that solve problems",
+    "Clean code and maintainability",
+    "Full-stack development",
+    "Web technologies and frameworks",
+    "Machine learning and AI",
+    "System design and architecture",
+    "Open source contributions",
+    "Mentoring junior developers",
+    "Continuous learning and innovation"
+  ],
+  "availability": {
+    "freelance": true,
+    "fullTime": true,
+    "consultation": true,
+    "collaboration": true
+  }
+}

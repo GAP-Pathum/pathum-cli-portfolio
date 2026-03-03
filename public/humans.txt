@@ -1,0 +1,28 @@
+/* humanstxt.org */
+
+/* TEAM */
+Developer: Galathara Arachchilage Pasindu Pathum
+Title: Junior Software Engineer | Full-Stack Developer
+Email: pathumpasindu41@gmail.com
+Website: https://pathumgap.vercel.app/
+Nationality: Sri Lankan
+Location: Ragala, Nuwara Eliya District, Sri Lanka
+
+/* SITE */
+Standards: HTML5, CSS3, JavaScript (ES6+), Vue.js
+Components: React, Node.js, Express.js, MongoDB
+Infrastructure: Vercel, Git/GitHub
+Type: Interactive CLI-Style Portfolio
+Description: A modern, responsive portfolio showcasing full-stack development projects and expertise
+
+/* SOCIAL MEDIA */
+GitHub: https://github.com/GAP-Pathum
+LinkedIn: https://www.linkedin.com/in/pasindu-pathum-98a299249
+Instagram: https://www.instagram.com/g_a_p_pathum/
+Facebook: https://www.facebook.com/pasindu.pathum.584868/
+Medium: https://medium.com/@pathumpasindu41
+Twitter: 
+
+/* CONTACT */
+Email: pathumpasindu41@gmail.com
+WhatsApp: +94752955301
